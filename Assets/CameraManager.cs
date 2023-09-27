@@ -17,6 +17,8 @@ public class CameraManager : MonoBehaviour
     private Vector3 cameraFollowVelocity = Vector3.zero;
     private Vector3 cameraVectorPosition;
 
+    public Vector3 cameraOffset;
+
     public float cameraCollisionOffset = 0.2f;
     public float minimumCollisionOffset = 0.2f;
     public float cameraCollisionRadius = 0.2f;
@@ -49,7 +51,7 @@ public class CameraManager : MonoBehaviour
     private void FollowTarget()
     {
         Vector3 targetPosition = 
-            Vector3.SmoothDamp(transform.position, target.position, ref cameraFollowVelocity, cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref cameraFollowVelocity, cameraFollowSpeed);
 
         transform.position = targetPosition;
     }
@@ -63,6 +65,7 @@ public class CameraManager : MonoBehaviour
         pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
         yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
         
+        /*
         rotation = Vector3.zero;
         rotation.y = yawAngle;
         targetRotation = Quaternion.Euler(rotation);
@@ -73,6 +76,17 @@ public class CameraManager : MonoBehaviour
         targetRotation = Quaternion.Euler(rotation);
         cameraPivot.localRotation = targetRotation;
 
+        */
+        
+        // Get the player's current rotation due to gravity.
+        Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
+
+        // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
+        targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
+        transform.rotation = targetRotation;
+
+        // Apply the same rotation to the camera pivot.
+        cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
 
     }
 

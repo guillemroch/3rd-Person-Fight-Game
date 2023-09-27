@@ -47,18 +47,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Jump"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""51905d47-8a27-47b9-ac6a-cea6976260b8"",
-                    ""expectedControlType"": ""Key"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Sprint"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""b38513dc-0d5c-42f8-b6b8-1bf80a80250b"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -109,6 +109,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""e89894aa-a2e0-4d87-ba60-11706f018da9"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a6efe42c-3de6-476b-b17f-9508241f6037"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -120,9 +131,31 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""fbeaa693-6a64-46ce-ab23-900469136958"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""6574a3b8-5c38-4bcf-8c25-3589458092ee"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GravityPull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1ab953d-bbf0-4a32-b9f9-b1197da181a1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""GravityPull"",

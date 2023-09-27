@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AnimatorManager : MonoBehaviour
 {
-    private Animator animator;
+    public Animator animator;
     //Blend Tree variables
     private int horizontal;
     private int vertical;
@@ -18,11 +18,63 @@ public class AnimatorManager : MonoBehaviour
         
     }
 
-    public void UpdateAnimatorValues(Vector2 movementInput)
+    public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
+    {
+        animator.SetBool("isInteracting", isInteracting);
+        animator.CrossFade(targetAnimation, 0.2f);
+    }
+    public void UpdateAnimatorValues(Vector2 movementInput, bool isSprinting)
     {
         //Animation Snapping
-        float snappedHorizontal = Snapping.Snap(movementInput.x, 0.5f);
-        float snappedVertical = Snapping.Snap(movementInput.y, 0.5f);
+        //Horizontal
+        float snappedHorizontal;
+        if ( movementInput.x > 0 && movementInput.x < 0.55f)
+        {
+            snappedHorizontal = 0.5f;
+            
+        }else if ( movementInput.x >= 0.55f)
+        {
+            snappedHorizontal = 1f;
+        }else if ( movementInput.x < 0 && movementInput.x > -0.55f)
+        {
+            snappedHorizontal = -0.5f;
+            
+        }else if ( movementInput.x <= -0.55f)
+        {
+            snappedHorizontal = -1f;
+        }
+        else
+        {
+            snappedHorizontal = 0;
+        }
+
+        //Vertical
+        float snappedVertical;
+        if ( movementInput.y > 0 && movementInput.y < 0.55f)
+        {
+            snappedVertical = 0.5f;
+            
+        }else if ( movementInput.y >= 0.55f)
+        {
+            snappedVertical = 1f;
+        }else if ( movementInput.y < 0 && movementInput.y > -0.55f)
+        {
+            snappedVertical = -0.5f;
+            
+        }else if ( movementInput.y <= -0.55f)
+        {
+            snappedVertical = -1f;
+        }else
+        {
+            snappedVertical = 0;
+        }
+
+        if (isSprinting)
+        {
+            snappedVertical = 2;
+            
+        }
+        
         
         animator.SetFloat(horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
