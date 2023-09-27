@@ -65,19 +65,7 @@ public class CameraManager : MonoBehaviour
         pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
         yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
         
-        /*
-        rotation = Vector3.zero;
-        rotation.y = yawAngle;
-        targetRotation = Quaternion.Euler(rotation);
-        transform.rotation = targetRotation;
-
-        rotation = Vector3.zero;
-        rotation.x = pitchAngle;
-        targetRotation = Quaternion.Euler(rotation);
-        cameraPivot.localRotation = targetRotation;
-
-        */
-        
+      
         // Get the player's current rotation due to gravity.
         Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
 
