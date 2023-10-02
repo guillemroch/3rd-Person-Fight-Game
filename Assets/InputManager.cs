@@ -99,7 +99,7 @@ public class InputManager : MonoBehaviour
         if (gravityInput)
         {
             gravityInput = false;
-            playerMovement.HandleGravityPull();
+            playerMovement.HandleGravityChange();
         }
     }
 }

@@ -36,7 +36,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Gravity")] 
     public Vector3 gravityDirection = Vector3.down; //What is the current gravity orientation for the player
-    
+    public float gravityIntensity = 9.8f;
+    public float gravityMultiplier = 2;
+    public float groundedGravity = 0.5f;
     //Speeds
     [Header("Speeds")] 
     public float movementSpeed ;
@@ -48,8 +50,7 @@ public class PlayerMovement : MonoBehaviour
     //Jump
     [Header("Jump Speeds")] 
     public float jumpHeight = 3;
-    public float gravityIntensity = -15;
-    
+
     //References
     [Header("References")] 
     public PlayerManager playerManager;
@@ -57,6 +58,21 @@ public class PlayerMovement : MonoBehaviour
     public InputManager inputManager;
     public Transform cameraObject;
     public Rigidbody playerRigidbody;
+
+    
+    //Gizmos
+    [Header("=====================")]
+    [Header("### DEBUG SECTION ###")]  [Header("Gizmos")]
+    public bool enabledGizmos;
+    
+    
+    public bool isTransformGizmoEnabled;
+    public bool isGroundRayTracingGizmoEnabled;
+    public bool isGravityDirectionGizmoEnabled;
+    public bool isVelocityGizmoEnabled;
+    public Color gravityGizmoColor = Color.cyan;
+
+    
    
     //------------ METHODS --------------------------------------------------------------------
     
@@ -91,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
         //If the player is interacting or jumping we do not want him to move
         HandleMovement();
         HandleRotation();
+        HandleGravity();
     }
 
     
@@ -119,11 +136,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
-        moveDirection *= movementSpeed;
+        //moveDirection *= movementSpeed;
 
         
-        Vector3 movementVelocity = moveDirection;
-        playerRigidbody.velocity = movementVelocity;
+        //Vector3 movementVelocity = moveDirection;
+        //playerRigidbody.velocity = movementVelocity;
+        playerRigidbody.AddForce(moveDirection * movementSpeed, ForceMode.Force);
     }
 
     /**
@@ -145,15 +163,15 @@ public class PlayerMovement : MonoBehaviour
         if (targetDirection == Vector3.zero)
             targetDirection = transform.forward;
 
-        
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
         //TODO: Testing rotation when changing gravity
 
 
-        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
         Quaternion playerRotation;
-        
-       
+
         playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        
         
         transform.rotation = playerRotation;
         transform.rotation = Quaternion.FromToRotation(transform.up, -gravityDirection) * transform.rotation;
@@ -168,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position - rayCastHeightOffset * gravityDirection;
-        //rayCastOrigin.y += rayCastHeightOffset;
+        
 
         if (!isGrounded && !isJumping)
         {
@@ -187,7 +205,6 @@ public class PlayerMovement : MonoBehaviour
             if (!isGrounded && !playerManager.isInteracting)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
-                Debug.Log("Touch ground, lets land");
             }
 
             inAirTimer = 0;
@@ -209,25 +226,38 @@ public class PlayerMovement : MonoBehaviour
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);
 
-            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
-            Vector3 playerVelocity = moveDirection;
-            playerVelocity.y = jumpingVelocity;
-            playerRigidbody.velocity = playerVelocity;
+            float jumpingVelocity = Mathf.Sqrt(2 * gravityIntensity  *  jumpHeight);
+            playerRigidbody.AddForce(jumpingVelocity * -gravityDirection);
         }
         
     }
 
-    public void HandleGravityPull()
+    public void HandleGravityChange()
     {
         animatorManager.animator.SetBool("isGravitySwitching", true);
         animatorManager.PlayTargetAnimation("GravitySwitch", false);
 
+        
         gravityDirection = -gravityDirection;
-
+        
+        
         inAirTimer = 0;
-        
-        
     }
+
+    public void HandleGravity()
+    {
+        if (isGrounded && !playerManager.isInteracting)
+        {
+            //playerRigidbody.velocity += groundedGravity * gravityMultiplier * transform.up;
+            playerRigidbody.AddForce(groundedGravity * gravityMultiplier * gravityDirection, ForceMode.Acceleration);
+        }
+        else
+        {
+            playerRigidbody.AddForce(gravityIntensity * gravityMultiplier * gravityDirection, ForceMode.Acceleration);
+        }
+    }
+
+ 
 
     
     /**
