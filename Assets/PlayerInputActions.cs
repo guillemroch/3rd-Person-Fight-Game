@@ -64,9 +64,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""GravityPull"",
+                    ""name"": ""HalfLash"",
                     ""type"": ""Button"",
                     ""id"": ""5e196484-9a0a-434e-99a7-3ea382d7d5fa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ConfirmLash"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a8352ff-7016-47d2-b9b7-5d7daa1c2e33"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -147,7 +156,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GravityPull"",
+                    ""action"": ""HalfLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -158,7 +167,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GravityPull"",
+                    ""action"": ""HalfLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -271,6 +280,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2162e45a-4ed3-4907-bf77-0e66243ec5bd"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ConfirmLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""872d5aba-27b5-45a2-b6dd-1ac85a2519b1"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -860,7 +891,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_GravityPull = m_Player.FindAction("GravityPull", throwIfNotFound: true);
+        m_Player_HalfLash = m_Player.FindAction("HalfLash", throwIfNotFound: true);
+        m_Player_ConfirmLash = m_Player.FindAction("ConfirmLash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -938,7 +970,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_GravityPull;
+    private readonly InputAction m_Player_HalfLash;
+    private readonly InputAction m_Player_ConfirmLash;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -947,7 +980,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @GravityPull => m_Wrapper.m_Player_GravityPull;
+        public InputAction @HalfLash => m_Wrapper.m_Player_HalfLash;
+        public InputAction @ConfirmLash => m_Wrapper.m_Player_ConfirmLash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -969,9 +1003,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @GravityPull.started += instance.OnGravityPull;
-            @GravityPull.performed += instance.OnGravityPull;
-            @GravityPull.canceled += instance.OnGravityPull;
+            @HalfLash.started += instance.OnHalfLash;
+            @HalfLash.performed += instance.OnHalfLash;
+            @HalfLash.canceled += instance.OnHalfLash;
+            @ConfirmLash.started += instance.OnConfirmLash;
+            @ConfirmLash.performed += instance.OnConfirmLash;
+            @ConfirmLash.canceled += instance.OnConfirmLash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -988,9 +1025,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @GravityPull.started -= instance.OnGravityPull;
-            @GravityPull.performed -= instance.OnGravityPull;
-            @GravityPull.canceled -= instance.OnGravityPull;
+            @HalfLash.started -= instance.OnHalfLash;
+            @HalfLash.performed -= instance.OnHalfLash;
+            @HalfLash.canceled -= instance.OnHalfLash;
+            @ConfirmLash.started -= instance.OnConfirmLash;
+            @ConfirmLash.performed -= instance.OnConfirmLash;
+            @ConfirmLash.canceled -= instance.OnConfirmLash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1177,7 +1217,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnGravityPull(InputAction.CallbackContext context);
+        void OnHalfLash(InputAction.CallbackContext context);
+        void OnConfirmLash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
