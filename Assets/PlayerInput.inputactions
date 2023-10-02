@@ -42,9 +42,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "GravityPull",
+                    "name": "HalfLash",
                     "type": "Button",
                     "id": "5e196484-9a0a-434e-99a7-3ea382d7d5fa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ConfirmLash",
+                    "type": "Button",
+                    "id": "1a8352ff-7016-47d2-b9b7-5d7daa1c2e33",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -125,7 +134,7 @@
                     "interactions": "Tap",
                     "processors": "",
                     "groups": "",
-                    "action": "GravityPull",
+                    "action": "HalfLash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -136,7 +145,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "GravityPull",
+                    "action": "HalfLash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -249,6 +258,28 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2162e45a-4ed3-4907-bf77-0e66243ec5bd",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ConfirmLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "872d5aba-27b5-45a2-b6dd-1ac85a2519b1",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

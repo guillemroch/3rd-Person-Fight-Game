@@ -8717,6 +8717,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: enabledGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: rotationSpeed
       value: 15
       objectReference: {fileID: 0}
@@ -8743,6 +8747,50 @@ PrefabInstance:
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: rayCastHeightOffset
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isVelocityGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isTransformGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: totalForcesGizmoColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: totalForcesGizmoColor.g
+      value: 0.32339406
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: totalForcesGizmoColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isTotalForcesGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isFallingForcesGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isJumpingForcesGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isLashingForcesGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isGroundDetectionGizmoEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isGravityDirectionGizmoEnabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_RootOrder
