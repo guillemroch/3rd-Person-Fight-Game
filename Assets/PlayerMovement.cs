@@ -9,11 +9,10 @@ using Object = UnityEngine.Object;
  * PlayerMovement:
  * Calculates player movement
  */
+
 public class PlayerMovement : MonoBehaviour
 {
-    
     //Player values for movements
-    
     [Header("Movement Variables")]
     public Vector3 moveDirection;
 
@@ -22,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isSprinting;
     public bool isGrounded;
     public bool isJumping;
-    public bool isGravitySwitching;
+    public bool isHalfLashing;
 
     
     //Falling and ground detection variables
@@ -39,6 +38,10 @@ public class PlayerMovement : MonoBehaviour
     public float gravityIntensity = 9.8f;
     public float gravityMultiplier = 2;
     public float groundedGravity = 0.5f;
+
+    [Header("Lashings")] 
+    public float halfLashingHeight = 1.0f;
+    
     //Speeds
     [Header("Speeds")] 
     public float movementSpeed ;
@@ -227,26 +230,36 @@ public class PlayerMovement : MonoBehaviour
             animatorManager.PlayTargetAnimation("Jump", false);
 
             float jumpingVelocity = Mathf.Sqrt(2 * gravityIntensity  *  jumpHeight);
-            playerRigidbody.AddForce(jumpingVelocity * -gravityDirection);
+            playerRigidbody.AddForce(jumpingVelocity * -gravityDirection, ForceMode.Impulse);
         }
         
     }
 
-    public void HandleGravityChange()
+    public void HandleHalfLash()
     {
-        animatorManager.animator.SetBool("isGravitySwitching", true);
-        animatorManager.PlayTargetAnimation("GravitySwitch", false);
+        if (isHalfLashing) return;
+        
+        animatorManager.animator.SetBool("isHalfLashing", true);
+        animatorManager.PlayTargetAnimation("Half Lashing", true);
 
         
-        gravityDirection = -gravityDirection;
+        //gravityDirection = -gravityDirection;
         
+        playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
+        //playerRigidbody.AddForce(-gravityIntensity * gravityMultiplier * gravityDirection, ForceMode.Acceleration);
+
         
         inAirTimer = 0;
     }
 
     public void HandleGravity()
     {
-        if (isGrounded && !playerManager.isInteracting)
+        if (isJumping) return;
+        if (isHalfLashing)
+        {
+            return;
+        } 
+        if (isGrounded)
         {
             //playerRigidbody.velocity += groundedGravity * gravityMultiplier * transform.up;
             playerRigidbody.AddForce(groundedGravity * gravityMultiplier * gravityDirection, ForceMode.Acceleration);

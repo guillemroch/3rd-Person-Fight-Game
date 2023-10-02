@@ -8733,6 +8733,10 @@ PrefabInstance:
       value: 9.8
       objectReference: {fileID: 0}
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: halfLashingHeight
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: rayCastMaxDistance
       value: 1
       objectReference: {fileID: 0}
