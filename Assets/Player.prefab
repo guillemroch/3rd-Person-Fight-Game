@@ -61,11 +61,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2563866629904262296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,24 +81,61 @@ MonoBehaviour:
   moveDirection: {x: 0, y: 0, z: 0}
   isSprinting: 0
   isGrounded: 0
+  isJumping: 0
+  isHalfLashing: 0
   inAirTimer: 0
   leapingVelocity: 3
   fallingVelocity: 33
   groundLayer:
     serializedVersion: 2
     m_Bits: 9
-  rayCastHeightOffset: 0.5
-  rayCastMaxDistance: 0.3
+  rayCastHeightOffset: 0.3
+  rayCastMaxDistance: 1
+  gravityDirection: {x: 0, y: -1, z: 0}
+  gravityIntensity: 9.8
+  gravityMultiplier: 2
+  groundedGravity: 0.5
+  halfLashingHeight: 20
   movementSpeed: 7
-  walkingSpeed: 1.5
-  runningSpeed: 6
-  sprintingSpeed: 8
+  walkingSpeed: 5
+  runningSpeed: 20
+  sprintingSpeed: 30
   rotationSpeed: 15
+  jumpHeight: 3
   playerManager: {fileID: 0}
   animatorManager: {fileID: 0}
   inputManager: {fileID: 0}
   cameraObject: {fileID: 0}
   playerRigidbody: {fileID: 0}
+  enabledGizmos: 1
+  isTransformGizmoEnabled: 1
+  upGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  rightGizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  frontGizmoColor: {r: 0, g: 0, b: 1, a: 1}
+  isGroundDetectionGizmoEnabled: 1
+  originGizmoColor: {r: 1, g: 0, b: 1, a: 1}
+  gizmoRayCastOrigin: {x: 0, y: 0, z: 0}
+  hitGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  rayGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  isGravityDirectionGizmoEnabled: 1
+  gravityGizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  gravityGizmoForceVector: {x: 0, y: 0, z: 0}
+  isVelocityGizmoEnabled: 1
+  movementGizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  movementGizmoForceVector: {x: 0, y: 0, z: 0}
+  isFallingForcesGizmoEnabled: 1
+  fallingForcesGizmoColor: {r: 0, g: 0, b: 1, a: 1}
+  fallingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isJumpingForcesGizmoEnabled: 1
+  jumpingForcesGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  jumpingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isLashingForcesGizmoEnabled: 1
+  lashingForcesGizmoColor: {r: 1, g: 0, b: 1, a: 1}
+  lashingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isTotalForcesGizmoEnabled: 1
+  totalForcesGizmoColor: {r: 1, g: 0.32339406, b: 0, a: 1}
+  totalForcesGizmoVector: {x: 0, y: 0, z: 0}
+  realVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2100550671156518442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +151,9 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   cameraInput: {x: 0, y: 0}
   sprintInput: 0
+  jumpInput: 0
+  halfLashInput: 0
+  lashInput: 0
   moveAmount: 0
 --- !u!114 &3005243556766777584
 MonoBehaviour:
@@ -184,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b3b36cd4e9be74d9f12875e0d1a516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!1001 &8796976247818440396
 PrefabInstance:
   m_ObjectHideFlags: 0
