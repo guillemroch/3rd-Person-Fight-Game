@@ -8709,87 +8709,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 31941526}
     m_Modifications:
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: runningSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: walkingSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: enabledGizmos
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: rotationSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: sprintingSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: groundedGravity
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: gravityIntensity
-      value: 9.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: halfLashingHeight
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: rayCastMaxDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: rayCastHeightOffset
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isVelocityGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isTransformGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: totalForcesGizmoColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: totalForcesGizmoColor.g
-      value: 0.32339406
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: totalForcesGizmoColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isTotalForcesGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isFallingForcesGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isJumpingForcesGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isLashingForcesGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isGroundDetectionGizmoEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isGravityDirectionGizmoEnabled
+      propertyPath: isTargetedDirectionGizmoEnabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
@@ -8836,29 +8756,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4675932026764890329, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675932026764890329, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675932026764890329, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675932026764890329, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6423912697608891000, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7362039989160965198, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

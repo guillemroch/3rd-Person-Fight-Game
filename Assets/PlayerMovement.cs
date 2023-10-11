@@ -116,6 +116,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 totalForcesGizmoVector;
 
     [Header("Real Velocity")] public Vector3 realVelocity;
+    [Header("Targeted Direction")] 
+    public bool isTargetedDirectionGizmoEnabled;
+    public Vector3 targetedDirectionGizmo;
+    public Color targetDirectionGizmoColor = Color.yellow;
 
     
    
@@ -151,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
         lashingForcesGizmoVector = Vector3.zero;
         totalForcesGizmoVector = Vector3.zero;
         realVelocity = playerRigidbody.velocity;
+        targetedDirectionGizmo = Vector3.zero;
         
 #endif
         
@@ -214,29 +219,43 @@ public class PlayerMovement : MonoBehaviour
         
         Vector3 targetDirection = Vector3.zero; //Resets target direction
 
-       if (isHalfLashing)
+       if (!isHalfLashing)
        {
             //calculate orientation based on camera position
             targetDirection = cameraObject.forward * inputManager.movementInput.y +
                               cameraObject.right * inputManager.movementInput.x;
             targetDirection.Normalize();
-            targetDirection.y = 0; //We are only rotating along the x and y axis, the y is fixed
+            targetDirection.y = 0;
+            //targetDirection = targetDirection * transform.up; //We are only rotating along the x and y axis, the y is fixed in the local transform
 
             if (targetDirection == Vector3.zero)
                 targetDirection = transform.forward;
 
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            targetedDirectionGizmo = targetDirection;
 
-            //TODO: Testing rotation when changing gravity
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, transform.up);
 
+            transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.FromToRotation(transform.up, -gravityDirection) * transform.rotation;
+            return;
+       }
 
-            Quaternion playerRotation;
+       if (isHalfLashing)
+       {
+           //calculate orientation based on camera position
+           targetDirection = transform.position - cameraObject.position;
+           Debug.Log(targetDirection + " = " + transform.position + " + " + cameraObject.position);
+           //targetDirection.Normalize();
+           //targetDirection = targetDirection * transform.up; //We are only rotating along the x and y axis, the y is fixed in the local transform
 
-            playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        
-        
-            transform.rotation = playerRotation;
-            transform.rotation = Quaternion.FromToRotation(transform.up, -gravityDirection) * transform.rotation;
+           if (targetDirection == Vector3.zero)
+               targetDirection = transform.forward;
+
+           targetedDirectionGizmo = targetDirection;
+
+           Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+           transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
        }
         
 
@@ -300,7 +319,6 @@ public class PlayerMovement : MonoBehaviour
             jumpingForcesGizmoVector = jumpingVelocity * -gravityDirection;
             totalForcesGizmoVector += jumpingForcesGizmoVector;
         }
-        
     }
 
     public void HandleHalfLash()
@@ -308,7 +326,7 @@ public class PlayerMovement : MonoBehaviour
         if (isHalfLashing) return;
         
         animatorManager.animator.SetBool("isHalfLashing", true);
-        animatorManager.PlayTargetAnimation("Half Lashing", true);
+        animatorManager.PlayTargetAnimation("Half Lashing", false);
 
         
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
@@ -427,6 +445,13 @@ public class PlayerMovement : MonoBehaviour
         {
             Gizmos.color = totalForcesGizmoColor;
             Gizmos.DrawRay(position, totalForcesGizmoVector);
+        }
+
+        if (isTargetedDirectionGizmoEnabled)
+        {
+            Gizmos.color = targetDirectionGizmoColor;
+            Gizmos.DrawRay(position, targetedDirectionGizmo);
+            Gizmos.DrawSphere(position + targetedDirectionGizmo, 0.05f);
         }
 
     }
