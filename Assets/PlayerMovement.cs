@@ -244,12 +244,13 @@ public class PlayerMovement : MonoBehaviour
        {
            //calculate orientation based on camera position
            targetDirection = transform.position - cameraObject.position;
-           Debug.Log(targetDirection + " = " + transform.position + " + " + cameraObject.position);
-           //targetDirection.Normalize();
+           targetDirection.Normalize();
            //targetDirection = targetDirection * transform.up; //We are only rotating along the x and y axis, the y is fixed in the local transform
 
            if (targetDirection == Vector3.zero)
                targetDirection = transform.forward;
+
+           Debug.Log(targetDirection + " = " + transform.position + " + " + cameraObject.position);
 
            targetedDirectionGizmo = targetDirection;
 
