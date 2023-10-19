@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Variables")]
     public Vector3 moveDirection;
 
+    public Vector3 targetDirection;
+
     //Movement status flags
     [Header("Movement Flags")] 
     public bool isSprinting;
@@ -216,8 +218,7 @@ public class PlayerMovement : MonoBehaviour
     private void HandleRotation()
     {
         
-        
-        Vector3 targetDirection = Vector3.zero; //Resets target direction
+        targetDirection = Vector3.zero; //Resets target direction
 
        if (!isHalfLashing)
        {
@@ -226,8 +227,8 @@ public class PlayerMovement : MonoBehaviour
                               cameraObject.right * inputManager.movementInput.x;
             targetDirection.Normalize();
             targetDirection.y = 0;
-            //targetDirection = targetDirection * transform.up; //We are only rotating along the x and y axis, the y is fixed in the local transform
 
+            Debug.Log(inputManager.cameraInput.x + "," + inputManager.cameraInput.y);
             if (targetDirection == Vector3.zero)
                 targetDirection = transform.forward;
 
@@ -236,27 +237,29 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, transform.up);
 
             transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.FromToRotation(transform.up, -gravityDirection) * transform.rotation;
             return;
        }
 
        if (isHalfLashing)
        {
-           //calculate orientation based on camera position
-           targetDirection = transform.position - cameraObject.position;
+           
+           targetDirection = cameraObject.up * inputManager.cameraInput.y + cameraObject.forward * inputManager.cameraInput.x;
            targetDirection.Normalize();
-           //targetDirection = targetDirection * transform.up; //We are only rotating along the x and y axis, the y is fixed in the local transform
+           
 
            if (targetDirection == Vector3.zero)
                targetDirection = transform.forward;
 
+           //Debug.Log(cameraDisplacement);
            Debug.Log(targetDirection + " = " + transform.position + " + " + cameraObject.position);
 
            targetedDirectionGizmo = targetDirection;
 
-           Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+           Quaternion targetRotation = Quaternion.LookRotation(targetDirection, transform.up);
 
-           transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+           transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * 0.1f * Time.deltaTime);
+
+
        }
         
 
