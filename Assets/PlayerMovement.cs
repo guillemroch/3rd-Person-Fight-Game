@@ -166,8 +166,7 @@ public class PlayerMovement : MonoBehaviour
         
         if (playerManager.isInteracting)
             return;
-        if (isJumping)
-            return;
+        
         
         //If the player is interacting or jumping we do not want him to move
         HandleMovement();
@@ -264,6 +263,7 @@ public class PlayerMovement : MonoBehaviour
         
 
     }
+    
 
     
     /**
@@ -284,9 +284,10 @@ public class PlayerMovement : MonoBehaviour
             }
 
             inAirTimer += Time.deltaTime;
-            playerRigidbody.AddForce(transform.forward * leapingVelocity, ForceMode.Force);
+            playerRigidbody.AddForce(transform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
             playerRigidbody.AddForce(gravityDirection * (fallingVelocity * inAirTimer), ForceMode.Force);
             
+            //Gizmos
             fallingForcesGizmoVector =
                 transform.forward * leapingVelocity + gravityDirection * (fallingVelocity * inAirTimer);
             totalForcesGizmoVector += fallingForcesGizmoVector;
@@ -372,9 +373,15 @@ public class PlayerMovement : MonoBehaviour
             gravityGizmoForceVector = gravityIntensity * gravityMultiplier * gravityDirection;
         }
     }
-    
-    
 
+    private void OnCollisionEnter(Collision other)
+    {
+        //checks if the current layer of the game object is included in the groundLayer LayerMask
+        if ((groundLayer.value & (1 << other.gameObject.layer))!= 0)
+        {
+            isGrounded = true;
+        }
+    }
 
 
 #if UNITY_EDITOR
