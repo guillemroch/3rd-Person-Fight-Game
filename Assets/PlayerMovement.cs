@@ -227,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
             targetDirection.Normalize();
             targetDirection.y = 0;
 
-            Debug.Log(inputManager.cameraInput.x + "," + inputManager.cameraInput.y);
+            //Debug.Log(inputManager.cameraInput.x + "," + inputManager.cameraInput.y);
             if (targetDirection == Vector3.zero)
                 targetDirection = transform.forward;
 
@@ -241,6 +241,8 @@ public class PlayerMovement : MonoBehaviour
 
        if (isHalfLashing)
        {
+           //Make the player rotate with the camera, making that we always see the back of the player
+
            
            targetDirection = cameraObject.up * inputManager.cameraInput.y + cameraObject.forward * inputManager.cameraInput.x;
            targetDirection.Normalize();
@@ -249,12 +251,9 @@ public class PlayerMovement : MonoBehaviour
            if (targetDirection == Vector3.zero)
                targetDirection = transform.forward;
 
-           //Debug.Log(cameraDisplacement);
-           Debug.Log(targetDirection + " = " + transform.position + " + " + cameraObject.position);
-
            targetedDirectionGizmo = targetDirection;
 
-           Quaternion targetRotation = Quaternion.LookRotation(targetDirection, transform.up);
+           Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
            transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * 0.1f * Time.deltaTime);
 
@@ -338,17 +337,19 @@ public class PlayerMovement : MonoBehaviour
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
         
-        Debug.Log("Velocity = " + playerRigidbody.velocity);
+        //Debug.Log("Velocity = " + playerRigidbody.velocity);
 
         
         inAirTimer = 0;
     }
     
-    public void HandleLash()
+    public void HandleLash() 
     {
         gravityDirection = cameraObject.forward;
 
-        isHalfLashing = false;
+        isHalfLashing = false; //TODO: Change this to a state machine
+        animatorManager.animator.SetBool("isHalfLashing", false);
+        
         
     }
     
@@ -379,7 +380,12 @@ public class PlayerMovement : MonoBehaviour
         //checks if the current layer of the game object is included in the groundLayer LayerMask
         if ((groundLayer.value & (1 << other.gameObject.layer))!= 0)
         {
+            //Debug.Log("Player has hit the ground");
             isGrounded = true;
+            /*Quaternion.Slerp(transform.rotation,
+                Quaternion.FromToRotation(transform.up, other.contacts[0].normal) * transform.rotation, 0.1f);*/
+            transform.up = other.contacts[0].normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
+            gravityDirection = - other.contacts[0].normal;
         }
     }
 
