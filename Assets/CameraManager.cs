@@ -6,6 +6,7 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     private InputManager inputManager;
+    private PlayerMovement playerMovement;
     
     public Transform target; //Object to look at
     public Transform cameraPivot; //Object from where the camera rotates
@@ -37,6 +38,7 @@ public class CameraManager : MonoBehaviour
     {
         target = FindObjectOfType<PlayerManager>().transform;
         inputManager = FindObjectOfType<InputManager>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
     }
@@ -58,6 +60,12 @@ public class CameraManager : MonoBehaviour
 
     private void RotateCamera()
     {
+        if (playerMovement.isHalfLashing)
+        {
+            transform.rotation = target.rotation;
+            return;
+        }
+        
         Vector3 rotation;
         Quaternion targetRotation;
             
