@@ -118,7 +118,7 @@ public class InputManager : MonoBehaviour
 
     private void HandleConfirmLashingDirectionInput()
     {
-        if (lashInput)
+        if (playerMovement.isHalfLashing && lashInput)
         {
             halfLashInput = false;
             playerMovement.HandleLash();
