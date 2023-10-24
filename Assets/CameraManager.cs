@@ -63,7 +63,7 @@ public class CameraManager : MonoBehaviour
         if (playerMovement.isHalfLashing)
         {
             //TODO: Setup camera modes
-            
+            //Todo: Make the transition smooth
             transform.rotation = target.rotation;
             return;
         }
