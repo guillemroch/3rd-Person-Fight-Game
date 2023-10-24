@@ -27,6 +27,9 @@ public class PlayerManager : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _animator = GetComponent<Animator>();
+        
+        //Make mouse disapear
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()

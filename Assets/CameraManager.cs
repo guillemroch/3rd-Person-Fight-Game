@@ -62,13 +62,12 @@ public class CameraManager : MonoBehaviour
     {
         if (playerMovement.isHalfLashing)
         {
+            //TODO: Setup camera modes
+            
             transform.rotation = target.rotation;
             return;
         }
         
-        Vector3 rotation;
-        Quaternion targetRotation;
-            
         pitchAngle += inputManager.cameraInput.y * cameraPitchSpeed;
         pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
         yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
@@ -78,7 +77,7 @@ public class CameraManager : MonoBehaviour
         Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
 
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
-        targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
+        Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
         transform.rotation = targetRotation;
 
         // Apply the same rotation to the camera pivot.

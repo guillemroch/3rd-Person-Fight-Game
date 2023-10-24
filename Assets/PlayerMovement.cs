@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
     
     [Header("Local Player Transform")] 
     public bool isTransformGizmoEnabled;
+    public Vector3 centerOfMassGizmo;
     public Color upGizmoColor = Color.green;
     public Color rightGizmoColor = Color.red;
     public Color frontGizmoColor = Color.blue;
@@ -242,25 +243,12 @@ public class PlayerMovement : MonoBehaviour
        if (isHalfLashing)
        {
            //Make the player rotate with the camera, making that we always see the back of the player
-
            
-           targetDirection = cameraObject.up * inputManager.cameraInput.y + cameraObject.forward * inputManager.cameraInput.x;
-           targetDirection.Normalize();
-           
-
-           if (targetDirection == Vector3.zero)
-               targetDirection = transform.forward;
-
-           targetedDirectionGizmo = targetDirection;
-
-           Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-
-           transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * 0.1f * Time.deltaTime);
-
+           transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
+           transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
 
        }
-        
-
+       
     }
     
 
@@ -403,14 +391,15 @@ public class PlayerMovement : MonoBehaviour
 
         var playerTransform = transform;
         var posOffset = new Vector3(0f, 1f, 0f);
-        var position = playerTransform.position + posOffset;
+        var position = playerTransform.position;
         
         if (!enabledGizmos) return;
 
         if (isTransformGizmoEnabled)
         {
             Gizmos.color = upGizmoColor;
-            
+            centerOfMassGizmo = playerRigidbody.worldCenterOfMass;
+            Gizmos.DrawSphere(centerOfMassGizmo, 0.05f);
             Gizmos.DrawRay(position, playerTransform.up);
             Gizmos.color = frontGizmoColor;
             Gizmos.DrawRay(position, playerTransform.forward);

@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
   isSprinting: 0
   isGrounded: 0
   isJumping: 0
@@ -90,7 +91,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9
   rayCastHeightOffset: 0.3
-  rayCastMaxDistance: 1
+  rayCastMaxDistance: 0.4
   gravityDirection: {x: 0, y: -1, z: 0}
   gravityIntensity: 9.8
   gravityMultiplier: 2
@@ -102,13 +103,14 @@ MonoBehaviour:
   sprintingSpeed: 30
   rotationSpeed: 15
   jumpHeight: 3
-  playerManager: {fileID: 0}
-  animatorManager: {fileID: 0}
-  inputManager: {fileID: 0}
+  playerManager: {fileID: 3005243556766777584}
+  animatorManager: {fileID: 3655622113326985271}
+  inputManager: {fileID: 2100550671156518442}
   cameraObject: {fileID: 0}
-  playerRigidbody: {fileID: 0}
+  playerRigidbody: {fileID: 4675932026764890329}
   enabledGizmos: 1
   isTransformGizmoEnabled: 1
+  centerOfMassGizmo: {x: 52.23, y: 2.529, z: 21.24}
   upGizmoColor: {r: 0, g: 1, b: 0, a: 1}
   rightGizmoColor: {r: 1, g: 0, b: 0, a: 1}
   frontGizmoColor: {r: 0, g: 0, b: 1, a: 1}
@@ -136,6 +138,9 @@ MonoBehaviour:
   totalForcesGizmoColor: {r: 1, g: 0.32339406, b: 0, a: 1}
   totalForcesGizmoVector: {x: 0, y: 0, z: 0}
   realVelocity: {x: 0, y: 0, z: 0}
+  isTargetedDirectionGizmoEnabled: 1
+  targetedDirectionGizmo: {x: 0, y: 0, z: 0}
+  targetDirectionGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &2100550671156518442
 MonoBehaviour:
   m_ObjectHideFlags: 0
