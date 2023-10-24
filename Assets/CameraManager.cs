@@ -6,6 +6,7 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     private InputManager inputManager;
+    private PlayerMovement playerMovement;
     
     public Transform target; //Object to look at
     public Transform cameraPivot; //Object from where the camera rotates
@@ -37,6 +38,7 @@ public class CameraManager : MonoBehaviour
     {
         target = FindObjectOfType<PlayerManager>().transform;
         inputManager = FindObjectOfType<InputManager>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
     }
@@ -58,9 +60,14 @@ public class CameraManager : MonoBehaviour
 
     private void RotateCamera()
     {
-        Vector3 rotation;
-        Quaternion targetRotation;
+        if (playerMovement.isHalfLashing)
+        {
+            //TODO: Setup camera modes
             
+            transform.rotation = target.rotation;
+            return;
+        }
+        
         pitchAngle += inputManager.cameraInput.y * cameraPitchSpeed;
         pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
         yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
@@ -70,7 +77,7 @@ public class CameraManager : MonoBehaviour
         Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
 
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
-        targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
+        Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
         transform.rotation = targetRotation;
 
         // Apply the same rotation to the camera pivot.

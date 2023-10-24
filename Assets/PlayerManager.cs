@@ -27,6 +27,9 @@ public class PlayerManager : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _animator = GetComponent<Animator>();
+        
+        //Make mouse disapear
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -50,6 +53,6 @@ public class PlayerManager : MonoBehaviour
         isInteracting = _animator.GetBool("isInteracting");
         _playerMovement.isJumping = _animator.GetBool("isJumping");
         _animator.SetBool("isGrounded", _playerMovement.isGrounded);
-        _playerMovement.isHalfLashing = _animator.GetBool("isHalfLashing");
+        _playerMovement.isHalfLashing = _animator.GetBool("isHalfLashing"); 
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class InputManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class InputManager : MonoBehaviour
     public Vector2 cameraInput;
     public bool sprintInput;
     public bool jumpInput;
-    public bool gravityInput;
+    public bool halfLashInput;
+    public bool lashInput;
     
     public float moveAmount;
     private void Awake()
@@ -38,8 +40,11 @@ public class InputManager : MonoBehaviour
             playerInputs.Player.Jump.performed += i => jumpInput = true;
             playerInputs.Player.Jump.canceled += i => jumpInput = false;
             
-            playerInputs.Player.GravityPull.performed += i => gravityInput = true;
-            playerInputs.Player.GravityPull.canceled += i => gravityInput = false;
+            playerInputs.Player.HalfLash.performed += i => halfLashInput = true;
+            playerInputs.Player.HalfLash.canceled += i => halfLashInput = false;
+            
+            playerInputs.Player.ConfirmLash.performed += i => lashInput = true;
+            playerInputs.Player.ConfirmLash.canceled += i => lashInput = false;
 
         }
         
@@ -57,7 +62,10 @@ public class InputManager : MonoBehaviour
         HandleCameraInput();
         HandleSprintingInput();
         HandleJumpingInput();
-        HandleGravityInput();
+        HandleHalfLashInput();
+        HandleSelectLashingDirectionInput();
+        HandleConfirmLashingDirectionInput();
+        
         //...
     }
 
@@ -94,12 +102,28 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void HandleGravityInput()
+    private void HandleHalfLashInput()
     {
-        if (gravityInput)
+        if (halfLashInput)
         {
-            gravityInput = false;
+            halfLashInput = false;
             playerMovement.HandleHalfLash();
         }
     }
+
+    private void HandleSelectLashingDirectionInput()
+    {
+        
+    }
+
+    private void HandleConfirmLashingDirectionInput()
+    {
+        if (playerMovement.isHalfLashing && lashInput)
+        {
+            halfLashInput = false;
+            playerMovement.HandleLash();
+        }
+    }
+    
+    
 }
