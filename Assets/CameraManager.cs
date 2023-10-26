@@ -32,6 +32,8 @@ public class CameraManager : MonoBehaviour
 
     public float minimumPitchAngle = -35;
     public float maximumPitchAngle = 35;
+    
+    public float transitionSlerpAmount = 0.2f;
 
 
     public void Awake()
@@ -63,8 +65,9 @@ public class CameraManager : MonoBehaviour
         if (playerMovement.isHalfLashing)
         {
             //TODO: Setup camera modes
-            //Todo: Make the transition smooth
-            transform.rotation = target.rotation;
+            //TODO: Make the transition smooth
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * transitionSlerpAmount);
             return;
         }
         
@@ -78,12 +81,15 @@ public class CameraManager : MonoBehaviour
 
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
         Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
-        transform.rotation = targetRotation;
+        // // transform.rotation = targetRotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * transitionSlerpAmount);
+
 
         // Apply the same rotation to the camera pivot.
         cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
 
     }
+    
 
     private void HandleCameraCollisions()
     {
