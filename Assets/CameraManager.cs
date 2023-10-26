@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    private InputManager inputManager;
-    private PlayerMovement playerMovement;
+    private InputManager _inputManager;
+    private PlayerMovement _playerMovement;
     
     public Transform target; //Object to look at
     public Transform cameraPivot; //Object from where the camera rotates
@@ -34,22 +34,42 @@ public class CameraManager : MonoBehaviour
     public float maximumPitchAngle = 35;
     
     public float transitionSlerpAmount = 0.2f;
+    public CameraMode cameraMode = CameraMode.Normal;
 
+        
 
     public void Awake()
     {
         target = FindObjectOfType<PlayerManager>().transform;
-        inputManager = FindObjectOfType<InputManager>();
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        _inputManager = FindObjectOfType<InputManager>();
+        _playerMovement = FindObjectOfType<PlayerMovement>();
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
     }
 
     public void HandleAllCameraMovement()
     {
+        
+        if (_playerMovement.isHalfLashing)
+        {
+            cameraMode =  CameraMode.HalfLash;
+        }
+        else
+        {
+            cameraMode =  CameraMode.Normal;
+        }
+        
         FollowTarget();
         RotateCamera();
         HandleCameraCollisions();
+    }
+
+    public enum CameraMode
+    {
+        Normal,
+        HalfLash,
+        Lash,
+        Transition
     }
 
     private void FollowTarget()
@@ -62,34 +82,56 @@ public class CameraManager : MonoBehaviour
 
     private void RotateCamera()
     {
-        if (playerMovement.isHalfLashing)
-        {
-            //TODO: Setup camera modes
-            //TODO: Make the transition smooth
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * transitionSlerpAmount);
-            return;
+        switch (cameraMode){
+            case CameraMode.Normal:
+                RotateNormalCamera();
+                break;
+            case CameraMode.HalfLash:
+                RotateHalfLashCamera();
+                break;
+            case CameraMode.Transition:
+                RotateTransitionCamera();
+                break;
         }
         
-        pitchAngle += inputManager.cameraInput.y * cameraPitchSpeed;
-        pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
-        yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
+    }
+
+    private void RotateTransitionCamera()
+    {
         
-      
+        // ! Idea: Use the transitionSlerpAmount to make the transition smooth. when high is like no Lerp, when low is very smooth
+        // ! Can use it with a timer to make the transition time and multiply the Lerp amount
+        
+        
+    }
+
+    private void RotateHalfLashCamera()
+    {
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * transitionSlerpAmount);
+    }
+
+    private void RotateNormalCamera()
+    {
+        pitchAngle += _inputManager.cameraInput.y * cameraPitchSpeed;
+        pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
+        yawAngle += _inputManager.cameraInput.x * cameraYawSpeed;
+
+
         // Get the player's current rotation due to gravity.
         Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
 
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
         Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
+        
         // // transform.rotation = targetRotation;
+        
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * transitionSlerpAmount);
-
-
+        
         // Apply the same rotation to the camera pivot.
         cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
-
     }
-    
+
+
 
     private void HandleCameraCollisions()
     {
