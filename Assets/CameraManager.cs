@@ -2,21 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraManager : MonoBehaviour
 {
+    [Header("References")]
     private InputManager _inputManager;
     private PlayerMovement _playerMovement;
     
+    [Header("Target")]
     public Transform target; //Object to look at
     public Transform cameraPivot; //Object from where the camera rotates
     public Transform cameraTransform; //Transform of the real camera
-
+    
+    [Header("Camera Settings")]
     public LayerMask collisionLayers; // Layers for camera collision
     
-    private float defaultPosition; // Where the camera goes when there are no collisions
-    private Vector3 cameraFollowVelocity = Vector3.zero;
-    private Vector3 cameraVectorPosition;
+    private float _defaultPosition; // Where the camera goes when there are no collisions
+    private Vector3 _cameraFollowVelocity = Vector3.zero;
+    private Vector3 _cameraVectorPosition;
 
     public Vector3 cameraOffset;
 
@@ -33,8 +37,17 @@ public class CameraManager : MonoBehaviour
     public float minimumPitchAngle = -35;
     public float maximumPitchAngle = 35;
     
-    public float transitionSlerpAmount = 0.2f;
+    [Header("Transition Settings")]
+    public float transitionLerpAmount = 1.5f;
+    public float normalLerpAmount = 25f;
+    public float transitionTime = 1.5f;
+    public float lerpAmount;
+    public float transitionTimer = 0f;
+    public bool transitionStart = false;
+    
+    [Header("Camera Mode")]
     public CameraMode cameraMode = CameraMode.Normal;
+    public CameraMode previousMode;
 
         
 
@@ -43,20 +56,37 @@ public class CameraManager : MonoBehaviour
         target = FindObjectOfType<PlayerManager>().transform;
         _inputManager = FindObjectOfType<InputManager>();
         _playerMovement = FindObjectOfType<PlayerMovement>();
-        cameraTransform = Camera.main.transform;
-        defaultPosition = cameraTransform.localPosition.z;
+        if (Camera.main != null) 
+            cameraTransform = Camera.main.transform;
+        _defaultPosition = cameraTransform.localPosition.z;
     }
 
     public void HandleAllCameraMovement()
     {
+        previousMode = cameraMode;
         
-        if (_playerMovement.isHalfLashing)
-        {
+        if (_playerMovement.isHalfLashing) 
+            
             cameraMode =  CameraMode.HalfLash;
-        }
         else
-        {
+        
             cameraMode =  CameraMode.Normal;
+
+
+        if (previousMode != cameraMode)
+        {
+            transitionStart = true;
+            Debug.Log("Started camera transition");
+        }
+
+        if (transitionStart)
+        {
+            transitionTimer += Time.deltaTime;
+            if (transitionTimer > transitionTime)
+            {
+                transitionTimer = 0f;
+                transitionStart = false;
+            }
         }
         
         FollowTarget();
@@ -75,13 +105,14 @@ public class CameraManager : MonoBehaviour
     private void FollowTarget()
     {
         Vector3 targetPosition = 
-            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref cameraFollowVelocity, cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref _cameraFollowVelocity, cameraFollowSpeed);
 
         transform.position = targetPosition;
     }
 
     private void RotateCamera()
     {
+        lerpAmount =  (normalLerpAmount - transitionLerpAmount) / 2 * Mathf.Cos(Mathf.PI * transitionTimer / transitionTime) + (normalLerpAmount + transitionLerpAmount) / 2;
         switch (cameraMode){
             case CameraMode.Normal:
                 RotateNormalCamera();
@@ -107,7 +138,7 @@ public class CameraManager : MonoBehaviour
 
     private void RotateHalfLashCamera()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * transitionSlerpAmount);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * lerpAmount);
     }
 
     private void RotateNormalCamera()
@@ -125,7 +156,7 @@ public class CameraManager : MonoBehaviour
         
         // // transform.rotation = targetRotation;
         
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * transitionSlerpAmount);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
         
         // Apply the same rotation to the camera pivot.
         cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
@@ -135,12 +166,11 @@ public class CameraManager : MonoBehaviour
 
     private void HandleCameraCollisions()
     {
-        float targetPosition = defaultPosition;
-        RaycastHit hit;
+        float targetPosition = _defaultPosition;
         Vector3 direction = cameraTransform.position - cameraPivot.position;
         direction.Normalize();
 
-        if (Physics.SphereCast(cameraPivot.transform.position, cameraCollisionRadius, direction, out hit,
+        if (Physics.SphereCast(cameraPivot.transform.position, cameraCollisionRadius, direction, out var hit,
                 Mathf.Abs(targetPosition), collisionLayers))
         {
             float distance = Vector3.Distance(cameraPivot.position, hit.point);
@@ -152,7 +182,7 @@ public class CameraManager : MonoBehaviour
             targetPosition -= minimumCollisionOffset;
         }
 
-        cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
-        cameraTransform.localPosition = cameraVectorPosition;
+        _cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
+        cameraTransform.localPosition = _cameraVectorPosition;
     }
 }

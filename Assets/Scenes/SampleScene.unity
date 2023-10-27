@@ -5273,7 +5273,12 @@ MonoBehaviour:
   yawAngle: 0
   minimumPitchAngle: -35
   maximumPitchAngle: 55
-  transitionSlerpAmount: 1.5
+  lerpAmount: 1.5
+  transitionTime: 1.5
+  transitionTimer: 0
+  transitionStart: 0
+  cameraMode: 0
+  previousMode: 0
 --- !u!1 &1483639372
 GameObject:
   m_ObjectHideFlags: 0
