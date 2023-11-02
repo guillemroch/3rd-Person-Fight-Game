@@ -98,8 +98,8 @@ public class CameraManager : MonoBehaviour
     {
         Normal,
         HalfLash,
-        Lash,
-        Transition
+        Lash
+        
     }
 
     private void FollowTarget()
@@ -113,6 +113,7 @@ public class CameraManager : MonoBehaviour
     private void RotateCamera()
     {
         lerpAmount =  (normalLerpAmount - transitionLerpAmount) / 2 * Mathf.Cos(Mathf.PI * transitionTimer / transitionTime) + (normalLerpAmount + transitionLerpAmount) / 2;
+        
         switch (cameraMode){
             case CameraMode.Normal:
                 RotateNormalCamera();
@@ -120,21 +121,13 @@ public class CameraManager : MonoBehaviour
             case CameraMode.HalfLash:
                 RotateHalfLashCamera();
                 break;
-            case CameraMode.Transition:
-                RotateTransitionCamera();
+            case CameraMode.Lash:
+                
                 break;
         }
         
     }
 
-    private void RotateTransitionCamera()
-    {
-        
-        // ! Idea: Use the transitionSlerpAmount to make the transition smooth. when high is like no Lerp, when low is very smooth
-        // ! Can use it with a timer to make the transition time and multiply the Lerp amount
-        
-        
-    }
 
     private void RotateHalfLashCamera()
     {
