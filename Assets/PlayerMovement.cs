@@ -183,7 +183,13 @@ public class PlayerMovement : MonoBehaviour
     {
         
         moveDirection = cameraObject.forward * inputManager.movementInput.y + cameraObject.right * inputManager.movementInput.x;
-        moveDirection.y = 0;
+        //Debug.Log(cameraObject.forward + "," + cameraObject.right);
+
+        float moveDot = Vector3.Dot(moveDirection, gravityDirection);
+        float magSquared = moveDirection.sqrMagnitude;
+        
+        Vector3 projection = (moveDot / magSquared) * gravityDirection;
+        moveDirection -= projection;
         moveDirection.Normalize();
 
         if (isSprinting)
@@ -209,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
         //playerRigidbody.velocity = movementVelocity;
         movementGizmoForceVector = moveDirection * movementSpeed;
         playerRigidbody.AddForce(moveDirection * movementSpeed, ForceMode.Force);
+        
         totalForcesGizmoVector += movementGizmoForceVector;
     }
 
