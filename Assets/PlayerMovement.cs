@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded;
     public bool isJumping;
     public bool isHalfLashing;
+    public bool isLashing;
 
     
     //Falling and ground detection variables
@@ -170,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
         
         
         //If the player is interacting or jumping we do not want him to move
+        
         HandleMovement();
         HandleRotation();
         HandleGravity();
@@ -181,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
      */
     private void HandleMovement()
     {
-        
+        if (isHalfLashing) return;
         moveDirection = cameraObject.forward * inputManager.movementInput.y + cameraObject.right * inputManager.movementInput.x;
         //Debug.Log(cameraObject.forward + "," + cameraObject.right);
 
@@ -224,16 +226,27 @@ public class PlayerMovement : MonoBehaviour
      */
     private void HandleRotation()
     {
-        
+    
         targetDirection = Vector3.zero; //Resets target direction
 
        if (!isHalfLashing)
        {
             //calculate orientation based on camera position
-            targetDirection = cameraObject.forward * inputManager.movementInput.y +
+            /*targetDirection = cameraObject.forward * inputManager.movementInput.y +
                               cameraObject.right * inputManager.movementInput.x;
             targetDirection.Normalize();
-            targetDirection.y = 0;
+            targetDirection.y = 0;*/
+            
+            targetDirection = cameraObject.forward * inputManager.movementInput.y +
+                            cameraObject.right * inputManager.movementInput.x;
+            //Debug.Log(cameraObject.forward + "," + cameraObject.right);
+
+            float moveDot = Vector3.Dot(targetDirection, gravityDirection);
+            float magSquared = targetDirection.sqrMagnitude;
+        
+            Vector3 projection = (moveDot / magSquared) * gravityDirection;
+            targetDirection -= projection;
+            targetDirection.Normalize();
 
             //Debug.Log(inputManager.cameraInput.x + "," + inputManager.cameraInput.y);
             if (targetDirection == Vector3.zero)

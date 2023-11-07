@@ -65,11 +65,13 @@ public class CameraManager : MonoBehaviour
     {
         previousMode = cameraMode;
         
-        if (_playerMovement.isHalfLashing) 
-            
+        if (_playerMovement.isHalfLashing)
             cameraMode =  CameraMode.HalfLash;
-        else
         
+        else if (_playerMovement.isLashing)
+            cameraMode =  CameraMode.Lash;
+        
+        else
             cameraMode =  CameraMode.Normal;
 
 
@@ -122,7 +124,7 @@ public class CameraManager : MonoBehaviour
                 RotateHalfLashCamera();
                 break;
             case CameraMode.Lash:
-                
+                RotateHalfLashCamera();
                 break;
         }
         

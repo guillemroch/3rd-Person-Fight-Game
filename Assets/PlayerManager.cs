@@ -54,6 +54,7 @@ public class PlayerManager : MonoBehaviour
         _playerMovement.isJumping = _animator.GetBool("isJumping");
         _animator.SetBool("isGrounded", _playerMovement.isGrounded);
         _playerMovement.isHalfLashing = _animator.GetBool("isHalfLashing");
+        _playerMovement.isLashing = _animator.GetBool("isLashing");
 
         
         
