@@ -164,17 +164,38 @@ public class PlayerMovement : MonoBehaviour
 #endif
         
         //First Handle the Falling
-        HandleFallingAndLanding();
+        if (!isHalfLashing)
+            HandleFallingAndLanding();
         
         if (playerManager.isInteracting)
             return;
         
         
         //If the player is interacting or jumping we do not want him to move
+
+        if (!isJumping && !isHalfLashing && !isLashing )
+        {
+            HandleMovement();
+        }
         
-        HandleMovement();
-        HandleRotation();
-        HandleGravity();
+        if (isHalfLashing)
+        {
+            HandleHalfLashingRotation();
+        }
+        else if (!isLashing)
+        {
+            HandleRotation();
+        }
+        else
+        {
+            //HandleLashingRotation();
+        }
+
+        if (!isHalfLashing && !isJumping)
+        {
+            HandleGravity();
+        }
+            
     }
 
     
@@ -183,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
      */
     private void HandleMovement()
     {
-        if (isHalfLashing) return;
+        if (isHalfLashing || isLashing) return;
         moveDirection = cameraObject.forward * inputManager.movementInput.y + cameraObject.right * inputManager.movementInput.x;
         //Debug.Log(cameraObject.forward + "," + cameraObject.right);
 
@@ -210,11 +231,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
-        //moveDirection *= movementSpeed;
-
-        
-        //Vector3 movementVelocity = moveDirection;
-        //playerRigidbody.velocity = movementVelocity;
         movementGizmoForceVector = moveDirection * movementSpeed;
         playerRigidbody.AddForce(moveDirection * movementSpeed, ForceMode.Force);
         
@@ -229,16 +245,12 @@ public class PlayerMovement : MonoBehaviour
     
         targetDirection = Vector3.zero; //Resets target direction
 
-       if (!isHalfLashing)
+       if (!isHalfLashing && !isLashing)
        {
             //calculate orientation based on camera position
-            /*targetDirection = cameraObject.forward * inputManager.movementInput.y +
-                              cameraObject.right * inputManager.movementInput.x;
-            targetDirection.Normalize();
-            targetDirection.y = 0;*/
-            
+
             targetDirection = cameraObject.forward * inputManager.movementInput.y +
-                            cameraObject.right * inputManager.movementInput.x;
+                              cameraObject.right * inputManager.movementInput.x;
             //Debug.Log(cameraObject.forward + "," + cameraObject.right);
 
             float moveDot = Vector3.Dot(targetDirection, gravityDirection);
@@ -257,18 +269,17 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, transform.up);
 
             transform.rotation =  Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            return;
        }
 
-       if (isHalfLashing)
-       {
-           //Make the player rotate with the camera, making that we always see the back of the player
-           
-           transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
-           transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
-
-       }
        
+    }
+
+    private void HandleHalfLashingRotation()
+    {
+        //Make the player rotate with the camera, making that we always see the back of the player
+        transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
+        transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
+
     }
     
 
@@ -285,9 +296,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isGrounded && !isJumping)
         {
-            if (!playerManager.isInteracting)
+            if (!playerManager.isInteracting && !isLashing)
             {
                 animatorManager.PlayTargetAnimation("Fall", true);
+                Debug.Log("Falling");
             }
 
             inAirTimer += Time.deltaTime;
@@ -319,7 +331,7 @@ public class PlayerMovement : MonoBehaviour
     /**
      * Handles Jumping
      */
-    public void HandleJumping()
+    public void TriggerJumping()
     {
         if (isGrounded)
         {
@@ -333,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void HandleHalfLash()
+    public void TriggerHalfLash()
     {
         if (isHalfLashing) return;
         
@@ -351,12 +363,17 @@ public class PlayerMovement : MonoBehaviour
         inAirTimer = 0;
     }
     
-    public void HandleLash() 
+    public void TriggerLash() 
     {
+        if (isLashing || !isHalfLashing) return;
+        
         gravityDirection = cameraObject.forward;
 
         isHalfLashing = false; //TODO: Change this to a state machine
         animatorManager.animator.SetBool("isHalfLashing", false);
+        animatorManager.animator.SetBool("isLashing", true);
+        //animatorManager.PlayTargetAnimation("Lash", false);
+        
         
         
     }
