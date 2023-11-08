@@ -2,21 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraManager : MonoBehaviour
 {
-    private InputManager inputManager;
-    private PlayerMovement playerMovement;
+    [Header("References")]
+    private InputManager _inputManager;
+    private PlayerMovement _playerMovement;
     
+    [Header("Target")]
     public Transform target; //Object to look at
     public Transform cameraPivot; //Object from where the camera rotates
     public Transform cameraTransform; //Transform of the real camera
-
+    
+    [Header("Camera Settings")]
     public LayerMask collisionLayers; // Layers for camera collision
     
-    private float defaultPosition; // Where the camera goes when there are no collisions
-    private Vector3 cameraFollowVelocity = Vector3.zero;
-    private Vector3 cameraVectorPosition;
+    private float _defaultPosition; // Where the camera goes when there are no collisions
+    private Vector3 _cameraFollowVelocity = Vector3.zero;
+    private Vector3 _cameraVectorPosition;
 
     public Vector3 cameraOffset;
 
@@ -32,67 +36,136 @@ public class CameraManager : MonoBehaviour
 
     public float minimumPitchAngle = -35;
     public float maximumPitchAngle = 35;
+    
+    [Header("Transition Settings")]
+    public float transitionLerpAmount = 1.5f;
+    public float normalLerpAmount = 25f;
+    public float transitionTime = 1.5f;
+    public float lerpAmount;
+    public float transitionTimer = 0f;
+    public bool transitionStart = false;
+    
+    [Header("Camera Mode")]
+    public CameraMode cameraMode = CameraMode.Normal;
+    public CameraMode previousMode;
 
+        
 
     public void Awake()
     {
         target = FindObjectOfType<PlayerManager>().transform;
-        inputManager = FindObjectOfType<InputManager>();
-        playerMovement = FindObjectOfType<PlayerMovement>();
-        cameraTransform = Camera.main.transform;
-        defaultPosition = cameraTransform.localPosition.z;
+        _inputManager = FindObjectOfType<InputManager>();
+        _playerMovement = FindObjectOfType<PlayerMovement>();
+        if (Camera.main != null) 
+            cameraTransform = Camera.main.transform;
+        _defaultPosition = cameraTransform.localPosition.z;
     }
 
     public void HandleAllCameraMovement()
     {
+        previousMode = cameraMode;
+        
+        if (_playerMovement.isHalfLashing)
+            cameraMode =  CameraMode.HalfLash;
+        
+        else if (_playerMovement.isLashing)
+            cameraMode =  CameraMode.Lash;
+        
+        else
+            cameraMode =  CameraMode.Normal;
+
+
+        if (previousMode != cameraMode)
+        {
+            transitionStart = true;
+            Debug.Log("Started camera transition");
+        }
+
+        if (transitionStart)
+        {
+            transitionTimer += Time.deltaTime;
+            if (transitionTimer > transitionTime)
+            {
+                transitionTimer = 0f;
+                transitionStart = false;
+            }
+        }
+        
         FollowTarget();
         RotateCamera();
         HandleCameraCollisions();
     }
 
+    public enum CameraMode
+    {
+        Normal,
+        HalfLash,
+        Lash
+        
+    }
+
     private void FollowTarget()
     {
         Vector3 targetPosition = 
-            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref cameraFollowVelocity, cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref _cameraFollowVelocity, cameraFollowSpeed);
 
         transform.position = targetPosition;
     }
 
     private void RotateCamera()
     {
-        if (playerMovement.isHalfLashing)
-        {
-            //TODO: Setup camera modes
-            
-            transform.rotation = target.rotation;
-            return;
+        lerpAmount =  (normalLerpAmount - transitionLerpAmount) / 2 * Mathf.Cos(Mathf.PI * transitionTimer / transitionTime) + (normalLerpAmount + transitionLerpAmount) / 2;
+        
+        switch (cameraMode){
+            case CameraMode.Normal:
+                RotateNormalCamera();
+                break;
+            case CameraMode.HalfLash:
+                RotateHalfLashCamera();
+                break;
+            case CameraMode.Lash:
+                RotateHalfLashCamera();
+                break;
         }
         
-        pitchAngle += inputManager.cameraInput.y * cameraPitchSpeed;
+    }
+
+
+    private void RotateHalfLashCamera()
+    {
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * lerpAmount);
+    }
+
+    private void RotateNormalCamera()
+    {
+        pitchAngle += _inputManager.cameraInput.y * cameraPitchSpeed;
         pitchAngle = Mathf.Clamp(pitchAngle, minimumPitchAngle, maximumPitchAngle);
-        yawAngle += inputManager.cameraInput.x * cameraYawSpeed;
-        
-      
+        yawAngle += _inputManager.cameraInput.x * cameraYawSpeed;
+
+
         // Get the player's current rotation due to gravity.
         Quaternion playerGravityRotation = Quaternion.FromToRotation(Vector3.up, target.up);
 
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
         Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
-        transform.rotation = targetRotation;
-
+        
+        // // transform.rotation = targetRotation;
+        
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
+        
         // Apply the same rotation to the camera pivot.
         cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
-
     }
+
+
 
     private void HandleCameraCollisions()
     {
-        float targetPosition = defaultPosition;
-        RaycastHit hit;
+        float targetPosition = _defaultPosition;
         Vector3 direction = cameraTransform.position - cameraPivot.position;
         direction.Normalize();
 
-        if (Physics.SphereCast(cameraPivot.transform.position, cameraCollisionRadius, direction, out hit,
+        if (Physics.SphereCast(cameraPivot.transform.position, cameraCollisionRadius, direction, out var hit,
                 Mathf.Abs(targetPosition), collisionLayers))
         {
             float distance = Vector3.Distance(cameraPivot.position, hit.point);
@@ -104,7 +177,7 @@ public class CameraManager : MonoBehaviour
             targetPosition -= minimumCollisionOffset;
         }
 
-        cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
-        cameraTransform.localPosition = cameraVectorPosition;
+        _cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
+        cameraTransform.localPosition = _cameraVectorPosition;
     }
 }
