@@ -176,6 +176,10 @@ public class PlayerMovement : MonoBehaviour
         if (!isJumping && !isHalfLashing && !isLashing )
         {
             HandleMovement();
+            
+        } else if (isLashing)
+        {
+            HandleLashMovement();
         }
         
         if (isHalfLashing)
@@ -188,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            //HandleLashingRotation();
+            HandleLashingRotation();
         }
 
         if (!isHalfLashing && !isJumping)
@@ -237,6 +241,31 @@ public class PlayerMovement : MonoBehaviour
         totalForcesGizmoVector += movementGizmoForceVector;
     }
 
+    private void HandleLashMovement()
+    {
+        gravityDirection = transform.forward;
+        /*
+        moveDirection = transform.forward * inputManager.movementInput.y +
+                        transform.right * inputManager.movementInput.x;
+        
+        float moveDot = Vector3.Dot(moveDirection, gravityDirection);
+        float magSquared = moveDirection.sqrMagnitude;
+        
+        Vector3 projection = (moveDot / magSquared) * gravityDirection;
+        moveDirection -= projection;
+        moveDirection.Normalize();
+
+        
+        Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+
+        Vector3 rotatedGravityDirection = rotation * gravityDirection * 0.00005f;
+
+        gravityDirection = rotatedGravityDirection;
+        gravityDirection.Normalize();
+        Debug.Log("Lashing direction: " + gravityDirection);*/
+
+    }
+
     /**
      * Handles the player rotation
      */
@@ -280,6 +309,24 @@ public class PlayerMovement : MonoBehaviour
         transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
         transform.RotateAround(playerRigidbody.worldCenterOfMass, transform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
 
+    }
+    
+    private void HandleLashingRotation()
+    {
+        moveDirection = transform.right * inputManager.movementInput.y +
+                        transform.up * inputManager.movementInput.x;
+        
+        
+        float moveDot = Vector3.Dot(moveDirection, transform.forward);
+        float magSquared = moveDirection.sqrMagnitude;
+        
+        Vector3 projection = (moveDot / magSquared) * transform.forward;
+        moveDirection -= projection;
+        moveDirection.Normalize();
+        
+        transform.Rotate(moveDirection);
+        
+        //transform.rotation = Quaternion.Slerp(transform.rotation, moveDirection, rotationSpeed * Time.deltaTime);
     }
     
 
@@ -402,6 +449,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        if (isGrounded) return;
         //checks if the current layer of the game object is included in the groundLayer LayerMask
         if ((groundLayer.value & (1 << other.gameObject.layer))!= 0)
         {
