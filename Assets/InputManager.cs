@@ -63,7 +63,6 @@ public class InputManager : MonoBehaviour
         HandleSprintingInput();
         HandleJumpingInput();
         HandleHalfLashInput();
-        HandleSelectLashingDirectionInput();
         HandleConfirmLashingDirectionInput();
         
         //...
@@ -98,7 +97,7 @@ public class InputManager : MonoBehaviour
         if (jumpInput)
         {
             jumpInput = false;
-            playerMovement.HandleJumping();
+            playerMovement.TriggerJumping();
         }
     }
 
@@ -107,21 +106,16 @@ public class InputManager : MonoBehaviour
         if (halfLashInput)
         {
             halfLashInput = false;
-            playerMovement.HandleHalfLash();
+            playerMovement.TriggerHalfLash();
         }
     }
-
-    private void HandleSelectLashingDirectionInput()
-    {
-        
-    }
-
+    
     private void HandleConfirmLashingDirectionInput()
     {
-        if (playerMovement.isHalfLashing && lashInput)
+        if (lashInput)
         {
-            halfLashInput = false;
-            playerMovement.HandleLash();
+            lashInput = false;
+            playerMovement.TriggerLash();
         }
     }
     
