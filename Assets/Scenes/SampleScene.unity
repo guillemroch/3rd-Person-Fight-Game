@@ -8721,14 +8721,6 @@ PrefabInstance:
       propertyPath: cameraObject
       value: 
       objectReference: {fileID: 330585546}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: playerTransform
-      value: 
-      objectReference: {fileID: 917945348}
-    - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.83
