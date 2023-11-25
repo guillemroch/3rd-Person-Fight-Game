@@ -6,9 +6,9 @@ using UnityEngine.Serialization;
 
 public class InputManager : MonoBehaviour
 {
-    private PlayerInputActions playerInputs;
-    private AnimatorManager animatorManager;
-    private PlayerMovement playerMovement;
+    private PlayerInputActions _playerInputs;
+    private AnimatorManager _animatorManager;
+    private PlayerMovement _playerMovement;
 
     //Input actions
     public Vector2 movementInput;
@@ -21,39 +21,39 @@ public class InputManager : MonoBehaviour
     public float moveAmount;
     private void Awake()
     {
-        animatorManager = GetComponent<AnimatorManager>();
-        playerMovement = GetComponent<PlayerMovement>();
+        _animatorManager = GetComponent<AnimatorManager>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void OnEnable()
     {
-        if (playerInputs == null)
+        if (_playerInputs == null)
         {
-            playerInputs = new PlayerInputActions();
+            _playerInputs = new PlayerInputActions();
 
-            playerInputs.Player.Move.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerInputs.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
+            _playerInputs.Player.Move.performed += i => movementInput = i.ReadValue<Vector2>();
+            _playerInputs.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
 
-            playerInputs.Player.Sprint.performed += i => sprintInput = true;
-            playerInputs.Player.Sprint.canceled += i => sprintInput = false;
+            _playerInputs.Player.Sprint.performed += i => sprintInput = true;
+            _playerInputs.Player.Sprint.canceled += i => sprintInput = false;
             
-            playerInputs.Player.Jump.performed += i => jumpInput = true;
-            playerInputs.Player.Jump.canceled += i => jumpInput = false;
+            _playerInputs.Player.Jump.performed += i => jumpInput = true;
+            _playerInputs.Player.Jump.canceled += i => jumpInput = false;
             
-            playerInputs.Player.HalfLash.performed += i => halfLashInput = true;
-            playerInputs.Player.HalfLash.canceled += i => halfLashInput = false;
+            _playerInputs.Player.HalfLash.performed += i => halfLashInput = true;
+            _playerInputs.Player.HalfLash.canceled += i => halfLashInput = false;
             
-            playerInputs.Player.ConfirmLash.performed += i => lashInput = true;
-            playerInputs.Player.ConfirmLash.canceled += i => lashInput = false;
+            _playerInputs.Player.ConfirmLash.performed += i => lashInput = true;
+            _playerInputs.Player.ConfirmLash.canceled += i => lashInput = false;
 
         }
         
-        playerInputs.Enable();
+        _playerInputs.Enable();
     }
 
     private void OnDisable()
     {
-        playerInputs.Disable();
+        _playerInputs.Disable();
     }
 
     public void HandleAllInputs()
@@ -70,9 +70,8 @@ public class InputManager : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        movementInput = movementInput;
         moveAmount = Mathf.Clamp01(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.y));
-        animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), playerMovement.isSprinting);
+        _animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), _playerMovement.isSprinting);
     }
 
     private void HandleCameraInput()
@@ -84,11 +83,11 @@ public class InputManager : MonoBehaviour
     {
         if (sprintInput && moveAmount > 0.5f)
         {
-            playerMovement.isSprinting = true;
+            _playerMovement.isSprinting = true;
         }
         else
         {
-            playerMovement.isSprinting = false;
+            _playerMovement.isSprinting = false;
         }
     }
 
@@ -97,7 +96,7 @@ public class InputManager : MonoBehaviour
         if (jumpInput)
         {
             jumpInput = false;
-            playerMovement.TriggerJumping();
+            _playerMovement.TriggerJumping();
         }
     }
 
@@ -106,7 +105,7 @@ public class InputManager : MonoBehaviour
         if (halfLashInput)
         {
             halfLashInput = false;
-            playerMovement.TriggerHalfLash();
+            _playerMovement.TriggerHalfLash();
         }
     }
     
@@ -115,7 +114,7 @@ public class InputManager : MonoBehaviour
         if (lashInput)
         {
             lashInput = false;
-            playerMovement.TriggerLash();
+            _playerMovement.TriggerLash();
         }
     }
     

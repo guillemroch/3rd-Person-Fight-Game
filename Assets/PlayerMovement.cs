@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
     //Player values for movements
     [Header("Movement Variables")]
     public Vector3 moveDirection;
@@ -120,10 +121,12 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 targetedDirectionGizmo;
     public Color targetDirectionGizmoColor = Color.yellow;
 
+    #endregion
     
    
     //------------ METHODS --------------------------------------------------------------------
     
+    #region Player Logic
     /**
      * Gets all the needed references in Awake()
      */
@@ -170,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
         
         //If the player is interacting or jumping we do not want him to move
 
-        if (!isJumping && !isHalfLashing && !isLashing )
+        if (!isHalfLashing && !isLashing )
         {
             HandleMovement();
             
@@ -341,7 +344,6 @@ public class PlayerMovement : MonoBehaviour
             if (!playerManager.isInteracting && !isLashing)
             {
                 animatorManager.PlayTargetAnimation("Fall", true);
-                Debug.Log("Falling");
             }
 
             inAirTimer += Time.deltaTime;
@@ -361,6 +363,15 @@ public class PlayerMovement : MonoBehaviour
                 animatorManager.PlayTargetAnimation("Land", true);
             }
 
+            if (isLashing)
+            {
+              Debug.Log("Normal: " + hit.normal);
+              isGrounded = true;
+              transform.up = hit.normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
+              gravityDirection = -hit.normal;  
+            }
+            
+
             inAirTimer = 0;
             isGrounded = true;
         }
@@ -369,6 +380,7 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
+    
 
     /**
      * Handles Jumping
@@ -440,17 +452,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (isGrounded) return;
-        //checks if the current layer of the game object is included in the groundLayer LayerMask
-        if ((groundLayer.value & (1 << other.gameObject.layer))!= 0)
-        {
-            isGrounded = true;
-            transform.up = other.contacts[0].normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
-            gravityDirection = - other.contacts[0].normal;
-        }
-    }
+ 
+    
+    #endregion
 
 
 #if UNITY_EDITOR
