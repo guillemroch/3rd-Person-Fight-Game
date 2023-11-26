@@ -405,9 +405,12 @@ public class PlayerMovement : MonoBehaviour
         
         animatorManager.animator.SetBool("isHalfLashing", true);
         animatorManager.PlayTargetAnimation("Half Lashing", false);
+        
 
         
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
+        transform.Rotate(transform.right, 90);
+
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
         
@@ -419,7 +422,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isLashing || !isHalfLashing) return;
         
-        gravityDirection = cameraObject.forward;
+        gravityDirection = playerTransform.up;
 
         isHalfLashing = false; //TODO: Change this to a state machine
         animatorManager.animator.SetBool("isHalfLashing", false);

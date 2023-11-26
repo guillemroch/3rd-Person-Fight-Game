@@ -133,7 +133,10 @@ public class CameraManager : MonoBehaviour
 
     private void RotateHalfLashCamera()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * lerpAmount);
+        Quaternion targetRotation = target.rotation;
+        targetRotation *= Quaternion.Euler(new Vector3(90, 0, 0));
+        
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
     }
 
     private void RotateNormalCamera()
