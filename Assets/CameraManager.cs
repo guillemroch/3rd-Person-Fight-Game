@@ -37,6 +37,9 @@ public class CameraManager : MonoBehaviour
     public float minimumPitchAngle = -35;
     public float maximumPitchAngle = 35;
     
+    [Header("Half Lash Settings")]
+    public Vector3 halfLashRotationOffset;
+    
     [Header("Transition Settings")]
     public float transitionLerpAmount = 1.5f;
     public float normalLerpAmount = 25f;
@@ -134,7 +137,7 @@ public class CameraManager : MonoBehaviour
     private void RotateHalfLashCamera()
     {
         Quaternion targetRotation = target.rotation;
-        targetRotation *= Quaternion.Euler(new Vector3(90, 0, 0));
+        targetRotation *= Quaternion.Euler(halfLashRotationOffset);
         
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
     }

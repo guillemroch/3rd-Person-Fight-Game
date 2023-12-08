@@ -179,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
             
         } else if (isLashing)
         {
-            HandleLashMovement();
+            //HandleLashMovement();
         }
         
         if (isHalfLashing)
@@ -192,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            HandleLashingRotation();
+            //HandleLashingRotation();
         }
 
         if (!isHalfLashing && !isJumping)
@@ -243,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLashMovement()
     {
-        gravityDirection = playerTransform.forward;
+        //gravityDirection = playerTransform.forward;
         /*
         moveDirection = transform.forward * inputManager.movementInput.y +
                         transform.right * inputManager.movementInput.x;
@@ -304,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
     private void HandleHalfLashingRotation()
     {
         //Make the player rotate with the camera, making that we always see the back of the player
-        transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
+        transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.forward, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.x);
         transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
 
     }
@@ -347,7 +347,8 @@ public class PlayerMovement : MonoBehaviour
             }
 
             inAirTimer += Time.deltaTime;
-            playerRigidbody.AddForce(playerTransform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
+            if (!isLashing)
+                playerRigidbody.AddForce(playerTransform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
             playerRigidbody.AddForce(gravityDirection * (fallingVelocity * inAirTimer), ForceMode.Force);
             
             //Gizmos
@@ -438,10 +439,7 @@ public class PlayerMovement : MonoBehaviour
     {
         gravityGizmoForceVector = Vector3.zero;
         if (isJumping) return;
-        if (isHalfLashing)
-        {
-            return;
-        } 
+        if (isHalfLashing) return;
         if (isGrounded)
         {
             //playerRigidbody.velocity += groundedGravity * gravityMultiplier * transform.up;
