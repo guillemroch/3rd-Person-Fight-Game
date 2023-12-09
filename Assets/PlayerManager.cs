@@ -21,35 +21,29 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        //First get instances of classes 
-        
+
         _inputManager = GetComponent<InputManager>();
         _playerMovement = GetComponent<PlayerMovement>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _animator = GetComponent<Animator>();
         
-        //Make mouse disapear
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        //Get the inputs
         _inputManager.HandleAllInputs();
     }
 
     private void FixedUpdate()
     {
-        //Calculate the Movement of the player
         _playerMovement.HandleAllMovement();
     }
 
     private void LateUpdate()
     {
-        //Calculate position of the camera
         _cameraManager.HandleAllCameraMovement();
 
-        //Handles the animator based on the player state
         isInteracting = _animator.GetBool("isInteracting");
         _playerMovement.isJumping = _animator.GetBool("isJumping");
         _animator.SetBool("isGrounded", _playerMovement.isGrounded);

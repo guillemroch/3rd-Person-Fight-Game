@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
     //Player values for movements
     [Header("Movement Variables")]
     public Vector3 moveDirection;
@@ -29,7 +30,10 @@ public class PlayerMovement : MonoBehaviour
     public float fallingVelocity;
     public LayerMask groundLayer;
     public float rayCastHeightOffset = 0.5f;
+    [Range(0.1f, 1.5f)]
     public float rayCastMaxDistance = 1;
+    [Range(0.1f, 1.5f)]
+    public float rayCastRadius = 0.2f;
 
     [Header("Gravity")] 
     public Vector3 gravityDirection = Vector3.down; //What is the current gravity orientation for the player
@@ -120,10 +124,12 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 targetedDirectionGizmo;
     public Color targetDirectionGizmoColor = Color.yellow;
 
+    #endregion
     
    
     //------------ METHODS --------------------------------------------------------------------
     
+    #region Player Logic
     /**
      * Gets all the needed references in Awake()
      */
@@ -170,13 +176,13 @@ public class PlayerMovement : MonoBehaviour
         
         //If the player is interacting or jumping we do not want him to move
 
-        if (!isJumping && !isHalfLashing && !isLashing )
+        if (!isHalfLashing && !isLashing )
         {
             HandleMovement();
             
         } else if (isLashing)
         {
-            HandleLashMovement();
+            //HandleLashMovement();
         }
         
         if (isHalfLashing)
@@ -189,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            HandleLashingRotation();
+            //HandleLashingRotation();
         }
 
         if (!isHalfLashing && !isJumping)
@@ -240,7 +246,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLashMovement()
     {
-        gravityDirection = playerTransform.forward;
+        //gravityDirection = playerTransform.forward;
         /*
         moveDirection = transform.forward * inputManager.movementInput.y +
                         transform.right * inputManager.movementInput.x;
@@ -292,16 +298,14 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, -gravityDirection);
 
-        transform.rotation =  Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-       
-
-       
+        transform.rotation = Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        
     }
 
     private void HandleHalfLashingRotation()
     {
         //Make the player rotate with the camera, making that we always see the back of the player
-        transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.up, rotationSpeed * Time.deltaTime * inputManager.cameraInput.x);
+        transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.forward, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.x);
         transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
 
     }
@@ -334,6 +338,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isHalfLashing) return;
         Vector3 rayCastOrigin = transform.position - rayCastHeightOffset * gravityDirection;
+        rayCastOrigin = playerRigidbody.worldCenterOfMass;
         gizmoRayCastOrigin = rayCastOrigin;
 
         if (!isGrounded && !isJumping)
@@ -341,11 +346,11 @@ public class PlayerMovement : MonoBehaviour
             if (!playerManager.isInteracting && !isLashing)
             {
                 animatorManager.PlayTargetAnimation("Fall", true);
-                Debug.Log("Falling");
             }
 
             inAirTimer += Time.deltaTime;
-            playerRigidbody.AddForce(playerTransform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
+            if (!isLashing)
+                playerRigidbody.AddForce(playerTransform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
             playerRigidbody.AddForce(gravityDirection * (fallingVelocity * inAirTimer), ForceMode.Force);
             
             //Gizmos
@@ -354,12 +359,21 @@ public class PlayerMovement : MonoBehaviour
             totalForcesGizmoVector += fallingForcesGizmoVector;
         }
         
-        if (Physics.SphereCast(rayCastOrigin, 0.2f, gravityDirection, out RaycastHit hit ,rayCastMaxDistance, groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, rayCastRadius, gravityDirection, out RaycastHit hit ,rayCastMaxDistance, groundLayer))
         {
             if (!isGrounded && !playerManager.isInteracting)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
             }
+
+            if (isLashing)
+            {
+              Debug.Log("Normal: " + hit.normal);
+              isGrounded = true;
+              transform.up = hit.normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
+              gravityDirection = -hit.normal;  
+            }
+            
 
             inAirTimer = 0;
             isGrounded = true;
@@ -369,6 +383,7 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
+    
 
     /**
      * Handles Jumping
@@ -393,12 +408,17 @@ public class PlayerMovement : MonoBehaviour
         
         animatorManager.animator.SetBool("isHalfLashing", true);
         animatorManager.PlayTargetAnimation("Half Lashing", false);
+        
 
         
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
+        if (isGrounded)
+            transform.Rotate(transform.right, 90);
+
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
-        
+        isGrounded = false;
+
         
         inAirTimer = 0;
     }
@@ -407,7 +427,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isLashing || !isHalfLashing) return;
         
-        gravityDirection = cameraObject.forward;
+        gravityDirection = playerTransform.up;
 
         isHalfLashing = false; //TODO: Change this to a state machine
         animatorManager.animator.SetBool("isHalfLashing", false);
@@ -423,10 +443,7 @@ public class PlayerMovement : MonoBehaviour
     {
         gravityGizmoForceVector = Vector3.zero;
         if (isJumping) return;
-        if (isHalfLashing)
-        {
-            return;
-        } 
+        if (isHalfLashing) return;
         if (isGrounded)
         {
             //playerRigidbody.velocity += groundedGravity * gravityMultiplier * transform.up;
@@ -440,17 +457,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (isGrounded) return;
-        //checks if the current layer of the game object is included in the groundLayer LayerMask
-        if ((groundLayer.value & (1 << other.gameObject.layer))!= 0)
-        {
-            isGrounded = true;
-            transform.up = other.contacts[0].normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
-            gravityDirection = - other.contacts[0].normal;
-        }
-    }
+ 
+    
+    #endregion
 
 
 #if UNITY_EDITOR
@@ -487,8 +496,8 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = originGizmoColor;
             Gizmos.DrawCube(gizmoRayCastOrigin, new Vector3(0.15f, 0.05f, 0.15f));
             Gizmos.color = hitGizmoColor;
-            Physics.SphereCast(gizmoRayCastOrigin, 0.2f, gravityDirection, out var hit, rayCastMaxDistance, groundLayer);
-            Gizmos.DrawSphere(hit.point, 0.05f);
+            Physics.SphereCast(gizmoRayCastOrigin, rayCastRadius, gravityDirection, out var hit, rayCastMaxDistance, groundLayer);
+            if (isGrounded) Gizmos.DrawSphere(hit.point, rayCastRadius);
         }
 
         if (isGravityDirectionGizmoEnabled)
