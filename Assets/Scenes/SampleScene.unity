@@ -8727,6 +8727,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: maxAirSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: cameraObject
       value: 
       objectReference: {fileID: 330585546}
