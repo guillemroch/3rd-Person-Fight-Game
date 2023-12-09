@@ -30,7 +30,10 @@ public class PlayerMovement : MonoBehaviour
     public float fallingVelocity;
     public LayerMask groundLayer;
     public float rayCastHeightOffset = 0.5f;
+    [Range(0.1f, 1.5f)]
     public float rayCastMaxDistance = 1;
+    [Range(0.1f, 1.5f)]
+    public float rayCastRadius = 0.2f;
 
     [Header("Gravity")] 
     public Vector3 gravityDirection = Vector3.down; //What is the current gravity orientation for the player
@@ -295,10 +298,8 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, -gravityDirection);
 
-        transform.rotation =  Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-       
-
-       
+        transform.rotation = Quaternion.Slerp(playerTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        
     }
 
     private void HandleHalfLashingRotation()
@@ -337,6 +338,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isHalfLashing) return;
         Vector3 rayCastOrigin = transform.position - rayCastHeightOffset * gravityDirection;
+        rayCastOrigin = playerRigidbody.worldCenterOfMass;
         gizmoRayCastOrigin = rayCastOrigin;
 
         if (!isGrounded && !isJumping)
@@ -357,7 +359,7 @@ public class PlayerMovement : MonoBehaviour
             totalForcesGizmoVector += fallingForcesGizmoVector;
         }
         
-        if (Physics.SphereCast(rayCastOrigin, 0.2f, gravityDirection, out RaycastHit hit ,rayCastMaxDistance, groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, rayCastRadius, gravityDirection, out RaycastHit hit ,rayCastMaxDistance, groundLayer))
         {
             if (!isGrounded && !playerManager.isInteracting)
             {
@@ -410,11 +412,13 @@ public class PlayerMovement : MonoBehaviour
 
         
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
-        transform.Rotate(transform.right, 90);
+        if (isGrounded)
+            transform.Rotate(transform.right, 90);
 
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
-        
+        isGrounded = false;
+
         
         inAirTimer = 0;
     }
@@ -492,8 +496,8 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = originGizmoColor;
             Gizmos.DrawCube(gizmoRayCastOrigin, new Vector3(0.15f, 0.05f, 0.15f));
             Gizmos.color = hitGizmoColor;
-            Physics.SphereCast(gizmoRayCastOrigin, 0.2f, gravityDirection, out var hit, rayCastMaxDistance, groundLayer);
-            Gizmos.DrawSphere(hit.point, 0.05f);
+            Physics.SphereCast(gizmoRayCastOrigin, rayCastRadius, gravityDirection, out var hit, rayCastMaxDistance, groundLayer);
+            if (isGrounded) Gizmos.DrawSphere(hit.point, rayCastRadius);
         }
 
         if (isGravityDirectionGizmoEnabled)
