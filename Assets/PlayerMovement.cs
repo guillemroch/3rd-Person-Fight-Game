@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     //Falling and ground detection variables
     [Header("Falling")] 
     public float inAirTimer;
+    public float maxAirSpeed = 25f;
     public float leapingVelocity;
     public float fallingVelocity;
     public LayerMask groundLayer;
@@ -182,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
             
         } else if (isLashing)
         {
-            //HandleLashMovement();
+            HandleLashMovement();
         }
         
         if (isHalfLashing)
@@ -195,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            //HandleLashingRotation();
+            HandleLashingRotation();
         }
 
         if (!isHalfLashing && !isJumping)
@@ -246,26 +247,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLashMovement()
     {
-        //gravityDirection = playerTransform.forward;
-        /*
-        moveDirection = transform.forward * inputManager.movementInput.y +
-                        transform.right * inputManager.movementInput.x;
+        moveDirection = playerTransform.right * inputManager.movementInput.y +
+                        playerTransform.forward * -inputManager.movementInput.x;
         
-        float moveDot = Vector3.Dot(moveDirection, gravityDirection);
+        /*float moveDot = Vector3.Dot(moveDirection, gravityDirection);
         float magSquared = moveDirection.sqrMagnitude;
         
         Vector3 projection = (moveDot / magSquared) * gravityDirection;
-        moveDirection -= projection;
+        moveDirection -= projection;*/
         moveDirection.Normalize();
-
         
-        Quaternion rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-
-        Vector3 rotatedGravityDirection = rotation * gravityDirection * 0.00005f;
-
-        gravityDirection = rotatedGravityDirection;
-        gravityDirection.Normalize();
-        Debug.Log("Lashing direction: " + gravityDirection);*/
+        Quaternion rotation = Quaternion.Euler(moveDirection) * Quaternion.Euler(gravityDirection);
+        
+        gravityDirection = rotation * gravityDirection;
 
     }
 
@@ -312,7 +306,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void HandleLashingRotation()
     {
-        var forward = playerTransform.forward;
+        /*var forward = playerTransform.forward;
         moveDirection = playerTransform.right * inputManager.movementInput.y +
                         playerTransform.up * inputManager.movementInput.x;
         
@@ -325,8 +319,15 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.Normalize();
         
         transform.Rotate(moveDirection);
+        */
         
         //transform.rotation = Quaternion.Slerp(transform.rotation, moveDirection, rotationSpeed * Time.deltaTime);
+        
+        // Calculate the rotation needed to align the player's up vector with the gravity direction
+        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, gravityDirection);
+
+        // Apply the rotation to the player's transform
+        playerTransform.rotation = targetRotation * playerTransform.rotation;
     }
     
 
@@ -347,8 +348,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 animatorManager.PlayTargetAnimation("Fall", true);
             }
-
-            inAirTimer += Time.deltaTime;
+            
+            if (inAirTimer <= maxAirSpeed) inAirTimer += Time.deltaTime;
             if (!isLashing)
                 playerRigidbody.AddForce(playerTransform.forward * (leapingVelocity * playerRigidbody.velocity.magnitude), ForceMode.Force);
             playerRigidbody.AddForce(gravityDirection * (fallingVelocity * inAirTimer), ForceMode.Force);
