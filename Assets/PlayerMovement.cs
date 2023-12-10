@@ -420,7 +420,7 @@ public class PlayerMovement : MonoBehaviour
         
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
         if (isGrounded)
-            transform.Rotate(transform.right, 90);
+            StartCoroutine(TriggerHalfLashingRotation(0.5f));
 
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
@@ -428,6 +428,20 @@ public class PlayerMovement : MonoBehaviour
 
         
         inAirTimer = 0;
+    }
+    
+    public IEnumerator TriggerHalfLashingRotation(float duration)
+    {
+        float timeElapsed = 0;
+        Quaternion startRotation = playerTransform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, playerTransform.forward) * playerTransform.rotation;
+        while (timeElapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.rotation = targetRotation;
     }
     
     public void TriggerLash() 
