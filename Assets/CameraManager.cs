@@ -109,8 +109,11 @@ public class CameraManager : MonoBehaviour
 
     private void FollowTarget()
     {
+        float offsetMultiplier = 1;
+        if (cameraMode != CameraMode.Normal) offsetMultiplier = 2;
+        
         Vector3 targetPosition = 
-            Vector3.SmoothDamp(transform.position, target.position + cameraOffset, ref _cameraFollowVelocity, cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, target.position + cameraOffset * offsetMultiplier, ref _cameraFollowVelocity, cameraFollowSpeed);
 
         transform.position = targetPosition;
     }
@@ -139,7 +142,7 @@ public class CameraManager : MonoBehaviour
         Quaternion targetRotation = target.rotation;
         targetRotation *= Quaternion.Euler(halfLashRotationOffset);
         
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
     }
 
     private void RotateNormalCamera()
@@ -155,9 +158,8 @@ public class CameraManager : MonoBehaviour
         // Combine the player's gravity rotation with the camera's pitch and yaw rotations.
         Quaternion targetRotation = playerGravityRotation * Quaternion.Euler(new Vector3(pitchAngle, yawAngle, 0));
         
-        // // transform.rotation = targetRotation;
         
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lerpAmount);
         
         // Apply the same rotation to the camera pivot.
         cameraPivot.localRotation = Quaternion.Euler(Vector3.zero);
