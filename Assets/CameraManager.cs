@@ -43,6 +43,7 @@ public class CameraManager : MonoBehaviour
     [Header("Transition Settings")]
     public float transitionLerpAmount = 1.5f;
     public float normalLerpAmount = 25f;
+    
     public float transitionTime = 1.5f;
     public float lerpAmount;
     public float transitionTimer = 0f;
@@ -81,7 +82,6 @@ public class CameraManager : MonoBehaviour
         if (previousMode != cameraMode)
         {
             transitionStart = true;
-            Debug.Log("Started camera transition");
         }
 
         if (transitionStart)

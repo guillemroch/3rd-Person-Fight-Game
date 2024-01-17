@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     //Player values for movements
     [Header("Movement Variables")]
     public Vector3 moveDirection;
-
     public Vector3 targetDirection;
 
     //Movement status flags
@@ -22,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isJumping;
     public bool isHalfLashing;
     public bool isLashing;
+
+    [Header("Transition Flags")] 
+    public bool isLandingFromLashing;
+    public bool isHalfLashingFromGround;
 
     
     //Falling and ground detection variables
@@ -54,6 +57,12 @@ public class PlayerMovement : MonoBehaviour
     public float sprintingSpeed = 8f;
     public float rotationSpeed = 15;
     
+    [Header("Stamina")]
+    public float stamina = 100;
+    public float staminaRegenRate = 1;
+    public float staminaDepletionRate = 1;
+    
+    
     //Jump
     [Header("Jump Speeds")] 
     public float jumpHeight = 3;
@@ -66,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cameraObject;
     public Transform playerTransform;
     public Rigidbody playerRigidbody;
-
+    public CameraManager cameraManager;
     
     //Gizmos
     [Header("=====================")]
@@ -143,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
         animatorManager = GetComponent<AnimatorManager>();
         inputManager = GetComponent<InputManager>();
         playerRigidbody = GetComponent<Rigidbody>();
+        cameraManager = FindObjectOfType<CameraManager>();
         cameraObject = Camera.main.transform;
     }
 
@@ -349,10 +359,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (isLashing)
             {
-              Debug.Log("Normal: " + hit.normal);
               isGrounded = true;
               gravityDirection = -hit.normal;  
-              StartCoroutine(TriggerLandingFromLashing(hit.normal, hit.point, 0.25f));
+              StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             }
             
 
@@ -365,10 +374,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerLandingFromLashing(Vector3 targetNormal, Vector3 hitPoint, float duration)
+    public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
     {
-        
-        
+        //TODO: Make it work without a Coroutine
+        isLandingFromLashing = true;
         Vector3 originalPosition = transform.position;
         Vector3 centerOfMass = playerRigidbody.worldCenterOfMass;
          
@@ -390,6 +399,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position = hitPoint;
         transform.rotation = targetRotation;
         isLashing = false;
+        isLandingFromLashing = false;
     }
 
     /**
@@ -416,22 +426,20 @@ public class PlayerMovement : MonoBehaviour
         animatorManager.animator.SetBool("isHalfLashing", true);
         animatorManager.PlayTargetAnimation("Half Lashing", false);
         
-
-        
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
         if (isGrounded)
-            StartCoroutine(TriggerHalfLashingRotation(0.5f));
+            StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
 
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
         isGrounded = false;
-
         
         inAirTimer = 0;
     }
     
-    public IEnumerator TriggerHalfLashingRotation(float duration)
+    public IEnumerator TriggerHalfLashingRotationCoroutine(float duration)
     {
+        isHalfLashingFromGround = true;
         float timeElapsed = 0;
         Quaternion startRotation = playerTransform.rotation;
         Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, playerTransform.forward) * playerTransform.rotation;
@@ -442,6 +450,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         transform.rotation = targetRotation;
+        isHalfLashingFromGround = false;
     }
     
     public void TriggerLash() 
@@ -453,7 +462,6 @@ public class PlayerMovement : MonoBehaviour
         isHalfLashing = false; //TODO: Change this to a state machine
         animatorManager.animator.SetBool("isHalfLashing", false);
         animatorManager.animator.SetBool("isLashing", true);
-        //animatorManager.PlayTargetAnimation("Lash", false);
         
         
         
