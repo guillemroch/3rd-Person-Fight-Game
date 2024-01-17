@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /**
@@ -11,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     //Player values for movements
     [Header("Movement Variables")]
     public Vector3 moveDirection;
-
     public Vector3 targetDirection;
 
     //Movement status flags
@@ -21,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isJumping;
     public bool isHalfLashing;
     public bool isLashing;
+
+    [Header("Transition Flags")] 
+    public bool isLandingFromLashing;
+    public bool isHalfLashingFromGround;
 
     
     //Falling and ground detection variables
@@ -53,6 +57,12 @@ public class PlayerMovement : MonoBehaviour
     public float sprintingSpeed = 8f;
     public float rotationSpeed = 15;
     
+    [Header("Stamina")]
+    public float stamina = 100;
+    public float staminaRegenRate = 1;
+    public float staminaDepletionRate = 1;
+    
+    
     //Jump
     [Header("Jump Speeds")] 
     public float jumpHeight = 3;
@@ -65,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cameraObject;
     public Transform playerTransform;
     public Rigidbody playerRigidbody;
-
+    public CameraManager cameraManager;
     
     //Gizmos
     [Header("=====================")]
@@ -142,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
         animatorManager = GetComponent<AnimatorManager>();
         inputManager = GetComponent<InputManager>();
         playerRigidbody = GetComponent<Rigidbody>();
+        cameraManager = FindObjectOfType<CameraManager>();
         cameraObject = Camera.main.transform;
     }
 
@@ -250,11 +261,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = playerTransform.right * inputManager.movementInput.y +
                         playerTransform.forward * -inputManager.movementInput.x;
         
-        /*float moveDot = Vector3.Dot(moveDirection, gravityDirection);
-        float magSquared = moveDirection.sqrMagnitude;
-        
-        Vector3 projection = (moveDot / magSquared) * gravityDirection;
-        moveDirection -= projection;*/
+
         moveDirection.Normalize();
         
         Quaternion rotation = Quaternion.Euler(moveDirection) * Quaternion.Euler(gravityDirection);
@@ -298,6 +305,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleHalfLashingRotation()
     {
+        targetedDirectionGizmo = playerTransform.up;
         //Make the player rotate with the camera, making that we always see the back of the player
         transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.forward, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.x);
         transform.RotateAround(playerRigidbody.worldCenterOfMass, playerTransform.right, rotationSpeed * Time.deltaTime * -inputManager.cameraInput.y);
@@ -306,27 +314,9 @@ public class PlayerMovement : MonoBehaviour
     
     private void HandleLashingRotation()
     {
-        /*var forward = playerTransform.forward;
-        moveDirection = playerTransform.right * inputManager.movementInput.y +
-                        playerTransform.up * inputManager.movementInput.x;
-        
-        
-        float moveDot = Vector3.Dot(moveDirection, forward);
-        float magSquared = moveDirection.sqrMagnitude;
-        
-        Vector3 projection = (moveDot / magSquared) * forward;
-        moveDirection -= projection;
-        moveDirection.Normalize();
-        
-        transform.Rotate(moveDirection);
-        */
-        
-        //transform.rotation = Quaternion.Slerp(transform.rotation, moveDirection, rotationSpeed * Time.deltaTime);
-        
-        // Calculate the rotation needed to align the player's up vector with the gravity direction
-        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, gravityDirection);
+        targetedDirectionGizmo = playerTransform.up;
 
-        // Apply the rotation to the player's transform
+        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, gravityDirection);
         playerTransform.rotation = targetRotation * playerTransform.rotation;
     }
     
@@ -369,10 +359,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (isLashing)
             {
-              Debug.Log("Normal: " + hit.normal);
               isGrounded = true;
-              transform.up = hit.normal; //TODO: Make it so that the player rotates slowly to the normal of the ground
               gravityDirection = -hit.normal;  
+              StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             }
             
 
@@ -384,7 +373,34 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
-    
+
+    public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
+    {
+        //TODO: Make it work without a Coroutine
+        isLandingFromLashing = true;
+        Vector3 originalPosition = transform.position;
+        Vector3 centerOfMass = playerRigidbody.worldCenterOfMass;
+         
+        Quaternion startRotation = playerTransform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, targetNormal) * playerTransform.rotation;
+
+        float timeElapsed = 0;
+        while (timeElapsed < duration)
+        {
+            transform.position = centerOfMass;
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / duration);
+            transform.position = originalPosition;
+            
+            transform.position = Vector3.Lerp(originalPosition, hitPoint + targetNormal * 0.5f, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = hitPoint;
+        transform.rotation = targetRotation;
+        isLashing = false;
+        isLandingFromLashing = false;
+    }
 
     /**
      * Handles Jumping
@@ -410,18 +426,31 @@ public class PlayerMovement : MonoBehaviour
         animatorManager.animator.SetBool("isHalfLashing", true);
         animatorManager.PlayTargetAnimation("Half Lashing", false);
         
-
-        
         playerRigidbody.AddForce(halfLashingHeight * -gravityDirection, ForceMode.Impulse);
         if (isGrounded)
-            transform.Rotate(transform.right, 90);
+            StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
 
         lashingForcesGizmoVector = halfLashingHeight * -gravityDirection;
         totalForcesGizmoVector += lashingForcesGizmoVector;
         isGrounded = false;
-
         
         inAirTimer = 0;
+    }
+    
+    public IEnumerator TriggerHalfLashingRotationCoroutine(float duration)
+    {
+        isHalfLashingFromGround = true;
+        float timeElapsed = 0;
+        Quaternion startRotation = playerTransform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, playerTransform.forward) * playerTransform.rotation;
+        while (timeElapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.rotation = targetRotation;
+        isHalfLashingFromGround = false;
     }
     
     public void TriggerLash() 
@@ -433,7 +462,6 @@ public class PlayerMovement : MonoBehaviour
         isHalfLashing = false; //TODO: Change this to a state machine
         animatorManager.animator.SetBool("isHalfLashing", false);
         animatorManager.animator.SetBool("isLashing", true);
-        //animatorManager.PlayTargetAnimation("Lash", false);
         
         
         
@@ -539,9 +567,10 @@ public class PlayerMovement : MonoBehaviour
         if (isTargetedDirectionGizmoEnabled)
         {
             Gizmos.color = targetDirectionGizmoColor;
-            Gizmos.DrawRay(position, targetedDirectionGizmo);
+            Gizmos.DrawRay(position, targetedDirectionGizmo * 100);
             Gizmos.DrawSphere(position + targetedDirectionGizmo, 0.05f);
         }
+        
 
     }
 #endif
