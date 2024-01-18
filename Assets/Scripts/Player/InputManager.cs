@@ -8,21 +8,26 @@ public class InputManager : MonoBehaviour
 {
     private PlayerInputActions _playerInputs;
     private AnimatorManager _animatorManager;
-    private PlayerMovement _playerMovement;
+    private PlayerStateMachine _playerMovement;
 
     //Input actions
     public Vector2 movementInput;
     public Vector2 cameraInput;
-    public bool sprintInput;
-    public bool jumpInput;
+    public bool isSprintPressed;
+    public bool isJumpPressed;
     public bool halfLashInput;
     public bool lashInput;
     
     public float moveAmount;
+    
+    // getters and setters
+    public bool IsJumpPressed { get => isJumpPressed; set => isJumpPressed = value; }
+    public bool IsSprintPressed { get => isSprintPressed; set => isSprintPressed = value; }
+
     private void Awake()
     {
         _animatorManager = GetComponent<AnimatorManager>();
-        _playerMovement = GetComponent<PlayerMovement>();
+        _playerMovement = GetComponent<PlayerStateMachine>();
     }
 
     private void OnEnable()
@@ -34,11 +39,11 @@ public class InputManager : MonoBehaviour
             _playerInputs.Player.Move.performed += i => movementInput = i.ReadValue<Vector2>();
             _playerInputs.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
 
-            _playerInputs.Player.Sprint.performed += i => sprintInput = true;
-            _playerInputs.Player.Sprint.canceled += i => sprintInput = false;
+            _playerInputs.Player.Sprint.performed += i => isSprintPressed = true;
+            _playerInputs.Player.Sprint.canceled += i => isSprintPressed = false;
             
-            _playerInputs.Player.Jump.performed += i => jumpInput = true;
-            _playerInputs.Player.Jump.canceled += i => jumpInput = false;
+            _playerInputs.Player.Jump.performed += i => isJumpPressed = true;
+            _playerInputs.Player.Jump.canceled += i => isJumpPressed = false;
             
             _playerInputs.Player.HalfLash.performed += i => halfLashInput = true;
             _playerInputs.Player.HalfLash.canceled += i => halfLashInput = false;
@@ -61,11 +66,11 @@ public class InputManager : MonoBehaviour
         HandleMovementInput();
         HandleCameraInput();
         HandleSprintingInput();
-        HandleJumpingInput();
+        /*HandleJumpingInput();
         HandleHalfLashInput();
-        HandleConfirmLashingDirectionInput();
+        HandleConfirmLashingDirectionInput();*/
         
-        //...
+        
     }
 
     private void HandleMovementInput()
@@ -81,7 +86,7 @@ public class InputManager : MonoBehaviour
 
     private void HandleSprintingInput()
     {
-        if (sprintInput && moveAmount > 0.5f)
+        if (isSprintPressed && moveAmount > 0.5f)
         {
             _playerMovement.isSprinting = true;
         }
@@ -90,14 +95,10 @@ public class InputManager : MonoBehaviour
             _playerMovement.isSprinting = false;
         }
     }
-
+/*
     private void HandleJumpingInput()
     {
-        if (jumpInput)
-        {
-            jumpInput = false;
-            _playerMovement.TriggerJumping();
-        }
+        isJumpPressed = false;
     }
 
     private void HandleHalfLashInput()
@@ -116,7 +117,7 @@ public class InputManager : MonoBehaviour
             lashInput = false;
             _playerMovement.TriggerLash();
         }
-    }
+    }*/
     
     
 }

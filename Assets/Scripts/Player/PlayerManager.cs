@@ -12,7 +12,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     private InputManager _inputManager; //Calls Input in Update()
-    private PlayerMovement _playerMovement; //Calls player movement calculations in FixedUpdate()
+    private PlayerStateMachine _playerMovement; //Calls player movement calculations in FixedUpdate()
     private CameraManager _cameraManager; //Calls camera in LateUpdate()
     private Animator _animator;  //Calls and modifies animator in LateUpdate()
     
@@ -23,7 +23,7 @@ public class PlayerManager : MonoBehaviour
     {
 
         _inputManager = GetComponent<InputManager>();
-        _playerMovement = GetComponent<PlayerMovement>();
+        _playerMovement = GetComponent<PlayerStateMachine>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _animator = GetComponent<Animator>();
         
@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _playerMovement.HandleAllMovement();
+        _playerMovement.HandleAllStates();
     }
 
     private void LateUpdate()

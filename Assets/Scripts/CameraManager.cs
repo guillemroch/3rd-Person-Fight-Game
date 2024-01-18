@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
 {
     [Header("References")]
     private InputManager _inputManager;
-    private PlayerMovement _playerMovement;
+    //private PlayerMovement _playerMovement;
     
     [Header("Target")]
     public Transform target; //Object to look at
@@ -59,7 +59,7 @@ public class CameraManager : MonoBehaviour
     {
         target = FindObjectOfType<PlayerManager>().transform;
         _inputManager = FindObjectOfType<InputManager>();
-        _playerMovement = FindObjectOfType<PlayerMovement>();
+        //_playerMovement = FindObjectOfType<PlayerMovement>();
         if (Camera.main != null) 
             cameraTransform = Camera.main.transform;
         _defaultPosition = cameraTransform.localPosition.z;
@@ -69,13 +69,13 @@ public class CameraManager : MonoBehaviour
     {
         previousMode = cameraMode;
         
-        if (_playerMovement.isHalfLashing)
+        /*if (_playerMovement.isHalfLashing)
             cameraMode =  CameraMode.HalfLash;
         
         else if (_playerMovement.isLashing)
             cameraMode =  CameraMode.Lash;
         
-        else
+        else*/
             cameraMode =  CameraMode.Normal;
 
 
