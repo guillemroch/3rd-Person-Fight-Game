@@ -1,13 +1,15 @@
+
 using System.Collections;
 using UnityEngine;
 
 /**
  * PlayerMovement:
  * Calculates player movement
- */
+ **/
 
 public class PlayerMovement : MonoBehaviour
 {
+
     #region Variables
     //Player values for movements
     [Header("Movement Variables")]
@@ -22,11 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isHalfLashing;
     public bool isLashing;
 
-    [Header("Transition Flags")] 
-    public bool isLandingFromLashing;
-    public bool isHalfLashingFromGround;
-
-    
+  
     //Falling and ground detection variables
     [Header("Falling")] 
     public float inAirTimer;
@@ -220,7 +218,7 @@ public class PlayerMovement : MonoBehaviour
     
     /**
      * Handles the movement vector, this is the speed and direction
-     */
+    */
     private void HandleMovement()
     {
         if (isHalfLashing || isLashing) return;
@@ -272,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
 
     /**
      * Handles the player rotation
-     */
+    */
     private void HandleRotation()
     {
         
@@ -377,7 +375,7 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
     {
         //TODO: Make it work without a Coroutine
-        isLandingFromLashing = true;
+        //isLandingFromLashing = true;
         Vector3 originalPosition = transform.position;
         Vector3 centerOfMass = playerRigidbody.worldCenterOfMass;
          
@@ -399,7 +397,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position = hitPoint;
         transform.rotation = targetRotation;
         isLashing = false;
-        isLandingFromLashing = false;
+       //isLandingFromLashing = false;
     }
 
     /**
@@ -439,7 +437,7 @@ public class PlayerMovement : MonoBehaviour
     
     public IEnumerator TriggerHalfLashingRotationCoroutine(float duration)
     {
-        isHalfLashingFromGround = true;
+        //isHalfLashingFromGround = true;
         float timeElapsed = 0;
         Quaternion startRotation = playerTransform.rotation;
         Quaternion targetRotation = Quaternion.FromToRotation(playerTransform.up, playerTransform.forward) * playerTransform.rotation;
@@ -450,7 +448,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         transform.rotation = targetRotation;
-        isHalfLashingFromGround = false;
+        //isHalfLashingFromGround = false;
     }
     
     public void TriggerLash() 
@@ -576,3 +574,4 @@ public class PlayerMovement : MonoBehaviour
 #endif
 
 }
+
