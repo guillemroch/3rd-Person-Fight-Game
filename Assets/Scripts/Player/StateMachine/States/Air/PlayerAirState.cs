@@ -12,7 +12,6 @@ public class PlayerAirState : PlayerBaseState
 
     }
     public override void EnterState() {
-
     }
 
     public override void UpdateState() {
@@ -23,11 +22,9 @@ public class PlayerAirState : PlayerBaseState
     }
 
     public override void ExitState() {
-        Debug.Log("Exit Air Root State");
     }
 
     public override void CheckSwitchStates() {
-        
         
     }
 

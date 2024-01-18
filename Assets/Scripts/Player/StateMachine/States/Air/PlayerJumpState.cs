@@ -10,7 +10,6 @@ public class PlayerJumpState : PlayerBaseState {
     }
 
     public override void EnterState() {
-
         HandleJump();
     }
 
@@ -31,7 +30,6 @@ public class PlayerJumpState : PlayerBaseState {
     public override void InitializeSubState() { }
 
     void HandleJump() {
-        Ctx.InputManager.ResetJumpInput();
         Ctx.AnimatorManager.animator.SetBool("isJumping", true);
         Ctx.AnimatorManager.PlayTargetAnimation("Jump", false);
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Player.StateMachine;
 using UnityEngine;
 
-public class PlayerFallState : PlayerBaseState
+public class PlayerFlyState : PlayerBaseState
 {
-    public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+    public PlayerFlyState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
     }
 

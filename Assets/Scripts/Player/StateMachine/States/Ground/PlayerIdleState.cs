@@ -7,6 +7,7 @@ public class PlayerIdleState : PlayerBaseState
 {
     public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
+        //Setup starting things for animation or logic
 
     }
 
@@ -22,7 +23,7 @@ public class PlayerIdleState : PlayerBaseState
         if (Ctx.InputManager.movementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
             SwitchStates(Factory.Run());
         }
-        else if (Ctx.InputManager.movementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
+        else if (Ctx.InputManager.movementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
             SwitchStates(Factory.Walk());
         }
     }
