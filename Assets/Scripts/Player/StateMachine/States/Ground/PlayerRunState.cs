@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Player.StateMachine;
 using UnityEngine;
 
-public class PlayerWalkState : PlayerBaseState
+public class PlayerRunState : PlayerBaseState
 {
-    public PlayerWalkState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+    public PlayerRunState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         //Setup starting things for animation or logic
+
     }
 
     public override void UpdateState() {
@@ -23,8 +25,8 @@ public class PlayerWalkState : PlayerBaseState
         if (Ctx.InputManager.movementInput == Vector2.zero) {
             SwitchStates(Factory.Idle());
         }
-        else if (Ctx.InputManager.IsSprintPressed) {
-            SwitchStates(Factory.Run());
+        else if (!Ctx.InputManager.IsSprintPressed) {
+            SwitchStates(Factory.Walk());
         }
     }
 

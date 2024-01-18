@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Player.StateMachine;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerBaseState {
@@ -21,12 +22,13 @@ public class PlayerGroundedState : PlayerBaseState {
     public override void ExitState() { }
 
     public override void CheckSwitchStates() {
-        if (Ctx.InputManager.IsJumpPressed) {
-            SwitchStates(Factory.Jump());
-        }
+        if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
+            SwitchStates(Factory.Air());
+        } 
     }
 
     public override void InitializeSubState() {
+        
         if (Ctx.InputManager.movementInput == Vector2.zero) {
             SwitchStates(Factory.Idle());
         }else if (!Ctx.InputManager.IsSprintPressed) {
