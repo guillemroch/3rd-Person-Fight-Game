@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Player;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,8 +16,6 @@ public class InputManager : MonoBehaviour
     public bool isSprintPressed;
     public bool isJumpPressed;
     public bool halfLashInput;
-
-  
     public bool lashInput;
     
     public float moveAmount;
@@ -26,9 +23,6 @@ public class InputManager : MonoBehaviour
     // getters and setters
     public bool IsJumpPressed { get => isJumpPressed; set => isJumpPressed = value; }
     public bool IsSprintPressed { get => isSprintPressed; set => isSprintPressed = value; }
-    public bool HalfLashInput { get => halfLashInput; set => halfLashInput = value; }
-
-    public bool LashInput { get => lashInput; set => lashInput = value; }
 
     private void Awake()
     {
@@ -71,37 +65,59 @@ public class InputManager : MonoBehaviour
     {
         HandleMovementInput();
         HandleCameraInput();
-    
+        HandleSprintingInput();
+        /*HandleJumpingInput();
+        HandleHalfLashInput();
+        HandleConfirmLashingDirectionInput();*/
+        
+        
     }
 
     private void HandleMovementInput()
     {
         moveAmount = Mathf.Clamp01(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.y));
-        _animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), isSprintPressed && moveAmount > 0.5f);
+        _animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), _playerMovement.isSprinting);
     }
 
     private void HandleCameraInput()
     {
         
     }
-    
-    public void ResetJumpInput()
+
+    private void HandleSprintingInput()
+    {
+        if (isSprintPressed && moveAmount > 0.5f)
+        {
+            _playerMovement.isSprinting = true;
+        }
+        else
+        {
+            _playerMovement.isSprinting = false;
+        }
+    }
+/*
+    private void HandleJumpingInput()
     {
         isJumpPressed = false;
     }
-    public void ResetLashInput()
+
+    private void HandleHalfLashInput()
     {
-        lashInput = false;
+        if (halfLashInput)
+        {
+            halfLashInput = false;
+            _playerMovement.TriggerHalfLash();
+        }
     }
     
-    public void ResetHalfLashInput()
+    private void HandleConfirmLashingDirectionInput()
     {
-        halfLashInput = false;
-    }
-
-
-
- 
+        if (lashInput)
+        {
+            lashInput = false;
+            _playerMovement.TriggerLash();
+        }
+    }*/
     
     
 }

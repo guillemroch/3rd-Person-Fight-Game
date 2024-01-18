@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Player;
-using Player.StateMachine;
 using UnityEngine;
 
 public class PlayerStateMachine : MonoBehaviour
@@ -15,8 +13,11 @@ public class PlayerStateMachine : MonoBehaviour
     //Movement status flags
     //TODO: IF state machine correctly implemented, these flags should be removed
     [Header("Movement Flags")] 
+    public bool isSprinting;
     public bool isGrounded;
-    
+    public bool isJumping;
+    public bool isHalfLashing;
+    public bool isLashing;
 
   
     //Falling and ground detection variables
@@ -71,7 +72,6 @@ public class PlayerStateMachine : MonoBehaviour
     
     //Gizmos
     #region Gizmos
-    
     [Header("=====================")]
     [Header("### DEBUG SECTION ###")]  [Header("Gizmos")]
     public bool enabledGizmos;
@@ -131,21 +131,21 @@ public class PlayerStateMachine : MonoBehaviour
     
     #endregion
     //State variables
-    private PlayerStateFactory _states;
-    private PlayerBaseState _currentState;
+    PlayerBaseState _currentState;
+    PlayerStateFactory _states;
     
     //getters and setters
     //TODO: Setup getters and setters of local variables
     //TODO: Setup getters and setters for variables from the InputManager and AnimatorManager
-    public PlayerBaseState CurrentState { get { return _currentState;} set { _currentState = value; }
-    }
-    public InputManager InputManager => inputManager;
-    public AnimatorManager AnimatorManager => animatorManager;
-    public Rigidbody PlayerRigidbody => playerRigidbody;
-    public float GravityIntensity => gravityIntensity;
-    public float JumpHeight => jumpHeight;
-    public Vector3 GravityDirection => gravityDirection;
-
+    public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+    public InputManager InputManager { get { return inputManager; } }
+    public AnimatorManager AnimatorManager { get { return animatorManager; } }
+    public Rigidbody PlayerRigidbody { get { return playerRigidbody; } }
+    public float GravityIntensity { get { return gravityIntensity; } }
+    public float JumpHeight { get { return jumpHeight; } }
+    public Vector3 GravityDirection { get { return gravityDirection; } }
+    
+    
     #endregion
     
     private void Awake()
@@ -167,10 +167,10 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void HandleAllStates()
     {
-        _currentState.UpdateStates();
+        _currentState.UpdateState();
     }
     
-    #region Gizmos
+    
     #if UNITY_EDITOR
     
     /**
@@ -254,6 +254,5 @@ public class PlayerStateMachine : MonoBehaviour
 
     }
 #endif
-    #endregion
 
 }
