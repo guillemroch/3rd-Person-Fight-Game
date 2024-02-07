@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3322915969423957918}
   - component: {fileID: 4675932026764890329}
+  - component: {fileID: 4331485296954385964}
   - component: {fileID: 2563866629904262296}
   - component: {fileID: 2100550671156518442}
   - component: {fileID: 3005243556766777584}
@@ -66,6 +67,89 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &4331485296954385964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6423912697608891000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f098a69e322a45976e736de9dc8e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDirection: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isSprinting: 0
+  isGrounded: 1
+  isJumping: 0
+  isHalfLashing: 0
+  isLashing: 0
+  inAirTimer: 0
+  maxAirSpeed: 7
+  leapingVelocity: 3
+  fallingVelocity: 33
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  rayCastHeightOffset: 0.3
+  rayCastMaxDistance: 0.7
+  rayCastRadius: 0.4
+  gravityDirection: {x: 0, y: -1, z: 0}
+  gravityIntensity: 9.8
+  gravityMultiplier: 2
+  groundedGravity: 0.5
+  halfLashingHeight: 20
+  movementSpeed: 7
+  walkingSpeed: 5
+  runningSpeed: 20
+  sprintingSpeed: 30
+  rotationSpeed: 15
+  stamina: 100
+  staminaRegenRate: 1
+  staminaDepletionRate: 1
+  jumpHeight: 3
+  playerManager: {fileID: 3005243556766777584}
+  animatorManager: {fileID: 3655622113326985271}
+  inputManager: {fileID: 2100550671156518442}
+  cameraObject: {fileID: 0}
+  playerTransform: {fileID: 3322915969423957918}
+  playerRigidbody: {fileID: 4675932026764890329}
+  cameraManager: {fileID: 0}
+  enabledGizmos: 0
+  isTransformGizmoEnabled: 0
+  centerOfMassGizmo: {x: 0, y: 0, z: 0}
+  upGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  rightGizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  frontGizmoColor: {r: 0, g: 0, b: 1, a: 1}
+  isGroundDetectionGizmoEnabled: 0
+  originGizmoColor: {r: 1, g: 0, b: 1, a: 1}
+  gizmoRayCastOrigin: {x: 0, y: 0, z: 0}
+  hitGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  rayGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  isGravityDirectionGizmoEnabled: 0
+  gravityGizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  gravityGizmoForceVector: {x: 0, y: 0, z: 0}
+  isVelocityGizmoEnabled: 0
+  movementGizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  movementGizmoForceVector: {x: 0, y: 0, z: 0}
+  isFallingForcesGizmoEnabled: 0
+  fallingForcesGizmoColor: {r: 0, g: 0, b: 1, a: 1}
+  fallingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isJumpingForcesGizmoEnabled: 0
+  jumpingForcesGizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  jumpingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isLashingForcesGizmoEnabled: 0
+  lashingForcesGizmoColor: {r: 1, g: 0, b: 1, a: 1}
+  lashingForcesGizmoVector: {x: 0, y: 0, z: 0}
+  isTotalForcesGizmoEnabled: 0
+  totalForcesGizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  totalForcesGizmoVector: {x: 0, y: 0, z: 0}
+  realVelocity: {x: 0, y: 0, z: 0}
+  isTargetedDirectionGizmoEnabled: 0
+  targetedDirectionGizmo: {x: 0, y: 0, z: 0}
+  targetDirectionGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &2563866629904262296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,13 +170,15 @@ MonoBehaviour:
   isHalfLashing: 0
   isLashing: 0
   inAirTimer: 0
+  maxAirSpeed: 7
   leapingVelocity: 3
   fallingVelocity: 33
   groundLayer:
     serializedVersion: 2
     m_Bits: 9
   rayCastHeightOffset: 0.3
-  rayCastMaxDistance: 0.4
+  rayCastMaxDistance: 0.7
+  rayCastRadius: 0.4
   gravityDirection: {x: 0, y: -1, z: 0}
   gravityIntensity: 9.8
   gravityMultiplier: 2
@@ -103,6 +189,9 @@ MonoBehaviour:
   runningSpeed: 20
   sprintingSpeed: 30
   rotationSpeed: 15
+  stamina: 100
+  staminaRegenRate: 1
+  staminaDepletionRate: 1
   jumpHeight: 3
   playerManager: {fileID: 3005243556766777584}
   animatorManager: {fileID: 3655622113326985271}
@@ -110,9 +199,10 @@ MonoBehaviour:
   cameraObject: {fileID: 0}
   playerTransform: {fileID: 3322915969423957918}
   playerRigidbody: {fileID: 4675932026764890329}
+  cameraManager: {fileID: 0}
   enabledGizmos: 1
   isTransformGizmoEnabled: 1
-  centerOfMassGizmo: {x: 52.23, y: 2.529, z: 21.24}
+  centerOfMassGizmo: {x: 52.23, y: 0.895, z: 21.24}
   upGizmoColor: {r: 0, g: 1, b: 0, a: 1}
   rightGizmoColor: {r: 1, g: 0, b: 0, a: 1}
   frontGizmoColor: {r: 0, g: 0, b: 1, a: 1}
@@ -157,8 +247,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementInput: {x: 0, y: 0}
   cameraInput: {x: 0, y: 0}
-  sprintInput: 0
-  jumpInput: 0
+  isSprintPressed: 0
+  isJumpPressed: 0
   halfLashInput: 0
   lashInput: 0
   moveAmount: 0
@@ -195,9 +285,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.4
-  m_Height: 1.95
+  m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!95 &7362039989160965198
 Animator:
   serializedVersion: 5
@@ -231,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b3b36cd4e9be74d9f12875e0d1a516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 7362039989160965198}
 --- !u!1001 &8796976247818440396
 PrefabInstance:
   m_ObjectHideFlags: 0
