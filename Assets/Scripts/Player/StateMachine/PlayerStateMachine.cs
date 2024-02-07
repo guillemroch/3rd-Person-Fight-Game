@@ -74,6 +74,7 @@ public class PlayerStateMachine : MonoBehaviour
     
     //Gizmos
     #region Gizmos
+    
     [Header("=====================")]
     [Header("### DEBUG SECTION ###")]  [Header("Gizmos")]
     public bool enabledGizmos;
@@ -133,12 +134,14 @@ public class PlayerStateMachine : MonoBehaviour
     
     #endregion
     //State variables
-    PlayerStateFactory _states;
+    public PlayerStateFactory _states;
+    public PlayerBaseState _currentState;
     
     //getters and setters
     //TODO: Setup getters and setters of local variables
     //TODO: Setup getters and setters for variables from the InputManager and AnimatorManager
-    public PlayerBaseState CurrentState { get; set; }
+    public PlayerBaseState CurrentState { get { return _currentState;} set { _currentState = value; }
+    }
     public InputManager InputManager => inputManager;
     public AnimatorManager AnimatorManager => animatorManager;
     public Rigidbody PlayerRigidbody => playerRigidbody;
@@ -152,8 +155,8 @@ public class PlayerStateMachine : MonoBehaviour
     {   
         //Setup state
         _states = new PlayerStateFactory(this);
-        CurrentState = _states.Grounded();
-        CurrentState.EnterState();
+        _currentState = _states.Grounded();
+        _currentState.EnterState();
         
         //Get references
         playerManager = GetComponent<PlayerManager>();
@@ -167,7 +170,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void HandleAllStates()
     {
-        CurrentState.UpdateState();
+        _currentState.UpdateStates();
     }
     
     #region Gizmos

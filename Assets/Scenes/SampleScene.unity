@@ -8719,40 +8719,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 31941526}
     m_Modifications:
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isJumping
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isGrounded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: maxAirSpeed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: cameraObject
       value: 
       objectReference: {fileID: 330585546}
     - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: rayCastRadius
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: rayCastMaxDistance
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: centerOfMassGizmo.y
-      value: 2.429
-      objectReference: {fileID: 0}
+      propertyPath: cameraManager
+      value: 
+      objectReference: {fileID: 1465044185}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.83
       objectReference: {fileID: 0}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.679
+      value: -0.855
       objectReference: {fileID: 0}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8786,19 +8766,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5562903958970503654, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_Height
-      value: 1.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5562903958970503654, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: m_Center.y
-      value: 0.9
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: cameraObject
+      value: 
+      objectReference: {fileID: 330585546}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: cameraManager
+      value: 
+      objectReference: {fileID: 1465044185}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: sprintingSpeed
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6423912697608891000, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2563866629904262296, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

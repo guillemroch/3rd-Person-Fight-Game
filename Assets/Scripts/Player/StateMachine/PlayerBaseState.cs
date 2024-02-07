@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Player.StateMachine{
     public abstract class PlayerBaseState
     {
@@ -10,8 +12,9 @@ namespace Player.StateMachine{
         //Getters and Setters
         protected PlayerStateMachine Ctx { get { return _ctx; } }
         protected PlayerStateFactory Factory { get { return _factory; }}
-        protected bool IsRootState { set => _isRootState = value; }
-    
+        protected bool IsRootState { get { return _isRootState; } set => _isRootState = value; }
+        protected PlayerBaseState CurrentSubState { get => _currentSubState; } //TODO: remove this getter (it's just for debug purposes)
+        protected PlayerBaseState CurrentSuperState { get => _currentSuperState; } //TODO: remove this getter (it's just for debug purposes)
 
         public PlayerBaseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) {
             _ctx = currentCtx;
@@ -27,22 +30,40 @@ namespace Player.StateMachine{
 
         public void UpdateStates() {
             UpdateState();
-            _currentSubState?.UpdateState();
+            _currentSubState?.UpdateStates();
+        }
+        
+        public void ExitStates() {
+            ExitState();
+            _currentSubState?.ExitStates();
         }
 
         protected void SwitchStates(PlayerBaseState newState) {
             //current state exits state
-            ExitState();
 
-            //new state enters state
-            newState.EnterState();
-
-            if (_isRootState) {
+            if (newState.IsRootState) {
+                
+                ExitState();
+                
+                if (_currentSubState != null) {
+                    _currentSubState.ExitStates();
+                }
+                
+                newState.EnterState();
+                
+                Debug.Log("Switching root state to " + newState.GetType());
                 //switch current state of context
                 Ctx.CurrentState = newState;
-            }else if (_currentSuperState != null) {
+                
+            }else {
+                if (_currentSuperState != null) {
                 //switch current sub state of super state
                 _currentSuperState.SetSubStates(newState);
+                } else if (_isRootState) {
+                    //switch current state of context
+                    SetSubStates(newState);
+                }
+                
             }
         
         }
@@ -52,8 +73,11 @@ namespace Player.StateMachine{
         }
 
         protected void SetSubStates(PlayerBaseState newSubState) {
+            _currentSubState?.ExitStates();
             _currentSubState = newSubState;
             newSubState.SetSuperState(this);
+            
+            _currentSubState.EnterState();
         }
     
     }

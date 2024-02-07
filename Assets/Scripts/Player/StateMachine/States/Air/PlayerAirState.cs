@@ -12,6 +12,8 @@ public class PlayerAirState : PlayerBaseState
 
     }
     public override void EnterState() {
+        Debug.Log("Enter Air Root State with substate: " + CurrentSubState?.GetType());
+
     }
 
     public override void UpdateState() {
@@ -22,9 +24,11 @@ public class PlayerAirState : PlayerBaseState
     }
 
     public override void ExitState() {
+        Debug.Log("Exit Air Root State");
     }
 
     public override void CheckSwitchStates() {
+        
         
     }
 
