@@ -1,0 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
+using Player.StateMachine;
+using UnityEngine;
+
+public class PlayerLashState : PlayerBaseState{
+    public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx,
+        stateFactory) {
+        IsRootState = true;
+        InitializeSubState();
+        Debug.Log($"<color=green>Lash State entered with substate: " + CurrentSubState?.GetType() + "</color>");
+    }
+
+    public override void EnterState() { }
+
+    public override void UpdateState() {
+        //TODO: add stamina
+    }
+
+    public override void FixedUpdateState() { }
+
+    public override void ExitState() { }
+
+    public override void CheckSwitchStates() { }
+
+    public override void InitializeSubState() {
+        SwitchStates(Factory.Halflash());
+    }
+}

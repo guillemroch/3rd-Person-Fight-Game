@@ -8,7 +8,7 @@ public class PlayerIdleState : PlayerBaseState
     public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         //Setup starting things for animation or logic
-        Debug.Log("Entered Idle Sub State with parent state: " + CurrentSuperState.GetType());
+        Debug.Log($"<color=lightblue>Entered Idle Sub State with parent state: " + CurrentSuperState.GetType() + "</color>");
 
     }
 
@@ -25,7 +25,6 @@ public class PlayerIdleState : PlayerBaseState
             SwitchStates(Factory.Run());
         }
         else if (Ctx.InputManager.movementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
-            Debug.Log("Idle => Walk");
             SwitchStates(Factory.Walk());
         }
     }
