@@ -27,25 +27,24 @@ public class PlayerGroundedState : PlayerBaseState {
     public override void FixedUpdateState() { }
 
     public override void ExitState() {
-        Debug.Log("Exit Grounded Root State");
     }
 
     public override void CheckSwitchStates() {
         if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
             SwitchStates(Factory.Air());
         } 
+        if (Ctx.InputManager.HalfLashInput) {
+            SwitchStates(Factory.Lash());
+        }
     }
 
     public override void InitializeSubState() {
         
         if (Ctx.InputManager.movementInput == Vector2.zero) {
-            Debug.Log("Idle");
             SwitchStates(Factory.Idle());
         }else if (!Ctx.InputManager.IsSprintPressed) {
-            Debug.Log("Walk");
             SwitchStates(Factory.Walk());
         }else {
-            Debug.Log("Run");
             SwitchStates(Factory.Run());
         }
     }

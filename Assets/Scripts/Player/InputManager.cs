@@ -17,6 +17,8 @@ public class InputManager : MonoBehaviour
     public bool isSprintPressed;
     public bool isJumpPressed;
     public bool halfLashInput;
+
+  
     public bool lashInput;
     
     public float moveAmount;
@@ -24,6 +26,9 @@ public class InputManager : MonoBehaviour
     // getters and setters
     public bool IsJumpPressed { get => isJumpPressed; set => isJumpPressed = value; }
     public bool IsSprintPressed { get => isSprintPressed; set => isSprintPressed = value; }
+    public bool HalfLashInput { get => halfLashInput; set => halfLashInput = value; }
+
+    public bool LashInput { get => lashInput; set => lashInput = value; }
 
     private void Awake()
     {
@@ -67,11 +72,7 @@ public class InputManager : MonoBehaviour
         HandleMovementInput();
         HandleCameraInput();
         HandleSprintingInput();
-        /*HandleJumpingInput();
-        HandleHalfLashInput();
-        HandleConfirmLashingDirectionInput();*/
-        
-        
+    
     }
 
     private void HandleMovementInput()
@@ -96,29 +97,8 @@ public class InputManager : MonoBehaviour
             _playerMovement.isSprinting = false;
         }
     }
-/*
-    private void HandleJumpingInput()
-    {
-        isJumpPressed = false;
-    }
 
-    private void HandleHalfLashInput()
-    {
-        if (halfLashInput)
-        {
-            halfLashInput = false;
-            _playerMovement.TriggerHalfLash();
-        }
-    }
-    
-    private void HandleConfirmLashingDirectionInput()
-    {
-        if (lashInput)
-        {
-            lashInput = false;
-            _playerMovement.TriggerLash();
-        }
-    }*/
+ 
     
     
 }

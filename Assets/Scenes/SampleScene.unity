@@ -8778,6 +8778,10 @@ PrefabInstance:
       propertyPath: sprintingSpeed
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6423912697608891000, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_Name
       value: Player

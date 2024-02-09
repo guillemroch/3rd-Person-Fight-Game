@@ -10,7 +10,7 @@ public class PlayerJumpState : PlayerBaseState {
     }
 
     public override void EnterState() {
-        Debug.Log("Entered Jump Sub State with parent state: " + CurrentSuperState.GetType());
+        Debug.Log("<color=orange>Entered Jump Sub State with parent state: " + CurrentSuperState.GetType() + "</color>");
 
         HandleJump();
     }

@@ -8,6 +8,7 @@ public class PlayerLashState : PlayerBaseState{
         stateFactory) {
         IsRootState = true;
         InitializeSubState();
+        Debug.Log($"<color=green>Lash State entered with substate: " + CurrentSubState?.GetType() + "</color>");
     }
 
     public override void EnterState() { }
