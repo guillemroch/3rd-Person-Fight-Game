@@ -7,7 +7,7 @@ public class PlayerHalflashState : PlayerBaseState
 {
     public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
-        Debug.Log("<color=lightblue>Entered Halflash substate with parent state: " + CurrentSuperState.GetType() + "</color>");
+        Ctx.InputManager.ResetHalfLashInput();
         Ctx.animatorManager.animator.SetBool("isHalfLashing", true);
         Ctx.animatorManager.PlayTargetAnimation("Half Lashing", false);
         

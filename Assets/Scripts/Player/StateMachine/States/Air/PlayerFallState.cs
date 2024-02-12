@@ -7,7 +7,6 @@ public class PlayerFallState : PlayerBaseState
 {
     public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
-        Debug.Log("Entered Fall Sub State with parent state: " + CurrentSuperState.GetType());
 
         Ctx.animatorManager.PlayTargetAnimation("Fall", true);
     }
@@ -26,9 +25,7 @@ public class PlayerFallState : PlayerBaseState
     }
 
     public override void CheckSwitchStates() {
-         if (Ctx.isGrounded) {
-            SwitchStates(Factory.Land());
-        }
+         if (Ctx.isGrounded) SwitchStates(Factory.Land());
     }
 
     public override void InitializeSubState() {
