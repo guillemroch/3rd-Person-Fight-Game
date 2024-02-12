@@ -8,11 +8,9 @@ public class PlayerLashingState : PlayerBaseState
     public PlayerLashingState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         
-        Debug.Log("Enter Lashing State");
-        
+        Ctx.InputManager.ResetLashInput();
         Ctx.gravityDirection = Ctx.playerTransform.up;
 
-        Ctx.isHalfLashing = false; //TODO: Change this to a state machine
         Ctx.animatorManager.animator.SetBool("isHalfLashing", false);
         Ctx.animatorManager.animator.SetBool("isLashing", true);
     }
@@ -114,7 +112,5 @@ public class PlayerLashingState : PlayerBaseState
 
         Ctx.transform.position = hitPoint;
         Ctx.transform.rotation = targetRotation;
-        Ctx.isLashing = false;
-        //isLandingFromLashing = false;
     }
 }

@@ -10,7 +10,6 @@ public class PlayerJumpState : PlayerBaseState {
     }
 
     public override void EnterState() {
-        Debug.Log("<color=orange>Entered Jump Sub State with parent state: " + CurrentSuperState.GetType() + "</color>");
 
         HandleJump();
     }
@@ -32,6 +31,7 @@ public class PlayerJumpState : PlayerBaseState {
     public override void InitializeSubState() { }
 
     void HandleJump() {
+        Ctx.InputManager.ResetJumpInput();
         Ctx.AnimatorManager.animator.SetBool("isJumping", true);
         Ctx.AnimatorManager.PlayTargetAnimation("Jump", false);
 

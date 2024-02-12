@@ -7,7 +7,6 @@ public class PlayerLandState : PlayerBaseState
 {
     public PlayerLandState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
-        Debug.Log("Entered Land Sub State with parent state: " + CurrentSuperState.GetType());
 
         Ctx.animatorManager.PlayTargetAnimation("Land", true);
     }

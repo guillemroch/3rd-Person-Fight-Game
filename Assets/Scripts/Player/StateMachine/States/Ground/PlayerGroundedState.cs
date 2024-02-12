@@ -14,7 +14,6 @@ public class PlayerGroundedState : PlayerBaseState {
     }
 
     public override void EnterState() {
-        Debug.Log("Enter Grounded Root State with substate: " + CurrentSubState?.GetType());
     }
 
     public override void UpdateState() {
@@ -54,7 +53,9 @@ public class PlayerGroundedState : PlayerBaseState {
         Vector3 rayCastOrigin = Ctx.transform.position - Ctx.rayCastHeightOffset * Ctx.gravityDirection;
         rayCastOrigin = Ctx.playerRigidbody.worldCenterOfMass;
         
-        if (Physics.SphereCast(rayCastOrigin, Ctx.rayCastRadius, Ctx.gravityDirection, out RaycastHit hit ,Ctx.rayCastMaxDistance, Ctx.groundLayer))
+        if (Physics.SphereCast(
+                rayCastOrigin, Ctx.rayCastRadius, Ctx.gravityDirection, out RaycastHit hit ,Ctx.rayCastMaxDistance, Ctx.groundLayer)
+            )
         {
             Ctx.inAirTimer = 0;
             Ctx.isGrounded = true;
@@ -85,14 +86,17 @@ public class PlayerGroundedState : PlayerBaseState {
             Ctx.targetDirection = Ctx.playerTransform.forward;
 
 
-        Quaternion targetRotation = Quaternion.LookRotation(Ctx.targetDirection, -Ctx.gravityDirection);
+        Quaternion targetRotation = 
+            Quaternion.LookRotation(Ctx.targetDirection, -Ctx.gravityDirection);
 
-        Ctx.transform.rotation = Quaternion.Slerp(Ctx.playerTransform.rotation, targetRotation, Ctx.rotationSpeed * Time.deltaTime);
+        Ctx.transform.rotation = 
+            Quaternion.Slerp(Ctx.playerTransform.rotation, targetRotation, Ctx.rotationSpeed * Time.deltaTime);
         
     }
 
     private void HandleGravity() {
-        Ctx.playerRigidbody.AddForce(Ctx.groundedGravity * Ctx.gravityMultiplier * Ctx.gravityDirection, ForceMode.Acceleration);
+        Ctx.playerRigidbody.AddForce(
+            Ctx.groundedGravity * Ctx.gravityMultiplier * Ctx.gravityDirection, ForceMode.Acceleration);
 
     }
 }

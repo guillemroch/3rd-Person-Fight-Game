@@ -15,11 +15,8 @@ public class PlayerStateMachine : MonoBehaviour
     //Movement status flags
     //TODO: IF state machine correctly implemented, these flags should be removed
     [Header("Movement Flags")] 
-    public bool isSprinting;
     public bool isGrounded;
-    public bool isJumping;
-    public bool isHalfLashing;
-    public bool isLashing;
+    
 
   
     //Falling and ground detection variables
@@ -134,8 +131,8 @@ public class PlayerStateMachine : MonoBehaviour
     
     #endregion
     //State variables
-    public PlayerStateFactory _states;
-    public PlayerBaseState _currentState;
+    private PlayerStateFactory _states;
+    private PlayerBaseState _currentState;
     
     //getters and setters
     //TODO: Setup getters and setters of local variables

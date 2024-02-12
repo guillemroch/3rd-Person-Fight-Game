@@ -12,7 +12,6 @@ public class PlayerAirState : PlayerBaseState
 
     }
     public override void EnterState() {
-        Debug.Log("Enter Air Root State with substate: " + CurrentSubState?.GetType());
 
     }
 

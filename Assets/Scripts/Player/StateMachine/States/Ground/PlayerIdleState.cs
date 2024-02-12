@@ -7,8 +7,6 @@ public class PlayerIdleState : PlayerBaseState
 {
     public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
-        //Setup starting things for animation or logic
-        Debug.Log($"<color=lightblue>Entered Idle Sub State with parent state: " + CurrentSuperState.GetType() + "</color>");
 
     }
 

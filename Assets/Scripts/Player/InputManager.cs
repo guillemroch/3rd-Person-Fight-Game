@@ -71,32 +71,35 @@ public class InputManager : MonoBehaviour
     {
         HandleMovementInput();
         HandleCameraInput();
-        HandleSprintingInput();
     
     }
 
     private void HandleMovementInput()
     {
         moveAmount = Mathf.Clamp01(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.y));
-        _animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), _playerMovement.isSprinting);
+        _animatorManager.UpdateAnimatorValues(new Vector2(0, moveAmount), isSprintPressed && moveAmount > 0.5f);
     }
 
     private void HandleCameraInput()
     {
         
     }
-
-    private void HandleSprintingInput()
+    
+    public void ResetJumpInput()
     {
-        if (isSprintPressed && moveAmount > 0.5f)
-        {
-            _playerMovement.isSprinting = true;
-        }
-        else
-        {
-            _playerMovement.isSprinting = false;
-        }
+        isJumpPressed = false;
     }
+    public void ResetLashInput()
+    {
+        lashInput = false;
+    }
+    
+    public void ResetHalfLashInput()
+    {
+        halfLashInput = false;
+    }
+
+
 
  
     
