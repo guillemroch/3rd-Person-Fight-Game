@@ -8,7 +8,6 @@ public class PlayerRunState : PlayerBaseState
     public PlayerRunState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         //Setup starting things for animation or logic
-        Debug.Log("Entered Run Sub State with parent state: " + CurrentSuperState.GetType());
 
 
     }

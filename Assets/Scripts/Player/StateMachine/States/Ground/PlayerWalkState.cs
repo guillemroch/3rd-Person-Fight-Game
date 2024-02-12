@@ -7,10 +7,7 @@ public class PlayerWalkState : PlayerBaseState
 {
     public PlayerWalkState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
-        //Setup starting things for animation or logic
         
-        Debug.Log("Entered Walk Sub State with parent state: " + CurrentSuperState.GetType());
-
     }
 
     public override void UpdateState() {

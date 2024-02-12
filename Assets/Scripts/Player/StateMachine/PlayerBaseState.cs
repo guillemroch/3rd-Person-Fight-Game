@@ -39,7 +39,6 @@ namespace Player.StateMachine{
         }
 
         protected void SwitchStates(PlayerBaseState newState) {
-            //current state exits state
 
             if (newState.IsRootState) {
                 
@@ -51,17 +50,19 @@ namespace Player.StateMachine{
                 
                 newState.EnterState();
                 
-                Debug.Log("Switching root state to " + newState.GetType());
+                Debug.Log("<color=orange>[ROOT]: " + newState.GetType() + "</color>");
                 //switch current state of context
                 Ctx.CurrentState = newState;
                 
             }else {
                 if (_currentSuperState != null) {
                 //switch current sub state of super state
+                Debug.Log("<color=green>[SUB]: " + newState.GetType() + "</color>");
                 _currentSuperState.SetSubStates(newState);
                 } else if (_isRootState) {
                     //switch current state of context
                     SetSubStates(newState);
+                    Debug.Log("<color=yellow>[SUB]: " + newState.GetType() + "</color>");
                 }
                 
             }
