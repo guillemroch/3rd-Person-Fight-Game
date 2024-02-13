@@ -41,7 +41,7 @@ namespace Player{
 
         private void LateUpdate()
         {
-            _cameraManager.HandleAllCameraMovement();
+            //_cameraManager.HandleAllCameraMovement();
 
             //TODO: When state machine correctly defined remove this:
             isInteracting = _animator.GetBool("isInteracting");
