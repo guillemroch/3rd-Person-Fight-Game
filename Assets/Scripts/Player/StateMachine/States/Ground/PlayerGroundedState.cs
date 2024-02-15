@@ -39,7 +39,7 @@ public class PlayerGroundedState : PlayerBaseState {
 
     public override void InitializeSubState() {
         
-        if (Ctx.InputManager.movementInput == Vector2.zero) {
+        if (Ctx.InputManager.MovementInput == Vector2.zero) {
             SwitchStates(Factory.Idle());
         }else if (!Ctx.InputManager.IsSprintPressed) {
             SwitchStates(Factory.Walk());
@@ -72,8 +72,8 @@ public class PlayerGroundedState : PlayerBaseState {
         Ctx.targetDirection = Vector3.zero; //Resets target direction
         
         //calculate orientation based on camera position
-        Ctx.targetDirection = Ctx.cameraObject.forward * Ctx.inputManager.movementInput.y +
-                              Ctx.cameraObject.right * Ctx.inputManager.movementInput.x;
+        Ctx.targetDirection = Ctx.cameraObject.forward * Ctx.inputManager.MovementInput.y +
+                              Ctx.cameraObject.right * Ctx.inputManager.MovementInput.x;
         
         float moveDot = Vector3.Dot(Ctx.targetDirection, Ctx.gravityDirection);
         float magSquared = Ctx.gravityDirection.sqrMagnitude;

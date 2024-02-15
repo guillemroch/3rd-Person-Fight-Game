@@ -19,10 +19,10 @@ public class PlayerIdleState : PlayerBaseState
     public override void ExitState() {    }
 
     public override void CheckSwitchStates() {
-        if (Ctx.InputManager.movementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
+        if (Ctx.InputManager.MovementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
             SwitchStates(Factory.Run());
         }
-        else if (Ctx.InputManager.movementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
+        else if (Ctx.InputManager.MovementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
             SwitchStates(Factory.Walk());
         }
     }

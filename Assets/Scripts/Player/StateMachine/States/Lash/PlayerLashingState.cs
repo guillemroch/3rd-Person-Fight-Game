@@ -43,8 +43,8 @@ public class PlayerLashingState : PlayerBaseState
     }
     
     private void HandleMovement() {
-        Ctx.moveDirection = Ctx.playerTransform.right * Ctx.inputManager.movementInput.y +
-                            Ctx.playerTransform.forward * -Ctx.inputManager.movementInput.x;
+        Ctx.moveDirection = Ctx.playerTransform.right * Ctx.inputManager.MovementInput.y +
+                            Ctx.playerTransform.forward * -Ctx.inputManager.MovementInput.x;
         
 
         Ctx.moveDirection.Normalize();

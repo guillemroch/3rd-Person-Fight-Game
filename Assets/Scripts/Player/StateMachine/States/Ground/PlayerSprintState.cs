@@ -31,7 +31,7 @@ public class PlayerSprintState : PlayerBaseState
     
     
     private void HandleMovement() {
-        Ctx.moveDirection = Ctx.cameraObject.forward * Ctx.inputManager.movementInput.y + Ctx.cameraObject.right * Ctx.inputManager.movementInput.x;
+        Ctx.moveDirection = Ctx.cameraObject.forward * Ctx.inputManager.MovementInput.y + Ctx.cameraObject.right * Ctx.inputManager.MovementInput.x;
 
         float moveDot = Vector3.Dot(Ctx.moveDirection, Ctx.gravityDirection);
         float magSquared = Ctx.gravityDirection.sqrMagnitude;

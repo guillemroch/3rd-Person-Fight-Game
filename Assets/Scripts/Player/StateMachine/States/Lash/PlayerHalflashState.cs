@@ -23,8 +23,8 @@ public class PlayerHalflashState : PlayerBaseState
     public override void UpdateState() {
         CheckSwitchStates();
         //Make the player rotate with the camera, making that we always see the back of the player
-        Ctx.transform.RotateAround(Ctx.playerRigidbody.worldCenterOfMass, Ctx.playerTransform.forward, Ctx.rotationSpeed * Time.deltaTime * -Ctx.inputManager.cameraInput.x);
-        Ctx.transform.RotateAround(Ctx.playerRigidbody.worldCenterOfMass, Ctx.playerTransform.right, Ctx.rotationSpeed * Time.deltaTime * -Ctx.inputManager.cameraInput.y);
+        //Ctx.transform.RotateAround(Ctx.playerRigidbody.worldCenterOfMass, Ctx.playerTransform.forward, Ctx.rotationSpeed * Time.deltaTime * -Ctx.inputManager.cameraInput.x);
+        //Ctx.transform.RotateAround(Ctx.playerRigidbody.worldCenterOfMass, Ctx.playerTransform.right, Ctx.rotationSpeed * Time.deltaTime * -Ctx.inputManager.cameraInput.y);
     }
 
     
