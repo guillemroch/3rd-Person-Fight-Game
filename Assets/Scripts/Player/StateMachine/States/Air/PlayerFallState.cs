@@ -1,56 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
-using Player.StateMachine;
 using UnityEngine;
 
-public class PlayerFallState : PlayerBaseState
-{
-    public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
-    public override void EnterState() {
+namespace Player.StateMachine.States.Air{
+    public class PlayerFallState : PlayerBaseState
+    {
+        public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public override void EnterState() {
 
-        Ctx.animatorManager.PlayTargetAnimation("Fall", true);
-    }
-
-    public override void UpdateState() {
-        CheckSwitchStates();
-        HandleFalling();
-        HandleGravity();
-        
-    }
-
-    public override void FixedUpdateState() {
-    }
-
-    public override void ExitState() {
-    }
-
-    public override void CheckSwitchStates() {
-         if (Ctx.isGrounded) SwitchStates(Factory.Land());
-    }
-
-    public override void InitializeSubState() {
-    }
-
-    void HandleFalling() {
-        
-        if (Ctx.inAirTimer <= Ctx.maxAirSpeed) Ctx.inAirTimer += Time.deltaTime;
-        
-        Ctx.playerRigidbody.AddForce(Ctx.playerTransform.forward * (Ctx.leapingVelocity * Ctx.playerRigidbody.velocity.magnitude), ForceMode.Force);
-        Ctx.playerRigidbody.AddForce(Ctx.gravityDirection * (Ctx.fallingVelocity * Ctx.inAirTimer), ForceMode.Force);
-        
-        Ctx.playerRigidbody.AddForce(Ctx.gravityIntensity * Ctx.gravityMultiplier * Ctx.gravityDirection, ForceMode.Acceleration);
-
-        Vector3 rayCastOrigin = Ctx.transform.position - Ctx.rayCastHeightOffset * Ctx.gravityDirection;
-        rayCastOrigin = Ctx.playerRigidbody.worldCenterOfMass;
-        if (Physics.SphereCast(rayCastOrigin, Ctx.rayCastRadius, Ctx.gravityDirection, out RaycastHit hit, Ctx.rayCastMaxDistance,
-                Ctx.groundLayer)) {
-            Ctx.isGrounded = true;
+            Ctx.AnimatorManager.PlayTargetAnimation("Fall");
         }
 
-    }
+        public override void UpdateState() {
+            CheckSwitchStates();
+            HandleFalling();
+            HandleGravity();
+        
+        }
 
-    void HandleGravity() {
-        Ctx.playerRigidbody.AddForce(Ctx.gravityIntensity * Ctx.gravityMultiplier * Ctx.gravityDirection, ForceMode.Acceleration);
+        public override void FixedUpdateState() {
+        }
 
+        public override void ExitState() {
+        }
+
+        public override void CheckSwitchStates() {
+            if (Ctx.isGrounded) SwitchStates(Factory.Land());
+        }
+
+        public override void InitializeSubState() {
+        }
+
+        void HandleFalling() {
+        
+            if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
+        
+            Ctx.PlayerRigidbody.AddForce(Ctx.PlayerTransform.forward * (Ctx.LeapingVelocity * Ctx.PlayerRigidbody.velocity.magnitude), ForceMode.Force);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
+        
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+
+            Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+            
+            if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
+                    Ctx.GroundLayer)) {
+                Ctx.isGrounded = true;
+            }
+
+        }
+
+        void HandleGravity() {
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+
+        }
     }
 }

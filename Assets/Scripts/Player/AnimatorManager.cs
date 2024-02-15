@@ -1,24 +1,38 @@
+using Unity.Collections;
 using UnityEngine;
 
 namespace Player{
     public class AnimatorManager : MonoBehaviour
     {
-        public Animator animator;
+        [SerializeField] [ReadOnly] public Animator animator;
         //Blend Tree variables
-        private int horizontal;
-        private int vertical;
+        [SerializeField] [ReadOnly] int _horizontalHash;
+        [SerializeField] [ReadOnly] int _verticalHash;
+        
+        //Other variables
+        [SerializeField] [ReadOnly] int _isGroundedHash;
+        [SerializeField] [ReadOnly] int _isHalfLashingHash;
+        [SerializeField] [ReadOnly] int _isLashingHash;
+        [SerializeField] [ReadOnly] int _isJumpingHash;
+        public int IsGroundedHash => _isGroundedHash;
+        public int IsHalfLashingHash => _isHalfLashingHash;
+        public int IsLashingHash => _isLashingHash;
+        public int IsJumpingHash => _isJumpingHash;
+
 
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            horizontal = Animator.StringToHash("Horizontal");
-            vertical = Animator.StringToHash("Vertical");
-        
+            _horizontalHash = Animator.StringToHash("Horizontal");
+            _verticalHash = Animator.StringToHash("Vertical");
+            _isGroundedHash = Animator.StringToHash("isGrounded");
+            _isHalfLashingHash = Animator.StringToHash("isHalfLashing");
+            _isLashingHash = Animator.StringToHash("isLashing");
+            _isJumpingHash = Animator.StringToHash("isJumping");
         }
 
-        public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
+        public void PlayTargetAnimation(string targetAnimation)
         {
-            animator.SetBool("isInteracting", isInteracting);
             animator.CrossFade(targetAnimation, 0.2f);
         }
         public void UpdateAnimatorValues(Vector2 movementInput, bool isSprinting)
@@ -26,14 +40,14 @@ namespace Player{
             //Animation Snapping
             //Horizontal
             float snappedHorizontal;
-            if ( movementInput.x > 0 && movementInput.x < 0.55f)
+            if ( movementInput.x is > 0 and < 0.55f)
             {
                 snappedHorizontal = 0.5f;
             
             }else if ( movementInput.x >= 0.55f)
             {
                 snappedHorizontal = 1f;
-            }else if ( movementInput.x < 0 && movementInput.x > -0.55f)
+            }else if ( movementInput.x is < 0 and > -0.55f)
             {
                 snappedHorizontal = -0.5f;
             
@@ -48,14 +62,14 @@ namespace Player{
 
             //Vertical
             float snappedVertical;
-            if ( movementInput.y > 0 && movementInput.y < 0.55f)
+            if ( movementInput.y is > 0 and < 0.55f)
             {
                 snappedVertical = 0.5f;
             
             }else if ( movementInput.y >= 0.55f)
             {
                 snappedVertical = 1f;
-            }else if ( movementInput.y < 0 && movementInput.y > -0.55f)
+            }else if ( movementInput.y is < 0 and > -0.55f)
             {
                 snappedVertical = -0.5f;
             
@@ -74,8 +88,8 @@ namespace Player{
             }
         
         
-            animator.SetFloat(horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
-            animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
+            animator.SetFloat(_horizontalHash, snappedHorizontal, 0.1f, Time.deltaTime);
+            animator.SetFloat(_verticalHash, snappedVertical, 0.1f, Time.deltaTime);
         }
     }
 }

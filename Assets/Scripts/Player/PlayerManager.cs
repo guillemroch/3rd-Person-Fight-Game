@@ -11,16 +11,18 @@ namespace Player{
  */
     public class PlayerManager : MonoBehaviour
     {
-        private InputManager _inputManager; //Calls Input in Update()
-        private PlayerStateMachine _playerStateMachine; //Calls player movement calculations in FixedUpdate()
-        private Animator _animator;  //Calls and modifies animator in LateUpdate()
-    
+        [SerializeField] private InputManager _inputManager; //Calls Input in Update()
+        [SerializeField] private PlayerStateMachine _playerStateMachine; //Calls player movement calculations in FixedUpdate()
+        [SerializeField] private AnimatorManager _animatorManager; //Calls and modifies animator in LateUpdate()
+        [SerializeField] private Animator _animator;  //Calls and modifies animator in LateUpdate()
+        
     
         private void Awake()
         {
 
             _inputManager = GetComponent<InputManager>();
             _playerStateMachine = GetComponent<PlayerStateMachine>();
+            _animatorManager = GetComponent<AnimatorManager>();
             _animator = GetComponent<Animator>();
         
             Cursor.lockState = CursorLockMode.Locked;
@@ -38,7 +40,7 @@ namespace Player{
 
         private void LateUpdate()
         {
-            _animator.SetBool("isGrounded", _playerStateMachine.isGrounded);
+            _animator.SetBool(_animatorManager.IsGroundedHash.GetHashCode(), _playerStateMachine.isGrounded);
         }
     }
 }

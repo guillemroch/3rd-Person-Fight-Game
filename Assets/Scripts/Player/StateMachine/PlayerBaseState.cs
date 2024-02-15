@@ -1,9 +1,7 @@
-using UnityEngine;
-
 namespace Player.StateMachine{
     public abstract class PlayerBaseState
     {
-        private bool _isRootState = false;
+        private bool _isRootState;
         private PlayerStateMachine _ctx;
         private PlayerStateFactory _factory;
         private PlayerBaseState _currentSuperState;
@@ -13,8 +11,8 @@ namespace Player.StateMachine{
         protected PlayerStateMachine Ctx { get { return _ctx; } }
         protected PlayerStateFactory Factory { get { return _factory; }}
         protected bool IsRootState { get { return _isRootState; } set => _isRootState = value; }
-        protected PlayerBaseState CurrentSubState { get => _currentSubState; } //TODO: remove this getter (it's just for debug purposes)
-        protected PlayerBaseState CurrentSuperState { get => _currentSuperState; } //TODO: remove this getter (it's just for debug purposes)
+        protected PlayerBaseState CurrentSubState { get => _currentSubState; } 
+        protected PlayerBaseState CurrentSuperState { get => _currentSuperState; } 
 
         public PlayerBaseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) {
             _ctx = currentCtx;
@@ -50,19 +48,19 @@ namespace Player.StateMachine{
                 
                 newState.EnterState();
                 
-                Debug.Log("<color=orange>[ROOT]: " + newState.GetType() + "</color>");
+                //Debug.Log("<color=orange>[ROOT]: " + newState.GetType() + "</color>");
                 //switch current state of context
                 Ctx.CurrentState = newState;
                 
             }else {
                 if (_currentSuperState != null) {
                 //switch current sub state of super state
-                Debug.Log("<color=green>[SUB]: " + newState.GetType() + "</color>");
+                //Debug.Log("<color=green>[SUB]: " + newState.GetType() + "</color>");
                 _currentSuperState.SetSubStates(newState);
                 } else if (_isRootState) {
                     //switch current state of context
                     SetSubStates(newState);
-                    Debug.Log("<color=yellow>[SUB]: " + newState.GetType() + "</color>");
+                    //Debug.Log("<color=yellow>[SUB]: " + newState.GetType() + "</color>");
                 }
                 
             }

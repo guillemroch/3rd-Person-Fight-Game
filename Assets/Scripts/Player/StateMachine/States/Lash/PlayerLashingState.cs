@@ -9,10 +9,10 @@ public class PlayerLashingState : PlayerBaseState
     public override void EnterState() {
         
         Ctx.InputManager.ResetLashInput();
-        Ctx.gravityDirection = Ctx.playerTransform.up;
+        Ctx.GravityDirection = Ctx.PlayerTransform.up;
 
-        Ctx.animatorManager.animator.SetBool("isHalfLashing", false);
-        Ctx.animatorManager.animator.SetBool("isLashing", true);
+        Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
+        Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
     }
 
     public override void UpdateState() {
@@ -43,38 +43,38 @@ public class PlayerLashingState : PlayerBaseState
     }
     
     private void HandleMovement() {
-        Ctx.moveDirection = Ctx.playerTransform.right * Ctx.inputManager.MovementInput.y +
-                            Ctx.playerTransform.forward * -Ctx.inputManager.MovementInput.x;
+        Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y +
+                            Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
         
 
-        Ctx.moveDirection.Normalize();
+        Ctx.MoveDirection.Normalize();
         
-        Quaternion rotation = Quaternion.Euler(Ctx.moveDirection) * Quaternion.Euler(Ctx.gravityDirection);
+        Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
         
-        Ctx.gravityDirection = rotation * Ctx.gravityDirection;
+        Ctx.GravityDirection = rotation * Ctx.GravityDirection;
     }
 
     private void HandleRotation() {
-        Quaternion targetRotation = Quaternion.FromToRotation(Ctx.playerTransform.up, Ctx.gravityDirection);
-        Ctx.playerTransform.rotation = targetRotation * Ctx.playerTransform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection);
+        Ctx.PlayerTransform.rotation = targetRotation * Ctx.PlayerTransform.rotation;
     }
 
     private void HandleGroundDetection() {
         
-        Vector3 rayCastOrigin = Ctx.transform.position - Ctx.rayCastHeightOffset * Ctx.gravityDirection;
-        rayCastOrigin = Ctx.playerRigidbody.worldCenterOfMass;
+        Vector3 rayCastOrigin = Ctx.transform.position - Ctx.RayCastHeightOffset * Ctx.GravityDirection;
+        rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
         
-        if (Ctx.inAirTimer <= Ctx.maxAirSpeed) Ctx.inAirTimer += Time.deltaTime;
-        Ctx.playerRigidbody.AddForce(Ctx.gravityDirection * (Ctx.fallingVelocity * Ctx.inAirTimer), ForceMode.Force);
+        if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
+        Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
         
-        if (Physics.SphereCast(rayCastOrigin, Ctx.rayCastRadius, Ctx.gravityDirection, out RaycastHit hit ,Ctx.rayCastMaxDistance, Ctx.groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
         {
            
             Ctx.isGrounded = true;
-            Ctx.gravityDirection = -hit.normal;  
+            Ctx.GravityDirection = -hit.normal;  
             Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             
-            Ctx.inAirTimer = 0;
+            Ctx.InAirTimer = 0;
            
         }
         else
@@ -84,7 +84,7 @@ public class PlayerLashingState : PlayerBaseState
     }
     
     private void HandleGravity() {
-        Ctx.playerRigidbody.AddForce(Ctx.gravityIntensity * Ctx.gravityMultiplier * Ctx.gravityDirection, ForceMode.Acceleration);
+        Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
 
     }
     
@@ -93,10 +93,10 @@ public class PlayerLashingState : PlayerBaseState
         //TODO: Make it work without a Coroutine
         //isLandingFromLashing = true;
         Vector3 originalPosition = Ctx.transform.position;
-        Vector3 centerOfMass = Ctx.playerRigidbody.worldCenterOfMass;
+        Vector3 centerOfMass = Ctx.PlayerRigidbody.worldCenterOfMass;
          
-        Quaternion startRotation = Ctx.playerTransform.rotation;
-        Quaternion targetRotation = Quaternion.FromToRotation(Ctx.playerTransform.up, targetNormal) * Ctx.playerTransform.rotation;
+        Quaternion startRotation = Ctx.PlayerTransform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, targetNormal) * Ctx.PlayerTransform.rotation;
 
         float timeElapsed = 0;
         while (timeElapsed < duration)

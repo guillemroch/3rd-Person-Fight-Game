@@ -6,141 +6,102 @@ namespace Player.StateMachine{
         #region Variables
         //Player values for movements
         [Header("Movement Variables")]
-        public Vector3 moveDirection;
-        public Vector3 targetDirection;
+        [SerializeField] private Vector3 _moveDirection;
+        [SerializeField] private Vector3 _targetDirection;
 
         //Movement status flags
-        //TODO: IF state machine correctly implemented, these flags should be removed
         [Header("Movement Flags")] 
-        public bool isGrounded;
-    
-
-  
+        [SerializeField] public bool isGrounded;
+        
         //Falling and ground detection variables
         [Header("Falling")] 
-        public float inAirTimer;
-        public float maxAirSpeed = 25f;
-        public float leapingVelocity;
-        public float fallingVelocity;
-        public LayerMask groundLayer;
-        public float rayCastHeightOffset = 0.5f;
+        [SerializeField] private float _inAirTimer;
+        [SerializeField] private float _maxAirSpeed = 25f;
+        [SerializeField] private float _leapingVelocity;
+        [SerializeField] private float _fallingVelocity;
+        [SerializeField] private LayerMask _groundLayer;
+        [SerializeField] private float _rayCastHeightOffset = 0.5f;
         [Range(0.1f, 1.5f)]
-        public float rayCastMaxDistance = 1;
-        [Range(0.1f, 1.5f)]
-        public float rayCastRadius = 0.2f;
+        [SerializeField] private float _rayCastMaxDistance = 1;
+
+        [Range(0.1f, 1.5f)] 
+        [SerializeField] private float _rayCastRadius = 0.2f;
+
 
         [Header("Gravity")] 
-        public Vector3 gravityDirection = Vector3.down; //What is the current gravity orientation for the player
-        public float gravityIntensity = 9.8f;
-        public float gravityMultiplier = 2;
-        public float groundedGravity = 0.5f;
+        [SerializeField] private Vector3 _gravityDirection = Vector3.down; //What is the current gravity orientation for the player
+        [SerializeField] private float _gravityIntensity = 9.8f;
+        [SerializeField] private float _gravityMultiplier = 2;
+        [SerializeField] private float _groundedGravity = 0.5f;
 
         [Header("Lashings")] 
-        public float halfLashingHeight = 1.0f;
+        [SerializeField] private float _halfLashingHeight = 1.0f;
     
         //Speeds
         [Header("Speeds")] 
-        public float movementSpeed ;
-        public float walkingSpeed = 1.5f;
-        public float runningSpeed = 6f;
-        public float sprintingSpeed = 8f;
-        public float rotationSpeed = 15;
+        [SerializeField] private float _movementSpeed ;
+        [SerializeField] private float _walkingSpeed = 1.5f;
+        [SerializeField] private float _runningSpeed = 6f;
+        [SerializeField] private float _sprintingSpeed = 8f;
+        [SerializeField] private float _rotationSpeed = 15;
     
         [Header("Stamina")]
-        public float stamina = 100;
-        public float staminaRegenRate = 1;
-        public float staminaDepletionRate = 1;
+        [SerializeField] private float _stamina = 100;
+        [SerializeField] private float _staminaRegenRate = 1;
+        [SerializeField] private float _staminaDepletionRate = 1;
     
     
         //Jump
         [Header("Jump Speeds")] 
-        public float jumpHeight = 3;
+        [SerializeField] private float _jumpHeight = 3;
 
         //References
         [Header("References")] 
-        public PlayerManager playerManager;
-        public AnimatorManager animatorManager;
-        public InputManager inputManager;
-        public Transform cameraObject;
-        public Transform playerTransform;
-        public Rigidbody playerRigidbody;
+        [SerializeField] private PlayerManager _playerManager;
+        [SerializeField] private AnimatorManager _animatorManager;
+        [SerializeField] private InputManager _inputManager;
+        [SerializeField] private Transform _cameraObject;
+        [SerializeField] private Transform _playerTransform;
+        [SerializeField] private Rigidbody _playerRigidbody;
     
-        //Gizmos
-        #region Gizmos
-    
-        [Header("=====================")]
-        [Header("### DEBUG SECTION ###")]  [Header("Gizmos")]
-        public bool enabledGizmos;
-    
-        [Header("Local Player Transform")] 
-        public bool isTransformGizmoEnabled;
-        public Vector3 centerOfMassGizmo;
-        public Color upGizmoColor = Color.green;
-        public Color rightGizmoColor = Color.red;
-        public Color frontGizmoColor = Color.blue;
-
-        [Header("Ground Detection")] 
-        public bool isGroundDetectionGizmoEnabled;
-    
-        public Color originGizmoColor = Color.magenta;
-        public Vector3 gizmoRayCastOrigin;
-        public Color hitGizmoColor = Color.green;
-        public Color rayGizmoColor = Color.yellow;
-    
-    
-        [Header("Forces Applied and Movement")]
-        [Header("Gravity Forces")]
-        public bool isGravityDirectionGizmoEnabled;
-        public Color gravityGizmoColor = Color.cyan;
-        public Vector3 gravityGizmoForceVector;
-    
-        [Header("Movement Forces")]
-        public bool isVelocityGizmoEnabled;
-        public Color movementGizmoColor = Color.red;
-        public Vector3 movementGizmoForceVector;
-    
-        [Header("Falling Forces")]
-        public bool isFallingForcesGizmoEnabled;
-        public Color fallingForcesGizmoColor = Color.blue;
-        public Vector3 fallingForcesGizmoVector;
-
-        [Header("Jumping Forces")]
-        public bool isJumpingForcesGizmoEnabled;
-        public Color jumpingForcesGizmoColor = Color.green;
-        public Vector3 jumpingForcesGizmoVector;
-
-        [Header("Lashing Forces")]
-        public bool isLashingForcesGizmoEnabled;
-        public Color lashingForcesGizmoColor = Color.magenta;
-        public Vector3 lashingForcesGizmoVector;
-
-        [Header("TOTAL FORCES")] 
-        public bool isTotalForcesGizmoEnabled;
-        public Color totalForcesGizmoColor = Color.red;
-        public Vector3 totalForcesGizmoVector;
-
-        [Header("Real Velocity")] public Vector3 realVelocity;
-        [Header("Targeted Direction")] 
-        public bool isTargetedDirectionGizmoEnabled;
-        public Vector3 targetedDirectionGizmo;
-        public Color targetDirectionGizmoColor = Color.yellow;
-    
-        #endregion
         //State variables
         private PlayerStateFactory _states;
         private PlayerBaseState _currentState;
     
         //getters and setters
-        //TODO: Setup getters and setters of local variables
-        //TODO: Setup getters and setters for variables from the InputManager and AnimatorManager
-        public PlayerBaseState CurrentState { get { return _currentState;} set { _currentState = value; }
-        }
-        public InputManager InputManager => inputManager;
-        public AnimatorManager AnimatorManager => animatorManager;
-        public Rigidbody PlayerRigidbody => playerRigidbody;
-        public float GravityIntensity => gravityIntensity;
-        public float JumpHeight => jumpHeight;
-        public Vector3 GravityDirection => gravityDirection;
+        public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }
+        public Vector3 TargetDirection { get => _targetDirection; set => _targetDirection = value; }
+        public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+        public float InAirTimer { get => _inAirTimer; set => _inAirTimer = value; }
+        public float MaxAirSpeed { get => _maxAirSpeed; set => _maxAirSpeed = value; }
+        public float LeapingVelocity { get => _leapingVelocity; set => _leapingVelocity = value; }
+        public float FallingVelocity { get => _fallingVelocity; set => _fallingVelocity = value; }
+        public LayerMask GroundLayer { get => _groundLayer; set => _groundLayer = value; }
+        public float RayCastRadius { get => _rayCastRadius; set => _rayCastRadius = value; }
+        public float RayCastHeightOffset { get => _rayCastHeightOffset; set => _rayCastHeightOffset = value; }
+        public float RayCastMaxDistance { get => _rayCastMaxDistance; set => _rayCastMaxDistance = value; }
+        public Vector3 GravityDirection { get => _gravityDirection; set => _gravityDirection = value; }
+        public float GravityIntensity { get => _gravityIntensity; set => _gravityIntensity = value; }
+        public float GravityMultiplier { get => _gravityMultiplier; set => _gravityMultiplier = value; }
+        public float GroundedGravity { get => _groundedGravity; set => _groundedGravity = value; }
+        public float HalfLashingHeight { get => _halfLashingHeight; set => _halfLashingHeight = value; }
+        public float MovementSpeed { get => _movementSpeed; set => _movementSpeed = value; }
+        public float WalkingSpeed { get => _walkingSpeed; set => _walkingSpeed = value; }
+        public float RunningSpeed { get => _runningSpeed; set => _runningSpeed = value; }
+        public float SprintingSpeed { get => _sprintingSpeed; set => _sprintingSpeed = value; }
+        public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
+        public float Stamina { get => _stamina; set => _stamina = value; }
+        public float StaminaRegenRate { get => _staminaRegenRate; set => _staminaRegenRate = value; }
+        public float StaminaDepletionRate { get => _staminaDepletionRate; set => _staminaDepletionRate = value; }
+        public float JumpHeight { get => _jumpHeight; set => _jumpHeight = value; }
+        public PlayerManager PlayerManager { get => _playerManager; set => _playerManager = value; }
+        public AnimatorManager AnimatorManager { get => _animatorManager; set => _animatorManager = value; }
+        public InputManager InputManager { get => _inputManager; set => _inputManager = value; }
+        public Transform CameraObject { get => _cameraObject; set => _cameraObject = value; }
+        public Transform PlayerTransform { get => _playerTransform; set => _playerTransform = value; }
+        public Rigidbody PlayerRigidbody { get => _playerRigidbody; set => _playerRigidbody = value; }
+        public PlayerStateFactory States { get => _states; set => _states = value; }
+        public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
 
         #endregion
     
@@ -152,11 +113,11 @@ namespace Player.StateMachine{
             _currentState.EnterState();
         
             //Get references
-            playerManager = GetComponent<PlayerManager>();
-            animatorManager = GetComponent<AnimatorManager>();
-            inputManager = GetComponent<InputManager>();
-            playerRigidbody = GetComponent<Rigidbody>();
-            cameraObject = Camera.main.transform;
+            _playerManager = GetComponent<PlayerManager>();
+            _animatorManager = GetComponent<AnimatorManager>();
+            _inputManager = GetComponent<InputManager>();
+            _playerRigidbody = GetComponent<Rigidbody>();
+            _cameraObject = Camera.main!.transform;
         }
     
 
@@ -165,91 +126,5 @@ namespace Player.StateMachine{
             _currentState.UpdateStates();
         }
     
-        #region Gizmos
-#if UNITY_EDITOR
-    
-        /**
-     * Debug Gizmos
-     * Cyan Ray: Ray
-     * Magenta cube: rayCastOrigin
-     * Green Sphere: Raycast hit
-     */
-        private void OnDrawGizmos()
-        {
-
-            var position = playerTransform.position;
-        
-            if (!enabledGizmos) return;
-
-            if (isTransformGizmoEnabled)
-            {
-                Gizmos.color = upGizmoColor;
-                centerOfMassGizmo = playerRigidbody.worldCenterOfMass;
-                Gizmos.DrawSphere(centerOfMassGizmo, 0.05f);
-                Gizmos.DrawRay(position, playerTransform.up);
-                Gizmos.color = frontGizmoColor;
-                Gizmos.DrawRay(position, playerTransform.forward);
-                Gizmos.color = rightGizmoColor;
-                Gizmos.DrawRay(position, playerTransform.right);
-            }
-
-            if (isGroundDetectionGizmoEnabled)
-            {
-                Gizmos.color = rayGizmoColor;
-                Gizmos.DrawRay(gizmoRayCastOrigin, gravityDirection);
-                Gizmos.color = originGizmoColor;
-                Gizmos.DrawCube(gizmoRayCastOrigin, new Vector3(0.15f, 0.05f, 0.15f));
-                Gizmos.color = hitGizmoColor;
-                Physics.SphereCast(gizmoRayCastOrigin, rayCastRadius, gravityDirection, out var hit, rayCastMaxDistance, groundLayer);
-                if (isGrounded) Gizmos.DrawSphere(hit.point, rayCastRadius);
-            }
-
-            if (isGravityDirectionGizmoEnabled)
-            {
-                Gizmos.color = gravityGizmoColor;
-                Gizmos.DrawRay(position, gravityGizmoForceVector);
-            }
-
-
-
-            if (isVelocityGizmoEnabled)
-            {
-                Gizmos.color = movementGizmoColor;
-                Gizmos.DrawRay(position, movementGizmoForceVector);
-            }
-    
-            if (isFallingForcesGizmoEnabled)
-            {
-                Gizmos.color = fallingForcesGizmoColor;
-                Gizmos.DrawRay(position, fallingForcesGizmoVector);
-            }
-            if (isJumpingForcesGizmoEnabled)
-            {
-                Gizmos.color = jumpingForcesGizmoColor;
-                Gizmos.DrawRay(position, jumpingForcesGizmoVector);
-            }
-            if (isLashingForcesGizmoEnabled)
-            {
-                Gizmos.color = lashingForcesGizmoColor;
-                Gizmos.DrawRay(position, lashingForcesGizmoVector);
-            }
-            if (isTotalForcesGizmoEnabled)
-            {
-                Gizmos.color = totalForcesGizmoColor;
-                Gizmos.DrawRay(position, totalForcesGizmoVector);
-            }
-
-            if (isTargetedDirectionGizmoEnabled)
-            {
-                Gizmos.color = targetDirectionGizmoColor;
-                Gizmos.DrawRay(position, targetedDirectionGizmo * 100);
-                Gizmos.DrawSphere(position + targetedDirectionGizmo, 0.05f);
-            }
-        
-
-        }
-#endif
-        #endregion
-
     }
 }

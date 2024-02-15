@@ -1,38 +1,30 @@
-using Player.StateMachine;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Player{
     public class InputManager : MonoBehaviour
     {
-        private PlayerInputActions _playerInputs;
-        private AnimatorManager _animatorManager;
+        [SerializeField] [ReadOnly] private PlayerInputActions _playerInputs;
+        [SerializeField] [ReadOnly] private AnimatorManager _animatorManager;
 
         //Input actions
-        private Vector2 _movementInput;
-        private bool _isSprintPressed;
-        private bool _halfLashInput;
-        private bool _lashInput;
-        private float _moveAmount;
-        public Vector2 MovementInput {
-            get => _movementInput;
-            set => _movementInput = value;
-        }
+        [SerializeField] [ReadOnly] private Vector2 _movementInput;
+        [SerializeField] [ReadOnly] private bool _isSprintPressed;
+        [SerializeField] [ReadOnly] private bool _halfLashInput;
+        [SerializeField] [ReadOnly] private bool _lashInput;
 
-        public float MoveAmount {
-            get => _moveAmount;
-            set => _moveAmount = value;
-        }
-
+        [SerializeField] [ReadOnly] private float _moveAmount;
         
-    
+        
         // getters and setters
+        public Vector2 MovementInput { get => _movementInput; set => _movementInput = value; }
+        public float MoveAmount { get => _moveAmount; set => _moveAmount = value; }
         public bool IsJumpPressed { get; private set; }
-
         public bool IsSprintPressed { get => _isSprintPressed; set => _isSprintPressed = value; }
         public bool HalfLashInput { get => _halfLashInput; set => _halfLashInput = value; }
-
         public bool LashInput { get => _lashInput; set => _lashInput = value; }
 
+        
         private void Awake()
         {
             _animatorManager = GetComponent<AnimatorManager>();

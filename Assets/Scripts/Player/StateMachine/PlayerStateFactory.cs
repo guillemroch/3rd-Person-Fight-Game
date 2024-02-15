@@ -1,3 +1,7 @@
+using Player.StateMachine.States.Air;
+using Player.StateMachine.States.Ground;
+using Player.StateMachine.States.Lash;
+
 namespace Player.StateMachine{
     public class PlayerStateFactory
     {
