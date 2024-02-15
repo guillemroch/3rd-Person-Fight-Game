@@ -3,7 +3,6 @@ using UnityEngine;
 namespace Player.StateMachine.States.Ground{
     public class PlayerGroundedState : PlayerBaseState {
     
-        //TODO: Change Run and Sprint substates to be reccurrent to animation speeds
         public PlayerGroundedState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
             : base(currentCtx, stateFactory) {
             IsRootState = true;
@@ -40,9 +39,14 @@ namespace Player.StateMachine.States.Ground{
             if (Ctx.InputManager.MovementInput == Vector2.zero) {
                 SwitchStates(Factory.Idle());
             }else if (!Ctx.InputManager.IsSprintPressed) {
-                SwitchStates(Factory.Walk());
+                if (Ctx.InputManager.MoveAmount <= 0.5f) {
+
+                    SwitchStates(Factory.Walk());
+                }else {
+                    SwitchStates(Factory.Run());
+                }
             }else {
-                SwitchStates(Factory.Run());
+                SwitchStates(Factory.Sprint());
             }
         }
 

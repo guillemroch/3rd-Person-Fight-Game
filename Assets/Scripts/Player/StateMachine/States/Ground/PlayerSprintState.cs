@@ -19,8 +19,15 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
-            if (!Ctx.InputManager.IsSprintPressed) {
-                SwitchStates(Factory.Run());
+            if (Ctx.InputManager.MovementInput == Vector2.zero) {
+                SwitchStates(Factory.Idle());
+            }
+            else if (!Ctx.InputManager.IsSprintPressed) {
+                if (Ctx.InputManager.MoveAmount <= 0.5f) {
+                    SwitchStates(Factory.Walk());
+                }else {
+                    SwitchStates(Factory.Run());
+                }
             }
         }
 

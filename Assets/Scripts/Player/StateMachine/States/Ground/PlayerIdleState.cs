@@ -1,31 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using Player.StateMachine;
 using UnityEngine;
 
-public class PlayerIdleState : PlayerBaseState
-{
-    public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
-    public override void EnterState() {
+namespace Player.StateMachine.States.Ground{
+    public class PlayerIdleState : PlayerBaseState
+    {
+        public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public override void EnterState() {
 
-    }
-
-    public override void UpdateState() {
-        CheckSwitchStates();
-    }
-
-    public override void FixedUpdateState() {    }
-
-    public override void ExitState() {    }
-
-    public override void CheckSwitchStates() {
-        if (Ctx.InputManager.MovementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
-            SwitchStates(Factory.Run());
         }
-        else if (Ctx.InputManager.MovementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
-            SwitchStates(Factory.Walk());
-        }
-    }
 
-    public override void InitializeSubState() {    }
+        public override void UpdateState() {
+            CheckSwitchStates();
+        }
+
+        public override void FixedUpdateState() {    }
+
+        public override void ExitState() {    }
+
+        public override void CheckSwitchStates() {
+            if (Ctx.InputManager.MovementInput != Vector2.zero && Ctx.InputManager.IsSprintPressed) {
+                SwitchStates(Factory.Sprint());
+            }
+            else if (Ctx.InputManager.MovementInput != Vector2.zero && !Ctx.InputManager.IsSprintPressed) {
+                if (Ctx.InputManager.MoveAmount <= 0.5f) {
+
+                    SwitchStates(Factory.Walk());
+                }else {
+                    SwitchStates(Factory.Run());
+                }
+            }
+        }
+
+        public override void InitializeSubState() {    }
+    }
 }

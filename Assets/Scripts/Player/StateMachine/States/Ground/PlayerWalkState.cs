@@ -23,9 +23,13 @@ namespace Player.StateMachine.States.Ground{
         public override void CheckSwitchStates() {
             if (Ctx.InputManager.MovementInput == Vector2.zero) {
                 SwitchStates(Factory.Idle());
+            }else if (!Ctx.InputManager.IsSprintPressed) {
+                if (Ctx.InputManager.MoveAmount > 0.5f) {
+                    SwitchStates(Factory.Run());
+                }
             }
             else if (Ctx.InputManager.IsSprintPressed) {
-                SwitchStates(Factory.Run());
+                SwitchStates(Factory.Sprint());
             }
         }
 
@@ -42,7 +46,7 @@ namespace Player.StateMachine.States.Ground{
             Ctx.MoveDirection += -projection;
             Ctx.MoveDirection.Normalize();
         
-            Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);
+            Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.WalkingSpeed, ForceMode.Force);
         }
     }
 }
