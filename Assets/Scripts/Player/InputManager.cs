@@ -10,8 +10,10 @@ namespace Player{
         //Input actions
         [SerializeField] [ReadOnly] private Vector2 _movementInput;
         [SerializeField] [ReadOnly] private bool _isSprintPressed;
-        [SerializeField] [ReadOnly] private bool _halfLashInput;
         [SerializeField] [ReadOnly] private bool _lashInput;
+        [SerializeField] [ReadOnly] private bool _unLashInput;
+        [SerializeField] [ReadOnly] private float _smallLashInput;
+        [SerializeField] [ReadOnly] private bool _smallUnLashInput;
 
         [SerializeField] [ReadOnly] private float _moveAmount;
         
@@ -21,10 +23,12 @@ namespace Player{
         public float MoveAmount { get => _moveAmount; set => _moveAmount = value; }
         public bool IsJumpPressed { get; private set; }
         public bool IsSprintPressed { get => _isSprintPressed; set => _isSprintPressed = value; }
-        public bool HalfLashInput { get => _halfLashInput; set => _halfLashInput = value; }
         public bool LashInput { get => _lashInput; set => _lashInput = value; }
+        public bool UnLashInput { get => _unLashInput; set => _unLashInput = value; }
+        public float SmallLashInput { get => _smallLashInput; set => _smallLashInput = value; }
+        public bool SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
 
-        
+
         private void Awake()
         {
             _animatorManager = GetComponent<AnimatorManager>();
@@ -44,11 +48,17 @@ namespace Player{
                 _playerInputs.Player.Jump.performed += i => IsJumpPressed = true;
                 _playerInputs.Player.Jump.canceled += i => IsJumpPressed = false;
             
-                _playerInputs.Player.HalfLash.performed += i => _halfLashInput = true;
-                _playerInputs.Player.HalfLash.canceled += i => _halfLashInput = false;
+                _playerInputs.Player.Lash.performed += i => _lashInput = true;
+                _playerInputs.Player.Lash.canceled += i => _lashInput = false;
             
-                _playerInputs.Player.ConfirmLash.performed += i => _lashInput = true;
-                _playerInputs.Player.ConfirmLash.canceled += i => _lashInput = false;
+                _playerInputs.Player.UnLash.performed += i => _unLashInput = true;
+                _playerInputs.Player.UnLash.canceled += i => _unLashInput = false;
+                
+                _playerInputs.Player.SmallLash.performed += i => _smallLashInput = i.ReadValue<float>();
+                _playerInputs.Player.SmallLash.canceled += i => _smallLashInput = 0;
+                
+                _playerInputs.Player.SmallUnLash.performed += i => _smallUnLashInput = true;
+                _playerInputs.Player.SmallUnLash.canceled += i => _smallUnLashInput = false;
 
             }
         
@@ -71,6 +81,7 @@ namespace Player{
         {
             _moveAmount = Mathf.Clamp01(Mathf.Abs(_movementInput.x) + Mathf.Abs(_movementInput.y));
             _animatorManager.UpdateAnimatorValues(new Vector2(0, _moveAmount), _isSprintPressed && _moveAmount > 0.5f);
+            Debug.Log("Lash: " + _smallLashInput);
         }
 
         private void HandleCameraInput()
@@ -87,9 +98,9 @@ namespace Player{
             _lashInput = false;
         }
     
-        public void ResetHalfLashInput()
+        public void ResetUnLashInput()
         {
-            _halfLashInput = false;
+            _unLashInput = false;
         }
 
 

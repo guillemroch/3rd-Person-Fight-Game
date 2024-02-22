@@ -6,7 +6,7 @@ namespace Player.StateMachine.States.Lash{
     {
         public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
         public override void EnterState() {
-            Ctx.InputManager.ResetHalfLashInput();
+            Ctx.InputManager.ResetLashInput();
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash, true);
             Ctx.AnimatorManager.PlayTargetAnimation("Half Lashing");
         
@@ -35,7 +35,12 @@ namespace Player.StateMachine.States.Lash{
 
         public override void CheckSwitchStates() {
             if (Ctx.InputManager.LashInput) {
-                SwitchStates(Factory.Lashing());
+                SwitchStates(Factory.Lash());
+                Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
+            }
+            if (Ctx.InputManager.SmallLashInput > 0) {
+                SwitchStates(Factory.SmallLash());
+                Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
             }
         }
 

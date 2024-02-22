@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Player.StateMachine;
 using UnityEngine;
 
-public class PlayerLashState : PlayerBaseState
+public class PlayerFullUnLashState : PlayerBaseState
 {
-    public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+    public PlayerFullUnLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         
-        Ctx.InputManager.ResetLashInput();
+        Ctx.InputManager.ResetUnLashInput();
         Ctx.GravityDirection = Ctx.PlayerTransform.up;
+        Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
     }
@@ -31,27 +32,7 @@ public class PlayerLashState : PlayerBaseState
     }
 
     public override void CheckSwitchStates() {
-        if (Ctx.isGrounded) {
-            SwitchStates(Factory.Air());
-        }
-        if (Ctx.InputManager.LashInput) {
-            SwitchStates(Factory.FullLash());
-        }
-        if (Ctx.InputManager.UnLashInput) {
-            SwitchStates(Factory.FullUnLash());
-        }
-        if (Ctx.InputManager.SmallLashInput > 0) {
-            SwitchStates(Factory.SmallLash());
-        }
-        if (Ctx.InputManager.SmallUnLashInput) {
-            SwitchStates(Factory.SmallUnLash());
-        }
-        if (Ctx.LashingIntensity <= 0) {
-            SwitchStates(Factory.Halflash());
-        }
-        
-        
-        
+        SwitchStates(Factory.Lash());
     }
 
     public override void InitializeSubState() {
@@ -99,7 +80,7 @@ public class PlayerLashState : PlayerBaseState
     }
     
     private void HandleGravity() {
-        Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * 0.1f), ForceMode.Acceleration);
+        Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity), ForceMode.Acceleration);
 
     }
     

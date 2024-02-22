@@ -64,7 +64,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""HalfLash"",
+                    ""name"": ""Lash"",
                     ""type"": ""Button"",
                     ""id"": ""5e196484-9a0a-434e-99a7-3ea382d7d5fa"",
                     ""expectedControlType"": ""Button"",
@@ -73,9 +73,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ConfirmLash"",
+                    ""name"": ""UnLash"",
                     ""type"": ""Button"",
                     ""id"": ""1a8352ff-7016-47d2-b9b7-5d7daa1c2e33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SmallLash"",
+                    ""type"": ""Value"",
+                    ""id"": ""c786d2a5-4239-4ff4-805a-981f98a87cd9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SmallUnLash"",
+                    ""type"": ""Value"",
+                    ""id"": ""3208e535-4c33-4801-8900-8e71fdf4888d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -152,22 +170,22 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6574a3b8-5c38-4bcf-8c25-3589458092ee"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HalfLash"",
+                    ""action"": ""Lash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""b1ab953d-bbf0-4a32-b9f9-b1197da181a1"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HalfLash"",
+                    ""action"": ""Lash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -284,22 +302,66 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2162e45a-4ed3-4907-bf77-0e66243ec5bd"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""ConfirmLash"",
+                    ""action"": ""UnLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""872d5aba-27b5-45a2-b6dd-1ac85a2519b1"",
-                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ConfirmLash"",
+                    ""action"": ""UnLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e667899-a354-4e62-b8f2-91f743f7c7b7"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SmallLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b5750a3-6f31-4b1d-817a-4377c06fdcf9"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SmallLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""49ad5d90-a20e-4555-b632-403cf75a0da0"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SmallUnLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7e2315a-b81f-4894-9adb-3014b47d1ebe"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SmallUnLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -403,8 +465,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_HalfLash = m_Player.FindAction("HalfLash", throwIfNotFound: true);
-        m_Player_ConfirmLash = m_Player.FindAction("ConfirmLash", throwIfNotFound: true);
+        m_Player_Lash = m_Player.FindAction("Lash", throwIfNotFound: true);
+        m_Player_UnLash = m_Player.FindAction("UnLash", throwIfNotFound: true);
+        m_Player_SmallLash = m_Player.FindAction("SmallLash", throwIfNotFound: true);
+        m_Player_SmallUnLash = m_Player.FindAction("SmallUnLash", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -473,8 +537,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_HalfLash;
-    private readonly InputAction m_Player_ConfirmLash;
+    private readonly InputAction m_Player_Lash;
+    private readonly InputAction m_Player_UnLash;
+    private readonly InputAction m_Player_SmallLash;
+    private readonly InputAction m_Player_SmallUnLash;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -483,8 +549,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @HalfLash => m_Wrapper.m_Player_HalfLash;
-        public InputAction @ConfirmLash => m_Wrapper.m_Player_ConfirmLash;
+        public InputAction @Lash => m_Wrapper.m_Player_Lash;
+        public InputAction @UnLash => m_Wrapper.m_Player_UnLash;
+        public InputAction @SmallLash => m_Wrapper.m_Player_SmallLash;
+        public InputAction @SmallUnLash => m_Wrapper.m_Player_SmallUnLash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -506,12 +574,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @HalfLash.started += instance.OnHalfLash;
-            @HalfLash.performed += instance.OnHalfLash;
-            @HalfLash.canceled += instance.OnHalfLash;
-            @ConfirmLash.started += instance.OnConfirmLash;
-            @ConfirmLash.performed += instance.OnConfirmLash;
-            @ConfirmLash.canceled += instance.OnConfirmLash;
+            @Lash.started += instance.OnLash;
+            @Lash.performed += instance.OnLash;
+            @Lash.canceled += instance.OnLash;
+            @UnLash.started += instance.OnUnLash;
+            @UnLash.performed += instance.OnUnLash;
+            @UnLash.canceled += instance.OnUnLash;
+            @SmallLash.started += instance.OnSmallLash;
+            @SmallLash.performed += instance.OnSmallLash;
+            @SmallLash.canceled += instance.OnSmallLash;
+            @SmallUnLash.started += instance.OnSmallUnLash;
+            @SmallUnLash.performed += instance.OnSmallUnLash;
+            @SmallUnLash.canceled += instance.OnSmallUnLash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -528,12 +602,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @HalfLash.started -= instance.OnHalfLash;
-            @HalfLash.performed -= instance.OnHalfLash;
-            @HalfLash.canceled -= instance.OnHalfLash;
-            @ConfirmLash.started -= instance.OnConfirmLash;
-            @ConfirmLash.performed -= instance.OnConfirmLash;
-            @ConfirmLash.canceled -= instance.OnConfirmLash;
+            @Lash.started -= instance.OnLash;
+            @Lash.performed -= instance.OnLash;
+            @Lash.canceled -= instance.OnLash;
+            @UnLash.started -= instance.OnUnLash;
+            @UnLash.performed -= instance.OnUnLash;
+            @UnLash.canceled -= instance.OnUnLash;
+            @SmallLash.started -= instance.OnSmallLash;
+            @SmallLash.performed -= instance.OnSmallLash;
+            @SmallLash.canceled -= instance.OnSmallLash;
+            @SmallUnLash.started -= instance.OnSmallUnLash;
+            @SmallUnLash.performed -= instance.OnSmallUnLash;
+            @SmallUnLash.canceled -= instance.OnSmallUnLash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -648,8 +728,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnHalfLash(InputAction.CallbackContext context);
-        void OnConfirmLash(InputAction.CallbackContext context);
+        void OnLash(InputAction.CallbackContext context);
+        void OnUnLash(InputAction.CallbackContext context);
+        void OnSmallLash(InputAction.CallbackContext context);
+        void OnSmallUnLash(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

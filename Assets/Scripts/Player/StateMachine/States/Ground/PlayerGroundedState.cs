@@ -29,8 +29,8 @@ namespace Player.StateMachine.States.Ground{
             if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
                 SwitchStates(Factory.Air());
             } 
-            if (Ctx.InputManager.HalfLashInput) {
-                SwitchStates(Factory.Lash());
+            if (Ctx.InputManager.LashInput) {
+                SwitchStates(Factory.Lashing());
             }
         }
 
