@@ -36,6 +36,10 @@ namespace Player.StateMachine{
 
         [Header("Lashings")] 
         [SerializeField] private float _halfLashingHeight = 1.0f;
+        [SerializeField] private float _lashingIntensity = 10;
+        public const float DEFAULT_LASHING_INTENSITY = 5;
+        public const float LASHING_INTENSITY_INCREMENT = 5;
+        public const float LASHING_INTENSITY_SMALL_INCREMENT = 1;
     
         //Speeds
         [Header("Speeds")] 
@@ -102,6 +106,7 @@ namespace Player.StateMachine{
         public Rigidbody PlayerRigidbody { get => _playerRigidbody; set => _playerRigidbody = value; }
         public PlayerStateFactory States { get => _states; set => _states = value; }
         public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
+        public float LashingIntensity { get => _lashingIntensity; set => _lashingIntensity = value; }
 
         #endregion
     
