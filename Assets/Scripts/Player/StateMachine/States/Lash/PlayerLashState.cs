@@ -35,16 +35,25 @@ public class PlayerLashState : PlayerBaseState
             SwitchStates(Factory.Air());
         }
         if (Ctx.InputManager.LashInput) {
-            SwitchStates(Factory.FullLash());
+            if (Ctx.LashingIntensity < PlayerStateMachine.MAX_LASHING_INTENSITY)
+                Ctx.LashingIntensity *= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
+            Ctx.InputManager.ResetLashInput();
         }
         if (Ctx.InputManager.UnLashInput) {
-            SwitchStates(Factory.FullUnLash());
+            if (Ctx.LashingIntensity > PlayerStateMachine.DEFAULT_LASHING_INTENSITY) { 
+                Ctx.LashingIntensity /= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
+            } else {
+                Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
+            }
+            Ctx.InputManager.ResetUnLashInput();
         }
-        if (Ctx.InputManager.SmallLashInput > 0) {
-            SwitchStates(Factory.SmallLash());
+        if (Ctx.InputManager.SmallLashInput > 0 && Ctx.LashCooldown <= 0) {
+            Ctx.LashingIntensity += PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput;
+            Ctx.StartCoroutine(SmallLashCooldown(0.1f));
         }
-        if (Ctx.InputManager.SmallUnLashInput) {
-            SwitchStates(Factory.SmallUnLash());
+        if (Ctx.InputManager.SmallUnLashInput > 0 && Ctx.LashCooldown <= 0) {
+            Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallUnLashInput;
+            Ctx.StartCoroutine(SmallLashCooldown(0.1f));
         }
         if (Ctx.LashingIntensity <= 0) {
             SwitchStates(Factory.Halflash());
@@ -99,6 +108,7 @@ public class PlayerLashState : PlayerBaseState
     }
     
     private void HandleGravity() {
+        
         Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * 0.1f), ForceMode.Acceleration);
 
     }
@@ -126,5 +136,15 @@ public class PlayerLashState : PlayerBaseState
 
         Ctx.transform.position = hitPoint;
         Ctx.transform.rotation = targetRotation;
+    }
+    
+    public IEnumerator SmallLashCooldown(float duration)
+    {
+        Ctx.LashCooldown = duration;
+        while (Ctx.LashCooldown >= 0)
+        {
+            Ctx.LashCooldown -= Time.deltaTime;
+            yield return null;
+        }
     }
 }

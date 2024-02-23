@@ -346,8 +346,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145139759}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07503267, y: -6.027278e-22, z: -4.785134e-23, w: 0.9971811}
-  m_LocalPosition: {x: 0, y: -0.32264686, z: 0.92479515}
+  m_LocalRotation: {x: -0.022323303, y: -0.000000016075463, z: -3.589469e-10, w: 0.9997508}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2992,7 +2992,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.60253686, y: 0.000000099505684, z: -0.00000007512406, w: 0.79809105}
+  m_LocalRotation: {x: 0.60253686, y: -0.00000008465132, z: 0.000000063909425, w: 0.79809105}
   m_LocalPosition: {x: 21.83, y: 2.995, z: -22.439999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3474,7 +3474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 0
-  m_FollowOffset: {x: 0, y: 0.367353, z: -3.415204}
+  m_FollowOffset: {x: 0, y: 0.69, z: -4.34}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 0.72
@@ -4587,7 +4587,7 @@ MonoBehaviour:
   m_CollideAgainst:
     serializedVersion: 2
     m_Bits: 9
-  m_IgnoreTag: 
+  m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4802,7 +4802,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983893286}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.546664, y: 0.000000045561464, z: -0.00000002974473, w: 0.8373521}
+  m_LocalRotation: {x: 0.546664, y: 0.00000004556146, z: -0.00000002974473, w: 0.8373521}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5719,8 +5719,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078521749}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.09298517, y: -1.7568557e-16, z: -2.9471304e-17, w: 0.9956675}
-  m_LocalPosition: {x: 0, y: -0.32264686, z: 0.92479515}
+  m_LocalRotation: {x: -0.036609218, y: -0.0000000022313567, z: -8.174302e-11, w: 0.9993297}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5896,8 +5896,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355996361}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10564331, y: 0.0000008668533, z: 0.0000000920926, w: 0.99440414}
-  m_LocalPosition: {x: 0, y: -0.32264686, z: 0.92479515}
+  m_LocalRotation: {x: -0.078454286, y: 0.00000086904714, z: 0.00000006839128, w: 0.9969177}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7232,7 +7232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 0
-  m_FollowOffset: {x: 0, y: 0.367353, z: -3.415204}
+  m_FollowOffset: {x: 0, y: 0.69, z: -4.34}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -7870,7 +7870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 0
-  m_FollowOffset: {x: 0, y: 0.367353, z: -3.415204}
+  m_FollowOffset: {x: 0, y: 0.69, z: -4.34}
   m_XDamping: 0.78
   m_YDamping: 1
   m_ZDamping: 1
@@ -9845,7 +9845,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877100322}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5762698, y: -0.04180353, z: 0.029534684, w: 0.8156551}
+  m_LocalRotation: {x: 0.5763533, y: -0.0394295, z: 0.027857402, w: 0.81577337}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10057,7 +10057,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919897239}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.60253686, y: 0.000000049046175, z: -0.000000037028517, w: 0.79809105}
+  m_LocalRotation: {x: 0.60253686, y: -0.00000001535313, z: 0.000000011591192, w: 0.7980911}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10682,6 +10682,10 @@ PrefabInstance:
       propertyPath: _cameraObject
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _lashCooldown
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: _runningSpeed
       value: 30

@@ -37,9 +37,11 @@ namespace Player.StateMachine{
         [Header("Lashings")] 
         [SerializeField] private float _halfLashingHeight = 1.0f;
         [SerializeField] private float _lashingIntensity = 10;
-        public const float DEFAULT_LASHING_INTENSITY = 5;
-        public const float LASHING_INTENSITY_INCREMENT = 5;
-        public const float LASHING_INTENSITY_SMALL_INCREMENT = 1;
+        [SerializeField] private float _lashCooldown = 0;
+        [SerializeField] public const float DEFAULT_LASHING_INTENSITY = 5;
+        [SerializeField] public const float LASHING_INTENSITY_INCREMENT = 5;
+        [SerializeField] public const float LASHING_INTENSITY_SMALL_INCREMENT = 1;
+        [SerializeField] public const float MAX_LASHING_INTENSITY = 200;
     
         //Speeds
         [Header("Speeds")] 
@@ -107,7 +109,8 @@ namespace Player.StateMachine{
         public PlayerStateFactory States { get => _states; set => _states = value; }
         public PlayerBaseState CurrentState { get => _currentState; set => _currentState = value; }
         public float LashingIntensity { get => _lashingIntensity; set => _lashingIntensity = value; }
-
+        public float LashCooldown { get => _lashCooldown; set => _lashCooldown = value; }
+        
         #endregion
     
         private void Awake()

@@ -13,7 +13,7 @@ namespace Player{
         [SerializeField] [ReadOnly] private bool _lashInput;
         [SerializeField] [ReadOnly] private bool _unLashInput;
         [SerializeField] [ReadOnly] private float _smallLashInput;
-        [SerializeField] [ReadOnly] private bool _smallUnLashInput;
+        [SerializeField] [ReadOnly] private float _smallUnLashInput;
 
         [SerializeField] [ReadOnly] private float _moveAmount;
         
@@ -26,7 +26,7 @@ namespace Player{
         public bool LashInput { get => _lashInput; set => _lashInput = value; }
         public bool UnLashInput { get => _unLashInput; set => _unLashInput = value; }
         public float SmallLashInput { get => _smallLashInput; set => _smallLashInput = value; }
-        public bool SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
+        public float SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
 
 
         private void Awake()
@@ -57,8 +57,8 @@ namespace Player{
                 _playerInputs.Player.SmallLash.performed += i => _smallLashInput = i.ReadValue<float>();
                 _playerInputs.Player.SmallLash.canceled += i => _smallLashInput = 0;
                 
-                _playerInputs.Player.SmallUnLash.performed += i => _smallUnLashInput = true;
-                _playerInputs.Player.SmallUnLash.canceled += i => _smallUnLashInput = false;
+                _playerInputs.Player.SmallUnLash.performed += i => _smallUnLashInput = i.ReadValue<float>();
+                _playerInputs.Player.SmallUnLash.canceled += i => _smallUnLashInput = 0;
 
             }
         
@@ -81,7 +81,6 @@ namespace Player{
         {
             _moveAmount = Mathf.Clamp01(Mathf.Abs(_movementInput.x) + Mathf.Abs(_movementInput.y));
             _animatorManager.UpdateAnimatorValues(new Vector2(0, _moveAmount), _isSprintPressed && _moveAmount > 0.5f);
-            Debug.Log("Lash: " + _smallLashInput);
         }
 
         private void HandleCameraInput()

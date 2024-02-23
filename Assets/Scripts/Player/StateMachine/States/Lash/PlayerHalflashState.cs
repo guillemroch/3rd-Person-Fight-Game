@@ -34,14 +34,11 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.InputManager.LashInput) {
+            if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lash());
                 Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
             }
-            if (Ctx.InputManager.SmallLashInput > 0) {
-                SwitchStates(Factory.SmallLash());
-                Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
-            }
+           
         }
 
         public override void InitializeSubState() {
