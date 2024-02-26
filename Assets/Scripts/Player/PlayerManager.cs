@@ -15,6 +15,7 @@ namespace Player{
         [SerializeField] private PlayerStateMachine _playerStateMachine; //Calls player movement calculations in FixedUpdate()
         [SerializeField] private AnimatorManager _animatorManager; //Calls and modifies animator in LateUpdate()
         [SerializeField] private Animator _animator;  //Calls and modifies animator in LateUpdate()
+        [SerializeField] private CameraManager _cameraManager; //Calls and modifies camera in LateUpdate()
         
     
         private void Awake()
@@ -24,6 +25,7 @@ namespace Player{
             _playerStateMachine = GetComponent<PlayerStateMachine>();
             _animatorManager = GetComponent<AnimatorManager>();
             _animator = GetComponent<Animator>();
+            _cameraManager = FindObjectOfType<CameraManager>();
         
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -40,6 +42,7 @@ namespace Player{
 
         private void LateUpdate()
         {
+            _cameraManager.HandleAllCameraMovement();
             _animator.SetBool(_animatorManager.IsGroundedHash.GetHashCode(), _playerStateMachine.isGrounded);
         }
     }

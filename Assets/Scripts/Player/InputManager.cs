@@ -9,6 +9,7 @@ namespace Player{
 
         //Input actions
         [SerializeField] [ReadOnly] private Vector2 _movementInput;
+        [SerializeField] [ReadOnly] private Vector2 _lookInput;
         [SerializeField] [ReadOnly] private bool _isSprintPressed;
         [SerializeField] [ReadOnly] private bool _lashInput;
         [SerializeField] [ReadOnly] private bool _unLashInput;
@@ -19,6 +20,7 @@ namespace Player{
         
         
         // getters and setters
+        public Vector2 LookInput { get => _lookInput; set => _lookInput = value; }
         public Vector2 MovementInput { get => _movementInput; set => _movementInput = value; }
         public float MoveAmount { get => _moveAmount; set => _moveAmount = value; }
         public bool IsJumpPressed { get; private set; }
@@ -41,6 +43,8 @@ namespace Player{
                 _playerInputs = new PlayerInputActions();
 
                 _playerInputs.Player.Move.performed += i => _movementInput = i.ReadValue<Vector2>();
+                
+                _playerInputs.Player.Look.performed += i => _lookInput = i.ReadValue<Vector2>();
 
                 _playerInputs.Player.Sprint.performed += i => _isSprintPressed = true;
                 _playerInputs.Player.Sprint.canceled += i => _isSprintPressed = false;
