@@ -85,7 +85,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""SmallLash"",
                     ""type"": ""Value"",
                     ""id"": ""c786d2a5-4239-4ff4-805a-981f98a87cd9"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Analog"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -94,9 +94,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""SmallUnLash"",
                     ""type"": ""Value"",
                     ""id"": ""3208e535-4c33-4801-8900-8e71fdf4888d"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Analog"",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeDirectionLash"",
+                    ""type"": ""Value"",
+                    ""id"": ""07a5a3d7-33a6-4504-aea5-cef46ef77f58"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": true
                 }
             ],
@@ -117,7 +126,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeVector2"",
                     ""groups"": "";Keyboard&Mouse;Touch"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
@@ -364,6 +373,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""SmallUnLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""78917d57-bbaf-4068-bc04-c3e72a5a6f59"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChangeDirectionLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d66ec25-1879-4035-a733-f6e1626a9fa5"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize(max=1)"",
+                    ""groups"": """",
+                    ""action"": ""ChangeDirectionLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cbf9cedd-44ea-4b78-a8de-67621aada145"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeDirectionLash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -469,6 +511,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_UnLash = m_Player.FindAction("UnLash", throwIfNotFound: true);
         m_Player_SmallLash = m_Player.FindAction("SmallLash", throwIfNotFound: true);
         m_Player_SmallUnLash = m_Player.FindAction("SmallUnLash", throwIfNotFound: true);
+        m_Player_ChangeDirectionLash = m_Player.FindAction("ChangeDirectionLash", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -541,6 +584,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_UnLash;
     private readonly InputAction m_Player_SmallLash;
     private readonly InputAction m_Player_SmallUnLash;
+    private readonly InputAction m_Player_ChangeDirectionLash;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -553,6 +597,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @UnLash => m_Wrapper.m_Player_UnLash;
         public InputAction @SmallLash => m_Wrapper.m_Player_SmallLash;
         public InputAction @SmallUnLash => m_Wrapper.m_Player_SmallUnLash;
+        public InputAction @ChangeDirectionLash => m_Wrapper.m_Player_ChangeDirectionLash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -586,6 +631,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SmallUnLash.started += instance.OnSmallUnLash;
             @SmallUnLash.performed += instance.OnSmallUnLash;
             @SmallUnLash.canceled += instance.OnSmallUnLash;
+            @ChangeDirectionLash.started += instance.OnChangeDirectionLash;
+            @ChangeDirectionLash.performed += instance.OnChangeDirectionLash;
+            @ChangeDirectionLash.canceled += instance.OnChangeDirectionLash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -614,6 +662,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SmallUnLash.started -= instance.OnSmallUnLash;
             @SmallUnLash.performed -= instance.OnSmallUnLash;
             @SmallUnLash.canceled -= instance.OnSmallUnLash;
+            @ChangeDirectionLash.started -= instance.OnChangeDirectionLash;
+            @ChangeDirectionLash.performed -= instance.OnChangeDirectionLash;
+            @ChangeDirectionLash.canceled -= instance.OnChangeDirectionLash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -732,6 +783,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnUnLash(InputAction.CallbackContext context);
         void OnSmallLash(InputAction.CallbackContext context);
         void OnSmallUnLash(InputAction.CallbackContext context);
+        void OnChangeDirectionLash(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

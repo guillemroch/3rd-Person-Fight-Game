@@ -15,6 +15,7 @@ namespace Player{
         [SerializeField] [ReadOnly] private bool _unLashInput;
         [SerializeField] [ReadOnly] private float _smallLashInput;
         [SerializeField] [ReadOnly] private float _smallUnLashInput;
+        [SerializeField] [ReadOnly] private bool _changeDirectionLashInput;
 
         [SerializeField] [ReadOnly] private float _moveAmount;
         
@@ -29,6 +30,7 @@ namespace Player{
         public bool UnLashInput { get => _unLashInput; set => _unLashInput = value; }
         public float SmallLashInput { get => _smallLashInput; set => _smallLashInput = value; }
         public float SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
+        public bool ChangeDirectionLashInput { get => _changeDirectionLashInput; set => _changeDirectionLashInput = value; }
 
 
         private void Awake()
@@ -63,6 +65,9 @@ namespace Player{
                 
                 _playerInputs.Player.SmallUnLash.performed += i => _smallUnLashInput = i.ReadValue<float>();
                 _playerInputs.Player.SmallUnLash.canceled += i => _smallUnLashInput = 0;
+                
+                _playerInputs.Player.ChangeDirectionLash.performed += i => _changeDirectionLashInput = true;
+                _playerInputs.Player.ChangeDirectionLash.canceled += i => _changeDirectionLashInput = false;
 
             }
         
@@ -76,6 +81,7 @@ namespace Player{
 
         public void HandleAllInputs()
         {
+         
             HandleMovementInput();
             HandleCameraInput();
     
@@ -107,9 +113,8 @@ namespace Player{
         }
 
 
-
- 
-    
-    
+        public void ResetChangeDirectionLashInput() {
+            _changeDirectionLashInput = false;
+        }
     }
 }

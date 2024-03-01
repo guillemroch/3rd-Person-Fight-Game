@@ -31,7 +31,7 @@ public class CameraManager : MonoBehaviour
     
     public void HandleAllCameraMovement()
     {
-        
+        /*
         Quaternion trackerRotation = _cameraTracker.transform.rotation;
         
         if (_inputManager.LookInput != Vector2.zero)
@@ -52,7 +52,7 @@ public class CameraManager : MonoBehaviour
                 _cameraTracker.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         }
-        
+        */
         
     }
 }

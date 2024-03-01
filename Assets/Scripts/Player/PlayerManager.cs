@@ -42,7 +42,7 @@ namespace Player{
 
         private void LateUpdate()
         {
-            _cameraManager.HandleAllCameraMovement();
+            //_cameraManager.HandleAllCameraMovement();
             _animator.SetBool(_animatorManager.IsGroundedHash.GetHashCode(), _playerStateMachine.isGrounded);
         }
     }

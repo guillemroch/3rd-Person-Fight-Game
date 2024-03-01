@@ -56,19 +56,7 @@ namespace Player.StateMachine{
             return new PlayerLashState(_context,this );
         }
         
-        public PlayerBaseState FullLash() {
-            return new PlayerFullLashState(_context,this );
-        }
         
-        public PlayerBaseState FullUnLash() {
-            return new PlayerFullUnLashState(_context,this );
-        }
-        public PlayerBaseState SmallLash() {
-            return new PlayerSmallLashState(_context,this );
-        }
-        public PlayerBaseState SmallUnLash() {
-            return new PlayerSmallUnLashState(_context,this );
-        }
         
         
         

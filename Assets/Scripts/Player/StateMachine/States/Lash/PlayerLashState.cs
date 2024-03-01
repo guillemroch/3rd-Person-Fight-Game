@@ -58,6 +58,10 @@ public class PlayerLashState : PlayerBaseState
         if (Ctx.LashingIntensity <= 0) {
             SwitchStates(Factory.Halflash());
         }
+        if (Ctx.InputManager.ChangeDirectionLashInput) {
+            Ctx.InputManager.ResetChangeDirectionLashInput();
+            ChangeDirectionLash();
+        }
         
         
         
@@ -147,4 +151,8 @@ public class PlayerLashState : PlayerBaseState
             yield return null;
         }
     }
+    
+    private void ChangeDirectionLash() {
+        Ctx.GravityDirection = (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
+    } 
 }

@@ -63,7 +63,7 @@
                     "name": "SmallLash",
                     "type": "Value",
                     "id": "c786d2a5-4239-4ff4-805a-981f98a87cd9",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -72,9 +72,18 @@
                     "name": "SmallUnLash",
                     "type": "Value",
                     "id": "3208e535-4c33-4801-8900-8e71fdf4888d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeDirectionLash",
+                    "type": "Value",
+                    "id": "07a5a3d7-33a6-4504-aea5-cef46ef77f58",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap",
                     "initialStateCheck": true
                 }
             ],
@@ -95,7 +104,7 @@
                     "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
                     "isComposite": false,
@@ -340,6 +349,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "SmallUnLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78917d57-bbaf-4068-bc04-c3e72a5a6f59",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ChangeDirectionLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d66ec25-1879-4035-a733-f6e1626a9fa5",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "Normalize(max=1)",
+                    "groups": "",
+                    "action": "ChangeDirectionLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbf9cedd-44ea-4b78-a8de-67621aada145",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeDirectionLash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

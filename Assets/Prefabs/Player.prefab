@@ -37,6 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9052123326355941671}
+  - {fileID: 1744553140469952528}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4675932026764890329
@@ -65,7 +66,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!114 &4331485296954385964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,7 +85,7 @@ MonoBehaviour:
   _inAirTimer: 0
   _maxAirSpeed: 25
   _leapingVelocity: 0
-  _fallingVelocity: 0
+  _fallingVelocity: 1
   _groundLayer:
     serializedVersion: 2
     m_Bits: 9
@@ -96,15 +97,17 @@ MonoBehaviour:
   _gravityMultiplier: 2
   _groundedGravity: 0.5
   _halfLashingHeight: 1
+  _lashingIntensity: 10
+  _lashCooldown: 0
   _movementSpeed: 0
-  _walkingSpeed: 1.5
-  _runningSpeed: 6
-  _sprintingSpeed: 8
+  _walkingSpeed: 20
+  _runningSpeed: 30
+  _sprintingSpeed: 40
   _rotationSpeed: 15
   _stamina: 100
   _staminaRegenRate: 1
   _staminaDepletionRate: 1
-  _jumpHeight: 3
+  _jumpHeight: 15
   _playerManager: {fileID: 3005243556766777584}
   _animatorManager: {fileID: 3655622113326985271}
   _inputManager: {fileID: 2100550671156518442}
@@ -125,9 +128,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animatorManager: {fileID: 0}
   _movementInput: {x: 0, y: 0}
+  _lookInput: {x: 0, y: 0}
   _isSprintPressed: 0
-  _halfLashInput: 0
   _lashInput: 0
+  _unLashInput: 0
+  _smallLashInput: 0
+  _smallUnLashInput: 0
   _moveAmount: 0
 --- !u!114 &3005243556766777584
 MonoBehaviour:
@@ -145,6 +151,7 @@ MonoBehaviour:
   _playerStateMachine: {fileID: 0}
   _animatorManager: {fileID: 0}
   _animator: {fileID: 0}
+  _cameraManager: {fileID: 0}
 --- !u!136 &5562903958970503654
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -208,6 +215,37 @@ MonoBehaviour:
   _isHalfLashingHash: 0
   _isLashingHash: 0
   _isJumpingHash: 0
+--- !u!1 &8679003133571998317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1744553140469952528}
+  m_Layer: 6
+  m_Name: CameraTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1744553140469952528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8679003133571998317}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.491, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3322915969423957918}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8796976247818440396
 PrefabInstance:
   m_ObjectHideFlags: 0
