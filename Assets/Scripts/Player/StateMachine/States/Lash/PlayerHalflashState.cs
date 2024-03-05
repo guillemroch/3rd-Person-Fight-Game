@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
@@ -21,9 +22,10 @@ namespace Player.StateMachine.States.Lash{
 
         public override void UpdateState() {
             CheckSwitchStates();
+            
             //Make the player rotate with the camera, making that we always see the back of the player
             Vector2 lookInput = Ctx.InputManager.LookInput;
-            Ctx.transform.localRotation *= Quaternion.Euler(-lookInput.y * Ctx.RotationSpeed * 0.1f , 0 , -lookInput.x * Ctx.RotationSpeed * 0.1f);;
+            Ctx.transform.localRotation *= Quaternion.Euler(-lookInput.y * Ctx.RotationSpeed * 0.1f , 0 , -lookInput.x * Ctx.RotationSpeed * 0.1f);
         }
 
     
@@ -36,6 +38,12 @@ namespace Player.StateMachine.States.Lash{
         public override void CheckSwitchStates() {
             if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lash());
+                Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
+            }
+            if (Ctx.InputManager.UnLashInput) {
+
+                CalculateGravityDirection();
+                SwitchStates(Factory.Air());
                 Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
             }
            
@@ -62,5 +70,29 @@ namespace Player.StateMachine.States.Lash{
             }
             Ctx.transform.rotation = targetRotation;
         }
+        
+        private void CalculateGravityDirection()
+        {
+            Collider[] colliders = Physics.OverlapSphere(Ctx.transform.position , Ctx.MaxUnlashDistance);
+            if (colliders.Length > 0){
+                colliders.OrderBy(c => Vector3.Distance(Ctx.transform.position, c.transform.position));
+                Vector3 closestPoint = colliders[0].ClosestPoint(Ctx.transform.position);
+                if (Vector3.Distance(Ctx.transform.position, closestPoint) <= 0)
+                {
+                    Ctx.GravityDirection = Vector3.down;
+                    return;
+                }
+                Ctx.GravityDirection = closestPoint - Ctx.transform.position;
+                Debug.Log("Ground found: " + colliders[0].name + " | at point:  " + closestPoint + " which is closer from: " + Ctx.transform.position);
+                Debug.DrawRay(Ctx.transform.position, Ctx.GravityDirection * 10, Color.red, 10);
+            }
+            else
+            {
+                Debug.Log("No ground found");
+                Ctx.GravityDirection = Vector3.down;
+            }
+        }
+        
+        
     }
 }

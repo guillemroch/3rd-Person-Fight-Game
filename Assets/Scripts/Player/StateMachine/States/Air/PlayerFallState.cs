@@ -24,6 +24,7 @@ namespace Player.StateMachine.States.Air{
 
         public override void CheckSwitchStates() {
             if (Ctx.isGrounded) SwitchStates(Factory.Land());
+            if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) SwitchStates(Factory.Lash());
         }
 
         public override void InitializeSubState() {

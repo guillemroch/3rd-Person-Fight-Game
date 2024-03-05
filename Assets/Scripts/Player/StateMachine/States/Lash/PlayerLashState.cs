@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerLashState : PlayerBaseState
 {
+    private Transform _lastPlayerTransform;
     public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         
@@ -12,6 +13,8 @@ public class PlayerLashState : PlayerBaseState
         Ctx.GravityDirection = Ctx.PlayerTransform.up;
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
+        
+        _lastPlayerTransform = Ctx.PlayerTransform;
     }
 
     public override void UpdateState() {
@@ -83,8 +86,26 @@ public class PlayerLashState : PlayerBaseState
     }
 
     private void HandleRotation() {
+        
+        //Rotate to face towards the gravity direction
         Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection);
         Ctx.PlayerTransform.rotation = targetRotation * Ctx.PlayerTransform.rotation;
+        
+        //Roll along the up axis of the player to move the player using a Lerp depending on the input
+
+        if (Ctx.InputManager.MovementInput.x == 0){
+            //_lastPlayerTransform = Ctx.PlayerTransform;
+            //_lastPlayerTransform.rotation *= Quaternion.Euler(0, 90,0);
+            // Quaternion targetRoll = Quaternion.AngleAxis( -90, Ctx.PlayerTransform.up);
+            //Ctx.PlayerTransform.localRotation *= Quaternion.Lerp(Ctx.PlayerTransform.rotation, targetRoll, Time.deltaTime * Ctx.RollLerpSpeed);
+        } else {
+            
+            Ctx.PlayerTransform.localRotation = Quaternion.Lerp(Ctx.PlayerTransform.rotation, Quaternion.Euler(_lastPlayerTransform.up), Ctx.RollLerpSpeed);
+        }
+       
+        
+        
+        
     }
 
     private void HandleGroundDetection() {

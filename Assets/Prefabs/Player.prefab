@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3996936588633403712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7652772769167109138}
+  m_Layer: 6
+  m_Name: HalfLashLookAt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7652772769167109138
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996936588633403712}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.254, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3322915969423957918}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6423912697608891000
 GameObject:
   m_ObjectHideFlags: 0
@@ -37,7 +68,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9052123326355941671}
-  - {fileID: 1744553140469952528}
+  - {fileID: 6779293006050388806}
+  - {fileID: 7652772769167109138}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4675932026764890329
@@ -66,7 +98,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 3
+  m_CollisionDetection: 1
 --- !u!114 &4331485296954385964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,6 +131,9 @@ MonoBehaviour:
   _halfLashingHeight: 1
   _lashingIntensity: 10
   _lashCooldown: 0
+  _halfLashRotationSpeed: 5
+  _rollSpeed: 1
+  _rollLerpSpeed: 0.5
   _movementSpeed: 0
   _walkingSpeed: 20
   _runningSpeed: 30
@@ -134,6 +169,7 @@ MonoBehaviour:
   _unLashInput: 0
   _smallLashInput: 0
   _smallUnLashInput: 0
+  _changeDirectionLashInput: 0
   _moveAmount: 0
 --- !u!114 &3005243556766777584
 MonoBehaviour:
@@ -215,7 +251,7 @@ MonoBehaviour:
   _isHalfLashingHash: 0
   _isLashingHash: 0
   _isJumpingHash: 0
---- !u!1 &8679003133571998317
+--- !u!1 &8987708746591024405
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,29 +259,29 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1744553140469952528}
+  - component: {fileID: 6779293006050388806}
   m_Layer: 6
-  m_Name: CameraTracker
+  m_Name: LashingLookAtForward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1744553140469952528
+--- !u!4 &6779293006050388806
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8679003133571998317}
+  m_GameObject: {fileID: 8987708746591024405}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.491, z: 0}
+  m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.526, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3322915969423957918}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1001 &8796976247818440396
 PrefabInstance:
   m_ObjectHideFlags: 0

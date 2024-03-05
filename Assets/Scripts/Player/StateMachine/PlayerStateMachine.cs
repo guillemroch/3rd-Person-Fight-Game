@@ -39,6 +39,9 @@ namespace Player.StateMachine{
         [SerializeField] private float _lashingIntensity = 10;
         [SerializeField] private float _lashCooldown = 0;
         [SerializeField] private float _halfLashRotationSpeed = 30;
+        [SerializeField] private float  _rollSpeed = 10;
+        [SerializeField] private float  _rollLerpSpeed = 0.5f;
+        [SerializeField] private float _maxUnlashDistance = 10;
         
         [SerializeField] public const float DEFAULT_LASHING_INTENSITY = 5;
         [SerializeField] public const float LASHING_INTENSITY_INCREMENT = 5;
@@ -113,6 +116,9 @@ namespace Player.StateMachine{
         public float LashingIntensity { get => _lashingIntensity; set => _lashingIntensity = value; }
         public float LashCooldown { get => _lashCooldown; set => _lashCooldown = value; }
         public float HalfLashRotationSpeed { get => _halfLashRotationSpeed; set => _halfLashRotationSpeed = value; }
+        public float RollSpeed { get => _rollSpeed; set => _rollSpeed = value; }
+        public float RollLerpSpeed { get => _rollLerpSpeed; set => _rollLerpSpeed = value; }
+        public float MaxUnlashDistance { get => _maxUnlashDistance; set => _maxUnlashDistance = value; }
 
         #endregion
     
