@@ -48,6 +48,22 @@ namespace Player.StateMachine{
         [SerializeField] public const float LASHING_INTENSITY_SMALL_INCREMENT = 1;
         [SerializeField] public const float MAX_LASHING_INTENSITY = 200;
     
+        
+        [Header("Rotation Lashing")]
+        [SerializeField] private  float maxAngle = 90;//maximum angle it can rotate
+        [SerializeField] private float direction = 0; //Direction of the rotation
+        [Range(0, 1)]
+        [SerializeField] private float precision = 0.99f; //Defined for the calculation of the maximum time to reach the max angle
+        [Range(0, 5)]
+        [SerializeField] private float damping = 2.1f; //How smooth the rotation is at the end
+        [Range(0, 1)]
+        [SerializeField] private float lerpSpeed = 0.5f;
+        [SerializeField] private float offset = 0; //Calculated based on the precision, the maximum angle and the damping
+        [SerializeField] private float maxTime = 1; //Calculated based on the precision, the maximum angle and the damping
+        [SerializeField] private float timeElapsed = 0;
+        
+        [SerializeField] private Vector3 rotationAxis = Vector3.forward;
+
         //Speeds
         [Header("Speeds")] 
         [SerializeField] private float _movementSpeed ;
@@ -119,6 +135,15 @@ namespace Player.StateMachine{
         public float RollSpeed { get => _rollSpeed; set => _rollSpeed = value; }
         public float RollLerpSpeed { get => _rollLerpSpeed; set => _rollLerpSpeed = value; }
         public float MaxUnlashDistance { get => _maxUnlashDistance; set => _maxUnlashDistance = value; }
+        public float MaxAngle { get => maxAngle; set => maxAngle = value; }
+        public float Direction { get => direction; set => direction = value; }
+        public float Precision { get => precision; set => precision = value; }
+        public float Damping { get => damping; set => damping = value; }
+        public float LerpSpeed { get => lerpSpeed; set => lerpSpeed = value; }
+        public float Offset { get => offset; set => offset = value; }
+        public float MaxTime { get => maxTime; set => maxTime = value; }
+        public float TimeElapsed { get => timeElapsed; set => timeElapsed = value; }
+        public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
 
         #endregion
     

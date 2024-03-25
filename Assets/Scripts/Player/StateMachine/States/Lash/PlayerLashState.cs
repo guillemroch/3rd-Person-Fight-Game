@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerLashState : PlayerBaseState
 {
-    private Transform _lastPlayerTransform;
+    private Transform _playerTemporaryTransform;
     public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         
@@ -14,7 +14,12 @@ public class PlayerLashState : PlayerBaseState
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
         Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
         
-        _lastPlayerTransform = Ctx.PlayerTransform;
+        float limit = Ctx.MaxAngle* Ctx.Precision;
+        //Maximum time to reach the max angle
+        Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
+        Ctx.MaxTime = Ctx.Offset*2;
+        
+        _playerTemporaryTransform = Ctx.PlayerTransform;
     }
 
     public override void UpdateState() {
@@ -74,8 +79,10 @@ public class PlayerLashState : PlayerBaseState
     }
     
     private void HandleMovement() {
-        Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y +
-                            Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
+        //The player rotates the gravity direction it is falling towards
+        
+        Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
+                        //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
         
 
         Ctx.MoveDirection.Normalize();
@@ -92,18 +99,10 @@ public class PlayerLashState : PlayerBaseState
         Ctx.PlayerTransform.rotation = targetRotation * Ctx.PlayerTransform.rotation;
         
         //Roll along the up axis of the player to move the player using a Lerp depending on the input
+      
+        float moveAmount = -Time.deltaTime * Ctx.InputManager.MovementInput.x;
 
-        if (Ctx.InputManager.MovementInput.x == 0){
-            //_lastPlayerTransform = Ctx.PlayerTransform;
-            //_lastPlayerTransform.rotation *= Quaternion.Euler(0, 90,0);
-            // Quaternion targetRoll = Quaternion.AngleAxis( -90, Ctx.PlayerTransform.up);
-            //Ctx.PlayerTransform.localRotation *= Quaternion.Lerp(Ctx.PlayerTransform.rotation, targetRoll, Time.deltaTime * Ctx.RollLerpSpeed);
-        } else {
-            
-            Ctx.PlayerTransform.localRotation = Quaternion.Lerp(Ctx.PlayerTransform.rotation, Quaternion.Euler(_lastPlayerTransform.up), Ctx.RollLerpSpeed);
-        }
-       
-        
+        Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
         
         
     }
@@ -176,4 +175,8 @@ public class PlayerLashState : PlayerBaseState
     private void ChangeDirectionLash() {
         Ctx.GravityDirection = (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
     } 
+    
+    private float Sigmoid(float x) {
+        return (1 / (1 + Mathf.Exp(-Ctx.Damping * x)));
+    }
 }

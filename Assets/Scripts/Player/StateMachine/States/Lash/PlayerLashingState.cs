@@ -19,7 +19,13 @@ namespace Player.StateMachine.States.Lash{
         public override void CheckSwitchStates() { }
 
         public override void InitializeSubState() {
-            SwitchStates(Factory.Halflash());
+            if (Ctx.InputManager.LashInput ) {
+                SwitchStates(Factory.Halflash());
+            }
+
+            if (Ctx.InputManager.SmallLashInput > 0) {
+                SwitchStates(Factory.Lash());
+            }
         }
     }
 }

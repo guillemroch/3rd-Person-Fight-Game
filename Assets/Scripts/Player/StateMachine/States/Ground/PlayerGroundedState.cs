@@ -29,7 +29,7 @@ namespace Player.StateMachine.States.Ground{
             if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
                 SwitchStates(Factory.Air());
             } 
-            if (Ctx.InputManager.LashInput) {
+            if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lashing());
             }
         }

@@ -2,6 +2,7 @@ using Player.StateMachine;
 using UnityEngine;
 
 namespace Player{
+ 
     /**
  * PlayerManager
  *
