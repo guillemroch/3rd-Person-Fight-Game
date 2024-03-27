@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class PlayerLashState : PlayerBaseState
 {
+    #region  Attributes
+    
     private Transform _playerTemporaryTransform;
+    
+    #endregion
+
+    #region State methods
     public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
     public override void EnterState() {
         
@@ -39,37 +45,43 @@ public class PlayerLashState : PlayerBaseState
     }
 
     public override void CheckSwitchStates() {
+        //LAND
         if (Ctx.isGrounded) {
             SwitchStates(Factory.Air());
         }
+        
+        //LASHINGS
         if (Ctx.InputManager.LashInput) {
-            if (Ctx.LashingIntensity < PlayerStateMachine.MAX_LASHING_INTENSITY)
-                Ctx.LashingIntensity *= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
+            HandleLash(PlayerStateMachine.LASHING_INTENSITY_INCREMENT);
+            /*if (Ctx.LashingIntensity < PlayerStateMachine.MAX_LASHING_INTENSITY)
+                Ctx.LashingIntensity *= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;*/
             Ctx.InputManager.ResetLashInput();
         }
         if (Ctx.InputManager.UnLashInput) {
-            if (Ctx.LashingIntensity > PlayerStateMachine.DEFAULT_LASHING_INTENSITY) { 
+            HandleLash(- PlayerStateMachine.LASHING_INTENSITY_INCREMENT);
+            /*if (Ctx.LashingIntensity > PlayerStateMachine.DEFAULT_LASHING_INTENSITY) { 
                 Ctx.LashingIntensity /= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
             } else {
                 Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_INCREMENT;
-            }
+            }*/
             Ctx.InputManager.ResetUnLashInput();
         }
         if (Ctx.InputManager.SmallLashInput > 0 && Ctx.LashCooldown <= 0) {
-            Ctx.LashingIntensity += PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput;
+            HandleLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+            //Ctx.LashingIntensity += PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput;
             Ctx.StartCoroutine(SmallLashCooldown(0.1f));
         }
         if (Ctx.InputManager.SmallUnLashInput > 0 && Ctx.LashCooldown <= 0) {
-            Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallUnLashInput;
+            HandleLash(- PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+            //Ctx.LashingIntensity -= PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallUnLashInput;
             Ctx.StartCoroutine(SmallLashCooldown(0.1f));
         }
+        
+        //HALFLASH
         if (Ctx.LashingIntensity <= 0) {
             SwitchStates(Factory.Halflash());
         }
-        if (Ctx.InputManager.ChangeDirectionLashInput) {
-            Ctx.InputManager.ResetChangeDirectionLashInput();
-            ChangeDirectionLash();
-        }
+  
         
         
         
@@ -80,28 +92,29 @@ public class PlayerLashState : PlayerBaseState
     
     private void HandleMovement() {
         //The player rotates the gravity direction it is falling towards
-        
-        Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
-                        //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
-        
-
+        // Disabled
+        /* // Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
+                        // //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
+                        
         Ctx.MoveDirection.Normalize();
         
         Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
         
-        Ctx.GravityDirection = rotation * Ctx.GravityDirection;
+        Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
     }
+    
+    #endregion
+    
+    #region private Methods
 
     private void HandleRotation() {
         
         //Rotate to face towards the gravity direction
         Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection);
-        Ctx.PlayerTransform.rotation = targetRotation * Ctx.PlayerTransform.rotation;
+        Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
         
         //Roll along the up axis of the player to move the player using a Lerp depending on the input
-      
         float moveAmount = -Time.deltaTime * Ctx.InputManager.MovementInput.x;
-
         Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
         
         
@@ -133,10 +146,32 @@ public class PlayerLashState : PlayerBaseState
     
     private void HandleGravity() {
         
-        Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * 0.1f), ForceMode.Acceleration);
+        Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * /*Ctx.LashingIntensity * */ 0.1f), ForceMode.Acceleration);
 
     }
     
+    private void HandleLash(float lashAmount) {
+        
+        //TODO: Remove the Lashing intensity variable
+        //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection.
+        
+        //If lash is MAX
+        if (lashAmount > 0 && Ctx.GravityDirection.magnitude > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
+        
+        Vector3 lashDirection =  (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
+
+        if (lashAmount > 0) {
+            Ctx.GravityDirection += lashDirection * lashAmount;
+            Ctx.LashingIntensity = Ctx.GravityDirection.magnitude;
+        }
+        else {
+            Ctx.GravityDirection += Ctx.GravityDirection.normalized * lashAmount;
+            Ctx.LashingIntensity += lashAmount;
+
+        }
+        
+        
+    } 
     public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
     {
         //TODO: Make it work without a Coroutine
@@ -172,11 +207,11 @@ public class PlayerLashState : PlayerBaseState
         }
     }
     
-    private void ChangeDirectionLash() {
-        Ctx.GravityDirection = (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
-    } 
+    
     
     private float Sigmoid(float x) {
         return (1 / (1 + Mathf.Exp(-Ctx.Damping * x)));
     }
+    
+    #endregion
 }

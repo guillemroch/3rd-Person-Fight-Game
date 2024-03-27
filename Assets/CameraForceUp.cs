@@ -8,10 +8,9 @@ public class CameraForceUp : MonoBehaviour
 {
     public CinemachineVirtualCamera virtualCamera;
     public Transform playerTransform;
-    
+
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         playerTransform = GameObject.Find("Player").transform;
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
