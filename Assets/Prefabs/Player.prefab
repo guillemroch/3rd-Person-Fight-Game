@@ -134,6 +134,16 @@ MonoBehaviour:
   _halfLashRotationSpeed: 5
   _rollSpeed: 1
   _rollLerpSpeed: 0.5
+  _maxUnlashDistance: 10
+  maxAngle: 90
+  direction: 0
+  precision: 0.99
+  damping: 2.1
+  lerpSpeed: 0.013
+  offset: 0
+  maxTime: 1
+  timeElapsed: 0
+  rotationAxis: {x: 0, y: 1, z: 0}
   _movementSpeed: 0
   _walkingSpeed: 20
   _runningSpeed: 30
@@ -169,7 +179,6 @@ MonoBehaviour:
   _unLashInput: 0
   _smallLashInput: 0
   _smallUnLashInput: 0
-  _changeDirectionLashInput: 0
   _moveAmount: 0
 --- !u!114 &3005243556766777584
 MonoBehaviour:

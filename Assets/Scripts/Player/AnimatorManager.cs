@@ -6,14 +6,14 @@ namespace Player{
     {
         [SerializeField] [ReadOnly] public Animator animator;
         //Blend Tree variables
-        [SerializeField] [ReadOnly] int _horizontalHash;
-        [SerializeField] [ReadOnly] int _verticalHash;
+        [SerializeField] [ReadOnly] private int _horizontalHash;
+        [SerializeField] [ReadOnly] private int _verticalHash;
         
         //Other variables
-        [SerializeField] [ReadOnly] int _isGroundedHash;
-        [SerializeField] [ReadOnly] int _isHalfLashingHash;
-        [SerializeField] [ReadOnly] int _isLashingHash;
-        [SerializeField] [ReadOnly] int _isJumpingHash;
+        [SerializeField] [ReadOnly] private int _isGroundedHash;
+        [SerializeField] [ReadOnly] private int _isHalfLashingHash;
+        [SerializeField] [ReadOnly] private int _isLashingHash;
+        [SerializeField] [ReadOnly] private int _isJumpingHash;
         public int IsGroundedHash => _isGroundedHash;
         public int IsHalfLashingHash => _isHalfLashingHash;
         public int IsLashingHash => _isLashingHash;

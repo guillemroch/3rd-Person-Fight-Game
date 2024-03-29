@@ -9,6 +9,7 @@ namespace Player.StateMachine.States.Lash{
         public override void EnterState() {
             Ctx.InputManager.ResetLashInput();
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash, true);
+            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
             Ctx.AnimatorManager.PlayTargetAnimation("Half Lashing");
         
             Ctx.PlayerRigidbody.AddForce(Ctx.HalfLashingHeight * -Ctx.GravityDirection, ForceMode.Impulse);
