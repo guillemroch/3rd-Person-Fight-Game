@@ -676,6 +676,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: isLashing
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isHalfLashing
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2005744467003520013}
   m_Solo: 0
