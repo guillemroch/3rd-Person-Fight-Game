@@ -35,7 +35,7 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void ExitState() {
-        
+            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
         }
 
         public override void CheckSwitchStates() {
@@ -54,11 +54,11 @@ namespace Player.StateMachine.States.Lash{
                 Ctx.InputManager.ResetUnLashInput();
             }
             if (Ctx.InputManager.SmallLashInput > 0 && Ctx.LashCooldown <= 0) {
-                HandleLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+                HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
             if (Ctx.InputManager.SmallUnLashInput > 0 && Ctx.LashCooldown <= 0) {
-                HandleLash(- PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+                HandleSmallLash(- PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
         
@@ -82,18 +82,18 @@ namespace Player.StateMachine.States.Lash{
             // Disabled
             /* // Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
                         // //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
-                        
-        Ctx.MoveDirection.Normalize();
-        
-        Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
-        
-        Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
+                            
+            Ctx.MoveDirection.Normalize();
+            
+            Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
+            
+            Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
             //=======================================================================================================
         
             //Diving system
             Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y + Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
-            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 50f ;
+            float diveTranslationSpeed = Ctx.GravityDirection.magnitude;
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
         
         }
@@ -147,11 +147,11 @@ namespace Player.StateMachine.States.Lash{
     
         private void HandleLash(float lashAmount) {
         
-            //TODO: Remove the Lashing intensity variable
-            //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection.
+            //TODO: Remove the Lashing intensity variable [OR NOT] 
+            //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection if reached max intensity.
         
             //If lash is MAX
-            if (lashAmount > 0 && Ctx.GravityDirection.magnitude > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
+            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
         
             //Vector3 lashDirection =  (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
             Vector3 lashDirection = Ctx.CameraObject.forward;
@@ -162,11 +162,17 @@ namespace Player.StateMachine.States.Lash{
             else {
                 Ctx.GravityDirection += Ctx.GravityDirection.normalized * lashAmount;
                 Ctx.LashingIntensity += lashAmount;
-
             }
-        
-        
-        } 
+        }
+
+        private void HandleSmallLash(float lashAmount) {
+            
+            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
+            
+            Ctx.GravityDirection += Ctx.PlayerTransform.forward * lashAmount;
+            Ctx.LashingIntensity = Ctx.GravityDirection.magnitude;
+        }
+
         public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
         {
             //TODO: Make it work without a Coroutine

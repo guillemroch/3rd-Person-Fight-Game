@@ -3,6 +3,8 @@ using UnityEngine;
 namespace Player.StateMachine{
     public class PlayerStateMachine : MonoBehaviour
     {
+        
+        //TODO: Create in game menu to modify these values and store them in a save file
         #region Variables
         //Player values for movements
         [Header("Movement Variables")]
