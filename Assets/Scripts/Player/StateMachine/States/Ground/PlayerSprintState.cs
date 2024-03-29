@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Ground{
     public class PlayerSprintState : PlayerBaseState
     {
-        public PlayerSprintState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerSprintState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Sprint") { }
         public override void EnterState() {
         }
 

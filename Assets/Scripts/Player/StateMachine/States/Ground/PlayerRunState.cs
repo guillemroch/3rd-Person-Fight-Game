@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Ground{
     public class PlayerRunState : PlayerBaseState
     {
-        public PlayerRunState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerRunState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Run") { }
         public override void EnterState() {
             //Setup starting things for animation or logic
 

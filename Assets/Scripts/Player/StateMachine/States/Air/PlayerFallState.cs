@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Air{
     public class PlayerFallState : PlayerBaseState
     {
-        public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Fall") { }
         public override void EnterState() {
 
             Ctx.AnimatorManager.PlayTargetAnimation("Fall");
@@ -20,6 +20,7 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void ExitState() {
+            
         }
 
         public override void CheckSwitchStates() {

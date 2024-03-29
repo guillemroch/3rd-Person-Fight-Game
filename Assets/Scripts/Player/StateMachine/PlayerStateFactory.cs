@@ -13,7 +13,7 @@ namespace Player.StateMachine{
     
         //Ground States
         public PlayerBaseState Grounded() {
-            return new PlayerGroundedState(_context,this );
+            return new PlayerGroundedState(_context,this);
         }
         public PlayerBaseState Idle() {
             return new PlayerIdleState(_context, this);

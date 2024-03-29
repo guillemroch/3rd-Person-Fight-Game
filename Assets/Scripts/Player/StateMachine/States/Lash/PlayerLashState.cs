@@ -7,13 +7,13 @@ namespace Player.StateMachine.States.Lash{
   
 
         #region State methods
-        public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash[Root]") { }
         public override void EnterState() {
-        
+            Ctx.isGrounded = false;
             CheckSwitchStates();
-        
-            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
+            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
+            
             Ctx.AnimatorManager.PlayTargetAnimation("Lash");
             float limit = Ctx.MaxAngle* Ctx.Precision;
             //Maximum time to reach the max angle
@@ -36,6 +36,7 @@ namespace Player.StateMachine.States.Lash{
 
         public override void ExitState() {
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
+            Ctx.GravityDirection.Normalize();
         }
 
         public override void CheckSwitchStates() {
@@ -57,8 +58,8 @@ namespace Player.StateMachine.States.Lash{
                 HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
-            if (Ctx.InputManager.SmallUnLashInput > 0 && Ctx.LashCooldown <= 0) {
-                HandleSmallLash(- PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+            if (Ctx.InputManager.SmallUnLashInput < 0 && Ctx.LashCooldown <= 0) {
+                HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
         
@@ -90,10 +91,11 @@ namespace Player.StateMachine.States.Lash{
             Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
             //=======================================================================================================
         
+            //TODO: Add proper animations to this
             //Diving system
             Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y + Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
-            float diveTranslationSpeed = Ctx.GravityDirection.magnitude;
+            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 15f;
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
         
         }
@@ -122,8 +124,8 @@ namespace Player.StateMachine.States.Lash{
         
             if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
             Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
-        
-            if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
+            if (Ctx.InAirTimer <= 2f) return;
+            if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
            
                 Ctx.isGrounded = true;
@@ -153,8 +155,12 @@ namespace Player.StateMachine.States.Lash{
             //If lash is MAX
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
         
-            //Vector3 lashDirection =  (Ctx.PlayerTransform.position - Ctx.CameraObject.position).normalized;
             Vector3 lashDirection = Ctx.CameraObject.forward;
+            if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f)) {
+                lashDirection = (hit.point - Ctx.transform.position).normalized;
+            }
+            
+            
             if (lashAmount > 0) {
                 Ctx.GravityDirection += lashDirection * lashAmount;
                 Ctx.LashingIntensity = Ctx.GravityDirection.magnitude;
@@ -169,8 +175,8 @@ namespace Player.StateMachine.States.Lash{
             
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
             
-            Ctx.GravityDirection += Ctx.PlayerTransform.forward * lashAmount;
-            Ctx.LashingIntensity = Ctx.GravityDirection.magnitude;
+            Ctx.GravityDirection += Ctx.PlayerTransform.up * lashAmount;
+            Ctx.LashingIntensity += lashAmount ;
         }
 
         public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)

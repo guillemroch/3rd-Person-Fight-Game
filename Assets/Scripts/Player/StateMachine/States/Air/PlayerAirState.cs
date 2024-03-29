@@ -2,7 +2,7 @@ namespace Player.StateMachine.States.Air{
     public class PlayerAirState : PlayerBaseState
     {
         public PlayerAirState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory) {
+            : base(currentCtx, stateFactory, "Air") {
             IsRootState = true;
             InitializeSubState();
 

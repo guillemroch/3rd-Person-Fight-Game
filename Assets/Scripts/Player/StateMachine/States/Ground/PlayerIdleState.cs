@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Ground{
     public class PlayerIdleState : PlayerBaseState
     {
-        public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Idle") { }
         public override void EnterState() {
 
         }

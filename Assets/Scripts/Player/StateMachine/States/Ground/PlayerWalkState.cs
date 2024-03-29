@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Ground{
     public class PlayerWalkState : PlayerBaseState
     {
-        public PlayerWalkState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerWalkState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Walk") { }
         public override void EnterState() {
         
         }

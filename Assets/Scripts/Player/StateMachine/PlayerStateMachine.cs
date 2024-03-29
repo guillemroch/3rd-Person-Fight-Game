@@ -1,6 +1,8 @@
+using Cinemachine;
 using UnityEngine;
 
 namespace Player.StateMachine{
+    [SaveDuringPlay]
     public class PlayerStateMachine : MonoBehaviour
     {
         
@@ -94,8 +96,8 @@ namespace Player.StateMachine{
         [SerializeField] private Rigidbody _playerRigidbody;
     
         //State variables
-        private PlayerStateFactory _states;
-        private PlayerBaseState _currentState;
+        [SerializeField] public PlayerStateFactory _states;
+        [SerializeField] public PlayerBaseState _currentState;
     
         //getters and setters
         public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }

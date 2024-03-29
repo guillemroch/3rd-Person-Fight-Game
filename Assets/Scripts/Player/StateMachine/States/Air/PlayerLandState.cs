@@ -1,7 +1,7 @@
 namespace Player.StateMachine.States.Air{
     public class PlayerLandState : PlayerBaseState
     {
-        public PlayerLandState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerLandState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Land") { }
         public override void EnterState() {
 
             Ctx.AnimatorManager.PlayTargetAnimation("Land");

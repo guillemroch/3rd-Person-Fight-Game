@@ -1,10 +1,17 @@
+using System;
+using UnityEngine;
+
 namespace Player.StateMachine{
+    
+    [Serializable]
     public abstract class PlayerBaseState
     {
         private bool _isRootState;
         private PlayerStateMachine _ctx;
         private PlayerStateFactory _factory;
-        private PlayerBaseState _currentSuperState;
+        [SerializeField]
+        public string name;
+        public PlayerBaseState _currentSuperState;
         private PlayerBaseState _currentSubState;
     
         //Getters and Setters
@@ -14,9 +21,10 @@ namespace Player.StateMachine{
         protected PlayerBaseState CurrentSubState { get => _currentSubState; } 
         protected PlayerBaseState CurrentSuperState { get => _currentSuperState; } 
 
-        public PlayerBaseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) {
+        public PlayerBaseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory, string name) {
             _ctx = currentCtx;
             _factory = stateFactory;
+            this.name = name;
         }
 
         public abstract void EnterState();

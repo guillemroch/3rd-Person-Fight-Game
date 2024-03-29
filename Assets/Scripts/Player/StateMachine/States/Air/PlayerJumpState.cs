@@ -4,7 +4,7 @@ namespace Player.StateMachine.States.Air{
     public class PlayerJumpState : PlayerBaseState {
 
         public PlayerJumpState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory) {
+            : base(currentCtx, stateFactory, "Jump") {
         }
 
         public override void EnterState() {

@@ -1,7 +1,7 @@
 namespace Player.StateMachine.States.Lash{
     public class PlayerLashingState : PlayerBaseState{
         public PlayerLashingState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx,
-            stateFactory) {
+            stateFactory, "Lashing") {
             IsRootState = true;
             InitializeSubState();
         }

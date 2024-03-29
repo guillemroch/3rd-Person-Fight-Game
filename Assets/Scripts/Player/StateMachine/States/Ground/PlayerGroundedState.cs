@@ -4,7 +4,7 @@ namespace Player.StateMachine.States.Ground{
     public class PlayerGroundedState : PlayerBaseState {
     
         public PlayerGroundedState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory) {
+            : base(currentCtx, stateFactory, "Grounded") {
             IsRootState = true;
             InitializeSubState();
         
@@ -86,7 +86,9 @@ namespace Player.StateMachine.States.Ground{
         
             if (Ctx.TargetDirection == Vector3.zero)
                 Ctx.TargetDirection = Ctx.PlayerTransform.forward;
-
+            
+            if (Ctx.GravityDirection == Vector3.zero)
+                Ctx.GravityDirection = Vector3.down;
 
             Quaternion targetRotation = 
                 Quaternion.LookRotation(Ctx.TargetDirection, -Ctx.GravityDirection);

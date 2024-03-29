@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Lash{
     public class PlayerHalflashState : PlayerBaseState
     {
-        public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory) { }
+        public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "PlayerHalflashState") { }
         public override void EnterState() {
             Ctx.InputManager.ResetLashInput();
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash, true);
@@ -34,6 +34,7 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void ExitState() {
+            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash, false);
         }
 
         public override void CheckSwitchStates() {

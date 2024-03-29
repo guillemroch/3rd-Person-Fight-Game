@@ -14,10 +14,13 @@ namespace Player{
         [SerializeField] [ReadOnly] private int _isHalfLashingHash;
         [SerializeField] [ReadOnly] private int _isLashingHash;
         [SerializeField] [ReadOnly] private int _isJumpingHash;
+        [SerializeField] [ReadOnly] private int _isFallingHash;
+        
         public int IsGroundedHash => _isGroundedHash;
         public int IsHalfLashingHash => _isHalfLashingHash;
         public int IsLashingHash => _isLashingHash;
         public int IsJumpingHash => _isJumpingHash;
+        public int IsFallingHash => _isFallingHash;
 
 
         private void Awake()
