@@ -124,7 +124,7 @@ namespace Player.StateMachine.States.Lash{
         
             if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
             Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
-            if (Ctx.InAirTimer <= 2f) return;
+            if (Ctx.InAirTimer <= 0.1f) return;
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
            
