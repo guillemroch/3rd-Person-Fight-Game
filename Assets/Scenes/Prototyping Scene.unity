@@ -419,7 +419,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145139759}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.67850894, y: -0.0000001191691, z: -0.000000110071, w: 0.7345922}
+  m_LocalRotation: {x: -0.67850894, y: 0.0000001191691, z: 0.000000110071, w: 0.7345922}
   m_LocalPosition: {x: 0, y: 0.0000009536743, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4771,7 +4771,7 @@ MonoBehaviour:
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
-    m_BlendHint: 1
+    m_BlendHint: 2
     m_InheritPosition: 1
     m_OnCameraLive:
       m_PersistentCalls:
@@ -5337,7 +5337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983893286}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0627113, y: 0.13371302, z: -0.37120378, w: 0.9167311}
+  m_LocalRotation: {x: -0.0627113, y: 0.13371304, z: -0.37120393, w: 0.91673106}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6406,7 +6406,7 @@ Transform:
   m_GameObject: {fileID: 1051895116}
   serializedVersion: 2
   m_LocalRotation: {x: -0.57357645, y: -0, z: -0, w: 0.81915206}
-  m_LocalPosition: {x: 1.344944, y: -10.035368, z: -11.40687}
+  m_LocalPosition: {x: 1.3924942, y: -10.035368, z: -11.40687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6568,9 +6568,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScaleFactor: 1.16
+  m_ReferenceResolution: {x: 1080, y: 1080}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -6626,7 +6626,7 @@ Transform:
   m_GameObject: {fileID: 1078521749}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6750545, y: 0.00000017184283, z: 0.00000015723548, w: 0.7377679}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.0000009536743, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6766,7 +6766,7 @@ MonoBehaviour:
     m_MinDuration: 0
   m_DefaultBlend:
     m_Style: 2
-    m_Time: 1
+    m_Time: 0.5
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -6813,7 +6813,7 @@ Transform:
   m_GameObject: {fileID: 1355996361}
   serializedVersion: 2
   m_LocalRotation: {x: -0.66442126, y: 0.00000246654, z: 0.0000021928192, w: 0.74735826}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.0000009536743, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8625,7 +8625,7 @@ Transform:
   m_GameObject: {fileID: 1655542224}
   serializedVersion: 2
   m_LocalRotation: {x: -0.57357645, y: -0, z: -0, w: 0.81915206}
-  m_LocalPosition: {x: 1.344944, y: -10.035368, z: -11.40687}
+  m_LocalPosition: {x: 1.3924942, y: -10.035368, z: -11.40687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9024,8 +9024,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822641167}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.3757655, y: 0.6170255, z: -0.5451597, w: -0.4253008}
-  m_LocalPosition: {x: 2.0828094, y: 10.109839, z: -7.366659}
+  m_LocalRotation: {x: -0.66194516, y: 0.042283785, z: -0.037448164, w: -0.74742115}
+  m_LocalPosition: {x: 1.315342, y: 10.108116, z: -5.5183735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11150,7 +11150,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877100322}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.042875502, y: 0.11854555, z: -0.3533791, w: 0.9269476}
+  m_LocalRotation: {x: -0.042875618, y: 0.11854607, z: -0.35338044, w: 0.92694706}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11600,7 +11600,7 @@ Transform:
   m_GameObject: {fileID: 1944292108}
   serializedVersion: 2
   m_LocalRotation: {x: 0.60253686, y: -0, z: -0, w: 0.79809105}
-  m_LocalPosition: {x: 1.344944, y: 8.845422, z: -6.993122}
+  m_LocalPosition: {x: 1.3924942, y: 8.845422, z: -6.993122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11685,7 +11685,7 @@ MonoBehaviour:
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
-    m_BlendHint: 1
+    m_BlendHint: 2
     m_InheritPosition: 1
     m_OnCameraLive:
       m_PersistentCalls:

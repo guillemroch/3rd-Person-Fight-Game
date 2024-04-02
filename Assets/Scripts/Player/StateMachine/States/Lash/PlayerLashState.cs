@@ -4,8 +4,7 @@ using UnityEngine;
 namespace Player.StateMachine.States.Lash{
     public class PlayerLashState : PlayerBaseState
     {
-  
-
+        
         #region State methods
         public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash[Root]") { }
         public override void EnterState() {
@@ -37,6 +36,7 @@ namespace Player.StateMachine.States.Lash{
         public override void ExitState() {
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
             Ctx.GravityDirection.Normalize();
+            Ctx.LashingIntensity = 0;
         }
 
         public override void CheckSwitchStates() {
@@ -58,8 +58,8 @@ namespace Player.StateMachine.States.Lash{
                 HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
-            if (Ctx.InputManager.SmallUnLashInput < 0 && Ctx.LashCooldown <= 0) {
-                HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * Ctx.InputManager.SmallLashInput);
+            if (Ctx.InputManager.SmallUnLashInput > 0 && Ctx.LashCooldown <= 0) {
+                HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * -Ctx.InputManager.SmallUnLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
         
@@ -107,12 +107,13 @@ namespace Player.StateMachine.States.Lash{
         private void HandleRotation() {
         
             //Rotate to face towards the gravity direction
+            if (Ctx.GravityDirection == Vector3.zero) Ctx.GravityDirection = Ctx.PlayerTransform.up;
             Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection);
             Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
         
             //Roll along the up axis of the player to move the player using a Lerp depending on the input
             float moveAmount = -Time.deltaTime * Ctx.InputManager.MovementInput.x;
-            Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
+            //Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
         
         
         }
@@ -174,7 +175,7 @@ namespace Player.StateMachine.States.Lash{
         private void HandleSmallLash(float lashAmount) {
             
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
-            
+            if (Ctx.GravityDirection == Vector3.zero) Ctx.GravityDirection = Ctx.PlayerTransform.up;
             Ctx.GravityDirection += Ctx.PlayerTransform.up * lashAmount;
             Ctx.LashingIntensity += lashAmount ;
         }

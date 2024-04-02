@@ -13,8 +13,8 @@ namespace Player.StateMachine.States.Lash{
             Ctx.AnimatorManager.PlayTargetAnimation("Half Lashing");  //TODO: Prevent the use of this methods
 
             Ctx.PlayerRigidbody.AddForce(Ctx.HalfLashingHeight * -Ctx.GravityDirection, ForceMode.Impulse);
-            if (Ctx.isGrounded)
-                Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
+            //if (Ctx.isGrounded)
+                //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
         
             Ctx.isGrounded = false;
         
@@ -40,7 +40,6 @@ namespace Player.StateMachine.States.Lash{
         public override void CheckSwitchStates() {
             if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lash());
-                Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
             }
             if (Ctx.InputManager.UnLashInput) {
 
@@ -79,7 +78,7 @@ namespace Player.StateMachine.States.Lash{
             if (colliders.Length > 0){
                 colliders.OrderBy(c => Vector3.Distance(Ctx.transform.position, c.transform.position));
                 Vector3 closestPoint = colliders[0].ClosestPoint(Ctx.transform.position);
-                if (Vector3.Distance(Ctx.transform.position, closestPoint) <= 0)
+                if (Vector3.Distance(Ctx.transform.position, closestPoint) <= 1)
                 {
                     Ctx.GravityDirection = Vector3.down;
                     return;
