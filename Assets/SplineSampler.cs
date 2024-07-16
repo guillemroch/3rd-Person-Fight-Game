@@ -88,7 +88,7 @@ public class SplineSampler
         float tInc = interval / splineLength;
         for (float t = 0; t <= 1f; t += tInc)
         {
-            bool success = SplineUtility.Evaluate(spline, t, out float3 position, out float3 tangent, out float3 upVector);
+            bool success = SplineUtility.Evaluate(spline, t, out float3 position, out float3 forward, out float3 upVector);
             if (!success)
             {
                 positions = null;
@@ -98,7 +98,7 @@ public class SplineSampler
             }
 
             Vector3 newPosition = new Vector3(position.x, position.y, position.z);
-            Vector3 newTangent = new Vector3(tangent.x, tangent.y, tangent.z);
+            Vector3 newTangent = new Vector3(forward.x, forward.y, forward.z);
             Vector3 newUpVector = new Vector3(upVector.x, upVector.y, upVector.z);
 
             positionList.Add(newPosition);

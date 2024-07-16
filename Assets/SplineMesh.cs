@@ -15,8 +15,14 @@ using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
+
 namespace UnityEngine.Splines{
     [ExecuteInEditMode]
+    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshCollider))]
+    [RequireComponent(typeof(SplineContainer))]
+    [RequireComponent((typeof(MeshRenderer)))]
+
     public class SplineMesh : MonoBehaviour{
 
 
@@ -36,7 +42,7 @@ namespace UnityEngine.Splines{
         private Mesh GenerateMesh() {
             Mesh mesh = new Mesh();
             bool success = SplineSampler.SampleSplineInterval(spline, transform, extrusionInterval,
-                out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors);
+                out Vector3[] positions, out Vector3[] forwards, out Vector3[] upVectors);
             if (!success) {
                 Debug.LogError("SplineMeshExtrude: GenerateMesh: Error encountered when sampling spline. Aborting");
                 return mesh;
@@ -47,7 +53,7 @@ namespace UnityEngine.Splines{
             List<Vector2> uvs = new List<Vector2>();
             int offset = 0;
             for (int i = 1; i < positions.Length; i++) {
-                Vector3 right = Vector3.Cross(tangents[i], upVectors[i]).normalized;
+                Vector3 right = Vector3.Cross(forwards[i], upVectors[i]).normalized;
                 //Add Vertices 
                 vertices.Add(positions[i] + (upVectors[i] * width) + (right * width));
                 vertices.Add(positions[i] + (-upVectors[i] * width)+ (right * width));
@@ -56,7 +62,7 @@ namespace UnityEngine.Splines{
     
                 
                 if (i == positions.Length) {
-                    right = Vector3.Cross(tangents[0], upVectors[0]).normalized;
+                    right = Vector3.Cross(forwards[0], upVectors[0]).normalized;
                     vertices.Add(positions[0] + (upVectors[0] * width) + (right * width));
                     vertices.Add(positions[0] + (-upVectors[0] * width)+ (right * width));
                     vertices.Add(positions[0] + (-upVectors[0] * width)+ (-right * width));
@@ -64,12 +70,16 @@ namespace UnityEngine.Splines{
 
                 }
                 else {
-                    right = Vector3.Cross(tangents[i-1], upVectors[i-1]).normalized;
+                    right = Vector3.Cross(forwards[i-1], upVectors[i-1]).normalized;
                     vertices.Add(positions[i-1] + (upVectors[i-1] * width) + (right * width));
                     vertices.Add(positions[i-1] + (-upVectors[i-1] * width)+ (right * width));
                     vertices.Add(positions[i-1] + (-upVectors[i-1] * width)+ (-right * width));
                     vertices.Add(positions[i-1] + (upVectors[i-1] * width) + (-right * width));
 
+                }
+
+                if (Vector3.Dot(forwards[i], forwards[i - 1]) <= 0.1) {
+                    
                 }
 
                 offset = 8 * (i - 1);
@@ -111,15 +121,15 @@ namespace UnityEngine.Splines{
                 tris.Add(offset + 1);
                 tris.Add(offset + 5);
                 
-                uvs.Add(new Vector2(1, 0));
+                uvs.Add(new Vector2(1*width, 0));
                 uvs.Add(new Vector2(0, 0));
-                uvs.Add(new Vector2(1, 0));
+                uvs.Add(new Vector2(1*width, 0));
                 uvs.Add(new Vector2(0, 0));
                 
-                uvs.Add(new Vector2(1, 1));
-                uvs.Add(new Vector2(0, 1));
-                uvs.Add(new Vector2(1, 1));
-                uvs.Add(new Vector2(0, 1));
+                uvs.Add(new Vector2(1*width, 1*width));
+                uvs.Add(new Vector2(0, 1*width));
+                uvs.Add(new Vector2(1*width, 1*width));
+                uvs.Add(new Vector2(0, 1*width));
             }
 
 
@@ -163,20 +173,17 @@ namespace UnityEngine.Splines{
 
         void OnSplineChanged(Spline spline, int knotIndex, SplineModification modificationType)
         {
-
+            Rebuild();
         }
 
-        void Update()
-        {
-           Rebuild();
-        }
+        
 
 
 
-        internal Mesh CreateMeshAsset() {
+        private Mesh CreateMeshAsset() {
             var mesh = new Mesh();
             mesh.name = name;
-            mesh.Equals(new Mesh());
+            mesh = GetComponent<MeshFilter>().sharedMesh;
 
 #if UNITY_EDITOR
             var scene = SceneManagement.SceneManager.GetActiveScene();
@@ -215,6 +222,8 @@ namespace UnityEngine.Splines{
 
             Mesh generatedMesh = GenerateMesh();
             meshFilter.mesh = generatedMesh;
+
+            CreateMeshAsset();
         }
 
         private void OnDrawGizmos() {
@@ -223,8 +232,17 @@ namespace UnityEngine.Splines{
                 out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors);
 
             Handles.matrix = transform.localToWorldMatrix;
-            foreach (var position in positions) {
-                Handles.SphereHandleCap(0, position, Quaternion.identity, 1f, EventType.Repaint);
+            for (int i = 1; i < positions.Length; i++) {
+                Handles.color = Color.yellow;
+                Handles.SphereHandleCap(0, positions[i], Quaternion.identity, 1f, EventType.Repaint);
+                Handles.color = Color.blue;
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i],Vector3.up), 5f, EventType.Repaint);
+                Handles.color = Color.red;
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i], tangents[i]), 5f, EventType.Repaint);
+                Handles.color = Color.green;
+                Vector3 right = Vector3.Cross(tangents[i], upVectors[i]).normalized;
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.Euler(right), 5f, EventType.Repaint);
+                Handles.RectangleHandleCap(0,positions[i], Quaternion.LookRotation(tangents[i], upVectors[i]), width, EventType.Repaint);
             }
         }
     }
