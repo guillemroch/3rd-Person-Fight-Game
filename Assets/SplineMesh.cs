@@ -87,49 +87,50 @@ namespace UnityEngine.Splines{
                 //Add triangles
                 //Face 1
                 tris.Add(offset + 0);
-                tris.Add(offset + 5);
                 tris.Add(offset + 1);
-
                 tris.Add(offset + 5);
+
                 tris.Add(offset + 0);
+                tris.Add(offset + 5);
                 tris.Add(offset + 4);
                 
-                //Face 2
-                tris.Add(offset + 0);
-                tris.Add(offset + 7);
-                tris.Add(offset + 4);
 
-                tris.Add(offset + 0);
-                tris.Add(offset + 3);
+                //Face 2
+                tris.Add(offset + 4);
                 tris.Add(offset + 7);
+                tris.Add(offset + 0);
+
+                tris.Add(offset + 7);
+                tris.Add(offset + 3);
+                tris.Add(offset + 0);
 
                 //Face 3
+                tris.Add(offset + 7);
                 tris.Add(offset + 2);
                 tris.Add(offset + 3);
-                tris.Add(offset + 7);
 
+                tris.Add(offset + 7);
                 tris.Add(offset + 6);
                 tris.Add(offset + 2);
-                tris.Add(offset + 7);
 
                 //Face 4
-                tris.Add(offset + 2);
-                tris.Add(offset + 5);
                 tris.Add(offset + 6);
-
-                tris.Add(offset + 2);
-                tris.Add(offset + 1);
                 tris.Add(offset + 5);
+                tris.Add(offset + 2);
                 
-                uvs.Add(new Vector2(1*width, 0));
+                tris.Add(offset + 5);
+                tris.Add(offset + 1);
+                tris.Add(offset + 2);
+
+                uvs.Add(new Vector2(1, 0));
                 uvs.Add(new Vector2(0, 0));
-                uvs.Add(new Vector2(1*width, 0));
+                uvs.Add(new Vector2(1, 0));
                 uvs.Add(new Vector2(0, 0));
                 
-                uvs.Add(new Vector2(1*width, 1*width));
-                uvs.Add(new Vector2(0, 1*width));
-                uvs.Add(new Vector2(1*width, 1*width));
-                uvs.Add(new Vector2(0, 1*width));
+                uvs.Add(new Vector2(1, 1));
+                uvs.Add(new Vector2(0, 1));
+                uvs.Add(new Vector2(1, 1));
+                uvs.Add(new Vector2(0, 1));
             }
 
 
@@ -223,10 +224,12 @@ namespace UnityEngine.Splines{
             Mesh generatedMesh = GenerateMesh();
             meshFilter.mesh = generatedMesh;
 
+            MeshCollider collider = GetComponent<MeshCollider>();
+            collider.sharedMesh = generatedMesh;
             CreateMeshAsset();
         }
 
-        private void OnDrawGizmos() {
+        private void OnDrawGizmos() {       
 
             SplineSampler.SampleSplineInterval(spline, transform, extrusionInterval,
                 out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors);
@@ -236,13 +239,16 @@ namespace UnityEngine.Splines{
                 Handles.color = Color.yellow;
                 Handles.SphereHandleCap(0, positions[i], Quaternion.identity, 1f, EventType.Repaint);
                 Handles.color = Color.blue;
-                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i],Vector3.up), 5f, EventType.Repaint);
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(Vector3.up,upVectors[i]), 5f, EventType.Repaint);
                 Handles.color = Color.red;
-                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i], tangents[i]), 5f, EventType.Repaint);
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i], Vector3.up), 5f, EventType.Repaint);
                 Handles.color = Color.green;
                 Vector3 right = Vector3.Cross(tangents[i], upVectors[i]).normalized;
-                Handles.ArrowHandleCap(0,positions[i],Quaternion.Euler(right), 5f, EventType.Repaint);
+                Vector3 direction = positions[i-1] + positions[i];
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(tangents[i],direction), 5f, EventType.Repaint);
                 Handles.RectangleHandleCap(0,positions[i], Quaternion.LookRotation(tangents[i], upVectors[i]), width, EventType.Repaint);
+                Handles.color = Color.magenta;
+                Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(right,Vector3.up), 5f, EventType.Repaint);
             }
         }
     }
