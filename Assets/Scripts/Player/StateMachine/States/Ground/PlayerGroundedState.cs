@@ -53,14 +53,21 @@ namespace Player.StateMachine.States.Ground{
         public void HandleGroundDetection() {
         
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+            RaycastHit hit;
+            //Logic for stairs and slopes
+            Vector3 targetPosition = Ctx.PlayerTransform.position;
+            rayCastOrigin.y += Ctx.RayCastHeightOffset;
             
         
             if (Physics.SphereCast(
-                    rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _ ,Ctx.RayCastMaxDistance, Ctx.GroundLayer)
-               )
+                    rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
                 Ctx.InAirTimer = 0;
                 Ctx.isGrounded = true;
+                Vector3 rayCastHitPoint = hit.point;
+                targetPosition.y = rayCastHitPoint.y;
+                Ctx.PlayerTransform.position =
+                    Vector3.Lerp(Ctx.PlayerTransform.position, targetPosition, Time.deltaTime / 0.1f);
             }
             else
             {

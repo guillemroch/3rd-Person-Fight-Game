@@ -13,6 +13,7 @@ namespace Player.StateMachine.States.Air{
             CheckSwitchStates();
             HandleFalling();
             HandleGravity();
+            HandleMovement();
         
         }
 
@@ -52,6 +53,18 @@ namespace Player.StateMachine.States.Air{
         void HandleGravity() {
             Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
 
+        }
+        private void HandleMovement() {
+            Ctx.MoveDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y + Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
+
+            float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
+            float magSquared = Ctx.GravityDirection.sqrMagnitude;
+    
+            Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
+            Ctx.MoveDirection += -projection;
+            Ctx.MoveDirection.Normalize();
+        
+            Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);
         }
     }
 }

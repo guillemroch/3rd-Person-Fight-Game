@@ -12,7 +12,6 @@ namespace Player.StateMachine.States.Ground{
 
         public override void UpdateState() {
             CheckSwitchStates();
-        
             HandleMovement();
         }
 

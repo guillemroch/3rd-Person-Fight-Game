@@ -2734,6 +2734,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &361579058 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+  m_PrefabInstance: {fileID: 5829072076403134700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -4950,6 +4955,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &1166069927 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7273507843651196426, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+  m_PrefabInstance: {fileID: 5829072076403134700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1386947797
 Mesh:
   m_ObjectHideFlags: 0
@@ -8716,9 +8726,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.45
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: isGrounded
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027430776061884979, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_Height
+      value: 1.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027430776061884979, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_Center.y
+      value: 1.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _target
+      value: 
+      objectReference: {fileID: 1166069927}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraPivot
+      value: 
+      objectReference: {fileID: 361579058}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _camLookSmoothTime
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name
@@ -8763,10 +8793,6 @@ PrefabInstance:
     - target: {fileID: 8460530013797635657, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9106837423716537563, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.39
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

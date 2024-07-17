@@ -40,8 +40,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3322915969423957918}
-  - component: {fileID: 4675932026764890329}
   - component: {fileID: 4331485296954385964}
+  - component: {fileID: 4675932026764890329}
   - component: {fileID: 2100550671156518442}
   - component: {fileID: 3005243556766777584}
   - component: {fileID: 5562903958970503654}
@@ -72,33 +72,6 @@ Transform:
   - {fileID: 7652772769167109138}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4675932026764890329
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6423912697608891000}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 5
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
 --- !u!114 &4331485296954385964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +132,33 @@ MonoBehaviour:
   _cameraObject: {fileID: 0}
   _playerTransform: {fileID: 3322915969423957918}
   _playerRigidbody: {fileID: 0}
+--- !u!54 &4675932026764890329
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6423912697608891000}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 5
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 1
 --- !u!114 &2100550671156518442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,6 +260,7 @@ MonoBehaviour:
   _isHalfLashingHash: 0
   _isLashingHash: 0
   _isJumpingHash: 0
+  _isFallingHash: 0
 --- !u!1 &8987708746591024405
 GameObject:
   m_ObjectHideFlags: 0

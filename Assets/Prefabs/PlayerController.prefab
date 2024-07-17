@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 25416451516565596}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.159, z: -1.593}
+  m_LocalPosition: {x: 0, y: 1.293, z: 0.031}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -168,6 +168,7 @@ MonoBehaviour:
   cameraFollowSpeed: 0.1
   cameraPitchSpeed: 5
   cameraYawSpeed: 5
+  _camLookSmoothTime: 20
   pitchAngle: 7.3851857
   yawAngle: 496.23593
   minimumPitchAngle: -35
@@ -475,7 +476,7 @@ Transform:
   m_GameObject: {fileID: 825794016909800940}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -938,7 +939,7 @@ Transform:
   m_GameObject: {fileID: 2015813601603208176}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

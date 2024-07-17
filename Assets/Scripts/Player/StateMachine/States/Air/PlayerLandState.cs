@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Player.StateMachine.States.Air{
     public class PlayerLandState : PlayerBaseState
     {
@@ -9,6 +11,7 @@ namespace Player.StateMachine.States.Air{
 
         public override void UpdateState() {
             CheckSwitchStates();
+            HandleMovement();
         }
 
         public override void FixedUpdateState() {
@@ -23,6 +26,19 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void InitializeSubState() {
+        }
+        
+        private void HandleMovement() {
+            Ctx.MoveDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y + Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
+
+            float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
+            float magSquared = Ctx.GravityDirection.sqrMagnitude;
+    
+            Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
+            Ctx.MoveDirection += -projection;
+            Ctx.MoveDirection.Normalize();
+        
+            Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);
         }
     }
 }
