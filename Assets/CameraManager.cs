@@ -7,16 +7,19 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    public enum CameraMode{
+        Normal, 
+        HalfLash, 
+        Lash
+    }
     [Header("References")]
-    private InputManager _inputManager;
     [SerializeField]
     private Transform _target; //Object to look at
     [SerializeField]
     private Transform _cameraPivot; //Object from where the camera rotates
-    [SerializeField]
+    
+    private InputManager _inputManager;
     private Transform _cameraTransform; //Transform of the real camera
-    [SerializeField]
-    private LayerMask _collisionLayers; // Layers for camera collision
     
     private float _defaultPosition; // Where the camera goes when there are no collisions
     private Vector3 _cameraFollowVelocity = Vector3.zero;
@@ -29,6 +32,8 @@ public class CameraManager : MonoBehaviour
     private float _minimumCollisionOffset = 0.2f;
     [SerializeField]
     private float _cameraCollisionRadius = 0.2f;
+    [SerializeField]
+    private LayerMask _collisionLayers; // Layers for camera collision
     
     [Header("Movement Speed")]
     [SerializeField]
@@ -50,7 +55,11 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     private float maximumPitchAngle = 35;
 
+    [Header("Camera Modes and Settings")]
+    [SerializeField] private static CameraMode _cameraMode = CameraMode.Normal;
 
+    [SerializeField] private Vector3 _cameraHalfLashOffset;
+    
     public void Awake()
     {
         _inputManager = FindObjectOfType<InputManager>();
@@ -60,20 +69,37 @@ public class CameraManager : MonoBehaviour
 
     public void HandleAllCameraMovement()
     {
-        FollowTarget();
-        RotateCamera();
-        HandleCameraCollisions();
+        if (_cameraMode == CameraMode.Normal) {
+            FollowTarget();
+            RotateCamera();
+            HandleCameraCollisions();
+        }else if (_cameraMode == CameraMode.HalfLash) {
+            FollowTargetHalfLash();
+            RotateCamera();
+            HandleCameraCollisions();
+        }else if (_cameraMode == CameraMode.Lash) {
+            
+        }
+        else {
+            Debug.LogError("No camera mode defined!");
+        }
+        
     }
 
     private void FollowTarget()
     {
         Vector3 lookAtPosition = 
             Vector3.SmoothDamp(transform.position, _target.position, ref _cameraFollowVelocity, _cameraFollowSpeed);
-
-       
         transform.position = lookAtPosition;
     }
-
+    private void FollowTargetHalfLash()
+    {
+        _cameraTransform.localPosition = _cameraHalfLashOffset;
+        Vector3 lookAtPosition = 
+            Vector3.SmoothDamp(transform.position, _target.position, ref _cameraFollowVelocity, _cameraFollowSpeed);
+        transform.position = lookAtPosition;
+        
+    }
     private void RotateCamera()
     {
         Vector3 rotation;
@@ -115,6 +141,11 @@ public class CameraManager : MonoBehaviour
 
         _cameraVectorPosition.z = Mathf.Lerp(_cameraTransform.localPosition.z, targetPosition, 0.2f);
         _cameraTransform.localPosition = _cameraVectorPosition;
+    }
+
+
+    public static void SetCameraMode(CameraMode cameraMode) {
+        _cameraMode = cameraMode;
     }
 }
 

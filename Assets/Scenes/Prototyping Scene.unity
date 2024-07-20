@@ -356,6 +356,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &117547160 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7805067754082171660, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+  m_PrefabInstance: {fileID: 5829072076403134700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &208229519
 Mesh:
   m_ObjectHideFlags: 0
@@ -8727,16 +8732,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: precision
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: isGrounded
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _playerRigidbody
+      value: 
+      objectReference: {fileID: 117547160}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _rayCastMaxDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _rayCastHeightOffset
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7027430776061884979, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Height
-      value: 1.66
+      value: 1.96
       objectReference: {fileID: 0}
     - target: {fileID: 7027430776061884979, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Center.y
-      value: 1.04
+      value: 0.96
       objectReference: {fileID: 0}
     - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: _target
@@ -8747,8 +8768,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 361579058}
     - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: _camLookSmoothTime
+      propertyPath: _cameraYawSpeed
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraPitchSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _camLookSmoothTime
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name

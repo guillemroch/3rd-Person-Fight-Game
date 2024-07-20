@@ -1,4 +1,6 @@
+using System;
 using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 
 namespace Player.StateMachine{
@@ -25,7 +27,7 @@ namespace Player.StateMachine{
         [SerializeField] private float _fallingVelocity;
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private float _rayCastHeightOffset = 0.5f;
-        [Range(0.1f, 1.5f)]
+        [Range(0.1f, 2f)]
         [SerializeField] private float _rayCastMaxDistance = 1;
 
         [Range(0.1f, 1.5f)] 
@@ -165,12 +167,23 @@ namespace Player.StateMachine{
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
         }
-    
-
+        
         public void HandleAllStates()
         {
             _currentState.UpdateStates();
         }
-    
+
+        public void OnDrawGizmos() {
+            /*Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
+            Handles.ArrowHandleCap(0, _playerTransform.position,
+                Quaternion.LookRotation(_playerTransform.up, _playerTransform.right), 1f, EventType.Repaint);
+            Handles.color = Color.yellow;
+            Handles.ArrowHandleCap(0, _playerTransform.position,
+                Quaternion.LookRotation(_gravityDirection.normalized, _playerTransform.forward),
+                _gravityDirection.magnitude, EventType.Repaint);
+            Handles.ArrowHandleCap(0, _playerTransform.position,
+                Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
+            
+        }
     }
 }

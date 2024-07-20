@@ -11,6 +11,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void EnterState() {
+            CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
         }
 
         public override void UpdateState() {
@@ -53,10 +54,10 @@ namespace Player.StateMachine.States.Ground{
         public void HandleGroundDetection() {
         
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+            rayCastOrigin += Ctx.PlayerTransform.up * Ctx.RayCastHeightOffset; //Consider the orientation of the Player
             RaycastHit hit;
             //Logic for stairs and slopes
             Vector3 targetPosition = Ctx.PlayerTransform.position;
-            rayCastOrigin.y += Ctx.RayCastHeightOffset;
             
         
             if (Physics.SphereCast(
@@ -64,10 +65,15 @@ namespace Player.StateMachine.States.Ground{
             {
                 Ctx.InAirTimer = 0;
                 Ctx.isGrounded = true;
+                //Logic for stairs
                 Vector3 rayCastHitPoint = hit.point;
-                targetPosition.y = rayCastHitPoint.y;
+                //targetPosition = rayCastHitPoint;
+                //[STAIRS] - DELETED FOR LATER FIX
+                /*targetPosition.y = rayCastHitPoint.y;
+
+                targetPosition += Vector3.Project(rayCastHitPoint, Ctx.PlayerTransform.up);
                 Ctx.PlayerTransform.position =
-                    Vector3.Lerp(Ctx.PlayerTransform.position, targetPosition, Time.deltaTime / 0.1f);
+                   Vector3.Lerp(Ctx.PlayerTransform.position, targetPosition, Time.deltaTime / 0.1f);*/
             }
             else
             {

@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
+    //Sub State of the Lash States
     public class PlayerHalflashState : PlayerBaseState
     {
         public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "PlayerHalflashState") { }
@@ -19,6 +20,8 @@ namespace Player.StateMachine.States.Lash{
             Ctx.isGrounded = false;
         
             Ctx.InAirTimer = 0;
+            
+            CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);
         }
 
         public override void UpdateState() {
@@ -47,14 +50,11 @@ namespace Player.StateMachine.States.Lash{
                 SwitchStates(Factory.Air());
                 Ctx.LashingIntensity = PlayerStateMachine.DEFAULT_LASHING_INTENSITY;
             }
-           
         }
 
         public override void InitializeSubState() {
         }
-    
-  
-    
+        
         public IEnumerator TriggerHalfLashingRotationCoroutine(float duration)
         {
             //isHalfLashingFromGround = true;

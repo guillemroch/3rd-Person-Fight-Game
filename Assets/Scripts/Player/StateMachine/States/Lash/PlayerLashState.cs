@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
+    //Sub State of the lash state
     public class PlayerLashState : PlayerBaseState
     {
         
         #region State methods
         public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash[Root]") { }
         public override void EnterState() {
+            Ctx.InAirTimer = 0;
             Ctx.isGrounded = false;
             CheckSwitchStates();
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
@@ -15,9 +18,11 @@ namespace Player.StateMachine.States.Lash{
             
             Ctx.AnimatorManager.PlayTargetAnimation("Lash");
             float limit = Ctx.MaxAngle* Ctx.Precision;
-            //Maximum time to reach the max angle
+            //Maximum time to reach the max angle for player roll rotation
             Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
             Ctx.MaxTime = Ctx.Offset*2;
+            
+            CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
         
         }
 
@@ -107,15 +112,19 @@ namespace Player.StateMachine.States.Lash{
         private void HandleRotation() {
         
             //Rotate to face towards the gravity direction
-            if (Ctx.GravityDirection == Vector3.zero) Ctx.GravityDirection = Ctx.PlayerTransform.up;
-            Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection);
-            Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+            if (Ctx.GravityDirection == Vector3.zero) 
+                Ctx.GravityDirection = Ctx.PlayerTransform.up;
+
+            if (Ctx.InputManager.SmallLashInput == 0) {
+                Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection.normalized);
+                Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+            }
+            
         
             //Roll along the up axis of the player to move the player using a Lerp depending on the input
             float moveAmount = -Time.deltaTime * Ctx.InputManager.MovementInput.x;
             //Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
-        
-        
+            
         }
 
         private void HandleGroundDetection() {
@@ -144,7 +153,7 @@ namespace Player.StateMachine.States.Lash{
     
         private void HandleGravity() {
         
-            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier), ForceMode.Acceleration);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier) * Ctx.LashingIntensity, ForceMode.Acceleration);
 
         }
     
@@ -153,14 +162,15 @@ namespace Player.StateMachine.States.Lash{
             //TODO: Remove the Lashing intensity variable [OR NOT] 
             //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection if reached max intensity.
         
-            //If lash is MAX
-            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
+            //If lash is at MAX return
+            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY)
+                return;
         
+            //Get direction of lashing based on camera position
             Vector3 lashDirection = Ctx.CameraObject.forward;
-            if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f)) {
+            /*if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f)) {
                 lashDirection = (hit.point - Ctx.transform.position).normalized;
-            }
-            
+            }*/
             
             if (lashAmount > 0) {
                 Ctx.GravityDirection += lashDirection * lashAmount;
@@ -174,8 +184,12 @@ namespace Player.StateMachine.States.Lash{
 
         private void HandleSmallLash(float lashAmount) {
             
-            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY) return;
-            if (Ctx.GravityDirection == Vector3.zero) Ctx.GravityDirection = Ctx.PlayerTransform.up;
+            if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY)
+                return;
+            
+            if (Ctx.GravityDirection == Vector3.zero)
+                Ctx.GravityDirection = Ctx.PlayerTransform.up;
+            
             Ctx.GravityDirection += Ctx.PlayerTransform.up * lashAmount;
             Ctx.LashingIntensity += lashAmount ;
         }

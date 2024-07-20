@@ -1,4 +1,5 @@
 namespace Player.StateMachine.States.Lash{
+    //Root State of the Lash States
     public class PlayerLashingState : PlayerBaseState{
         public PlayerLashingState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx,
             stateFactory, "Lashing") {

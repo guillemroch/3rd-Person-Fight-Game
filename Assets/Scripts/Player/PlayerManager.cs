@@ -21,7 +21,6 @@ namespace Player{
     
         private void Awake()
         {
-
             _inputManager = GetComponent<InputManager>();
             _playerStateMachine = GetComponent<PlayerStateMachine>();
             _animatorManager = GetComponent<AnimatorManager>();
