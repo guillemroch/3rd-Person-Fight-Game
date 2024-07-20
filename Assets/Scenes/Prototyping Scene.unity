@@ -6305,6 +6305,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1828801630 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+  m_PrefabInstance: {fileID: 5829072076403134700}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb867bb5c99cec4585c9e80f5e7b563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1850088818
 GameObject:
   m_ObjectHideFlags: 0
@@ -8740,6 +8751,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraManager
+      value: 
+      objectReference: {fileID: 1828801630}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: _playerRigidbody
       value: 
       objectReference: {fileID: 117547160}
@@ -8778,6 +8793,34 @@ PrefabInstance:
     - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: _camLookSmoothTime
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraLashOffset.z
+      value: -3.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraLashYawSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraLashPitchSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraLashFollowSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraHalflashOffset.z
+      value: -6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraHalflashYawSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraHalflashPitchSpeed
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name

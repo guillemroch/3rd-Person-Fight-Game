@@ -94,6 +94,7 @@ namespace Player.StateMachine{
         [SerializeField] private AnimatorManager _animatorManager;
         [SerializeField] private InputManager _inputManager;
         [SerializeField] private Transform _cameraObject;
+        [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private Transform _playerTransform;
         [SerializeField] private Rigidbody _playerRigidbody;
     
@@ -102,6 +103,7 @@ namespace Player.StateMachine{
         [SerializeField] public PlayerBaseState _currentState;
     
         //getters and setters
+        public CameraManager CameraManager { get => _cameraManager; set => _cameraManager = value; }
         public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }
         public Vector3 TargetDirection { get => _targetDirection; set => _targetDirection = value; }
         public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
@@ -166,6 +168,7 @@ namespace Player.StateMachine{
             _inputManager = GetComponent<InputManager>();
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
+            _cameraManager = Camera.main!.GetComponent<CameraManager>();
         }
         
         public void HandleAllStates()

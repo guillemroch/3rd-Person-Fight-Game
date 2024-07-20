@@ -21,7 +21,7 @@ namespace Player.StateMachine.States.Lash{
         
             Ctx.InAirTimer = 0;
             
-            CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);
+            Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);
         }
 
         public override void UpdateState() {

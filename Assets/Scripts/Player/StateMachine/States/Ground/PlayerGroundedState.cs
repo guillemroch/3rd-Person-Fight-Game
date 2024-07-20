@@ -11,7 +11,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void EnterState() {
-            CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
+            Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
         }
 
         public override void UpdateState() {

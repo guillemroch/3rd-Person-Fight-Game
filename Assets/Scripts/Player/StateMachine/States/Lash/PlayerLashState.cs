@@ -22,7 +22,7 @@ namespace Player.StateMachine.States.Lash{
             Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
             Ctx.MaxTime = Ctx.Offset*2;
             
-            CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
+            Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
         
         }
 
