@@ -186,7 +186,13 @@ namespace Player.StateMachine{
                 _gravityDirection.magnitude, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,
                 Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
-            
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.up);
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.right);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward);
         }
     }
 }
