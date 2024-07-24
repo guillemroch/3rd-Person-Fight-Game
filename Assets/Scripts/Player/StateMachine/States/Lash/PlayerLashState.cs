@@ -72,10 +72,6 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.LashingIntensity <= 0) {
                 SwitchStates(Factory.Halflash());
             }
-  
-        
-        
-        
         }
 
         public override void InitializeSubState() {
@@ -117,13 +113,10 @@ namespace Player.StateMachine.States.Lash{
 
             if (Ctx.InputManager.SmallLashInput == 0) {
                 Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection.normalized);
-                Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+                float rollAmount = Ctx.RollSpeed * Ctx.InputManager.RollInput;
+                Quaternion rollRotation = Quaternion.AngleAxis(rollAmount, Ctx.PlayerTransform.up);
+                Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * rollRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
             }
-            
-        
-            //Roll along the up axis of the player to move the player using a Lerp depending on the input
-            float moveAmount = -Time.deltaTime * Ctx.InputManager.MovementInput.x;
-            //Ctx.transform.rotation = Quaternion.Lerp(Ctx.transform.rotation, Ctx.transform.rotation * Quaternion.Euler(Ctx.RotationAxis * moveAmount * Ctx.MaxAngle), Ctx.LerpSpeed);
             
         }
 

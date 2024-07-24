@@ -17,6 +17,7 @@ namespace Player{
         [SerializeField] [ReadOnly] private float _smallUnLashInput;
 
         [SerializeField] [ReadOnly] private float _moveAmount;
+        [SerializeField] [ReadOnly] private float _rollInput;
         
         
         // getters and setters
@@ -29,7 +30,7 @@ namespace Player{
         public bool UnLashInput { get => _unLashInput; set => _unLashInput = value; }
         public float SmallLashInput { get => _smallLashInput; set => _smallLashInput = value; }
         public float SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
-
+        public float RollInput { get => _rollInput; set => _rollInput = value; }
 
         private void Awake()
         {
@@ -63,6 +64,12 @@ namespace Player{
                 
                 _playerInputs.Player.SmallUnLash.performed += i => _smallUnLashInput = i.ReadValue<float>();
                 _playerInputs.Player.SmallUnLash.canceled += i => _smallUnLashInput = 0;
+                
+                _playerInputs.Player.RollLeft.performed += i => _rollInput = -i.ReadValue<float>();
+                _playerInputs.Player.RollLeft.canceled += i => _rollInput = 0;
+                
+                _playerInputs.Player.RollRight.performed += i => _rollInput = i.ReadValue<float>();
+                _playerInputs.Player.RollRight.canceled += i => _rollInput = 0;
                 
  
 

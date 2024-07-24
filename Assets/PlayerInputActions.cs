@@ -107,6 +107,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RollLeft"",
+                    ""type"": ""Value"",
+                    ""id"": ""df8272cd-a6e8-4aab-bb8c-f873a9688ba9"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RollRight"",
+                    ""type"": ""Value"",
+                    ""id"": ""a198a32d-a366-4db0-ba22-f5a49a759cc2"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -406,6 +424,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ChangeDirectionLash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f689878-4cc0-4106-a094-4fdd69625efc"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RollLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1673d3c8-248c-4ce5-9524-e73928bd8120"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RollRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -512,6 +552,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_SmallLash = m_Player.FindAction("SmallLash", throwIfNotFound: true);
         m_Player_SmallUnLash = m_Player.FindAction("SmallUnLash", throwIfNotFound: true);
         m_Player_ChangeDirectionLash = m_Player.FindAction("ChangeDirectionLash", throwIfNotFound: true);
+        m_Player_RollLeft = m_Player.FindAction("RollLeft", throwIfNotFound: true);
+        m_Player_RollRight = m_Player.FindAction("RollRight", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -585,6 +627,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SmallLash;
     private readonly InputAction m_Player_SmallUnLash;
     private readonly InputAction m_Player_ChangeDirectionLash;
+    private readonly InputAction m_Player_RollLeft;
+    private readonly InputAction m_Player_RollRight;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -598,6 +642,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @SmallLash => m_Wrapper.m_Player_SmallLash;
         public InputAction @SmallUnLash => m_Wrapper.m_Player_SmallUnLash;
         public InputAction @ChangeDirectionLash => m_Wrapper.m_Player_ChangeDirectionLash;
+        public InputAction @RollLeft => m_Wrapper.m_Player_RollLeft;
+        public InputAction @RollRight => m_Wrapper.m_Player_RollRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -634,6 +680,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeDirectionLash.started += instance.OnChangeDirectionLash;
             @ChangeDirectionLash.performed += instance.OnChangeDirectionLash;
             @ChangeDirectionLash.canceled += instance.OnChangeDirectionLash;
+            @RollLeft.started += instance.OnRollLeft;
+            @RollLeft.performed += instance.OnRollLeft;
+            @RollLeft.canceled += instance.OnRollLeft;
+            @RollRight.started += instance.OnRollRight;
+            @RollRight.performed += instance.OnRollRight;
+            @RollRight.canceled += instance.OnRollRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -665,6 +717,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeDirectionLash.started -= instance.OnChangeDirectionLash;
             @ChangeDirectionLash.performed -= instance.OnChangeDirectionLash;
             @ChangeDirectionLash.canceled -= instance.OnChangeDirectionLash;
+            @RollLeft.started -= instance.OnRollLeft;
+            @RollLeft.performed -= instance.OnRollLeft;
+            @RollLeft.canceled -= instance.OnRollLeft;
+            @RollRight.started -= instance.OnRollRight;
+            @RollRight.performed -= instance.OnRollRight;
+            @RollRight.canceled -= instance.OnRollRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -784,6 +842,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnSmallLash(InputAction.CallbackContext context);
         void OnSmallUnLash(InputAction.CallbackContext context);
         void OnChangeDirectionLash(InputAction.CallbackContext context);
+        void OnRollLeft(InputAction.CallbackContext context);
+        void OnRollRight(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

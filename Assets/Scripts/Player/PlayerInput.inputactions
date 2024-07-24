@@ -85,6 +85,24 @@
                     "processors": "",
                     "interactions": "MultiTap",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RollLeft",
+                    "type": "Value",
+                    "id": "df8272cd-a6e8-4aab-bb8c-f873a9688ba9",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RollRight",
+                    "type": "Value",
+                    "id": "a198a32d-a366-4db0-ba22-f5a49a759cc2",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -382,6 +400,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeDirectionLash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f689878-4cc0-4106-a094-4fdd69625efc",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RollLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1673d3c8-248c-4ce5-9524-e73928bd8120",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RollRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -188,11 +188,11 @@ namespace Player.StateMachine{
                 Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
 
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(_playerTransform.position, _playerTransform.up);
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.up * 0.2f);
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(_playerTransform.position, _playerTransform.right);
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.right * 0.2f);
             Gizmos.color = Color.blue;
-            Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward);
+            Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward * 0.2f);
         }
     }
 }

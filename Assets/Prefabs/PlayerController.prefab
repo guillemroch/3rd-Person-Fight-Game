@@ -156,23 +156,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb867bb5c99cec4585c9e80f5e7b563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 7273507843651196426}
-  cameraPivot: {fileID: 2619504762795049410}
-  cameraTransform: {fileID: 9106837423716537563}
-  collisionLayers:
+  _target: {fileID: 7273507843651196426}
+  _cameraPivot: {fileID: 2619504762795049410}
+  localTransformRotation: {x: 0, y: 0, z: 0, w: 0}
+  _cameraCollisionOffset: 0.2
+  _minimumCollisionOffset: 0.2
+  _cameraCollisionRadius: 0.2
+  _collisionLayers:
     serializedVersion: 2
-    m_Bits: 0
-  cameraCollisionOffset: 0.2
-  minimumCollisionOffset: 0.2
-  cameraCollisionRadius: 0.2
-  cameraFollowSpeed: 0.1
-  cameraPitchSpeed: 5
-  cameraYawSpeed: 5
-  _camLookSmoothTime: 20
+    m_Bits: 9
+  _cameraFollowSpeed: 0.1
+  _cameraPitchSpeed: 1.5
+  _cameraYawSpeed: 1.5
+  _camLookSmoothTime: 5
+  _normalFOV: 70
   pitchAngle: 7.3851857
   yawAngle: 496.23593
   minimumPitchAngle: -35
   maximumPitchAngle: 35
+  _cameraMode: 0
+  _cameraHalflashOffset: {x: 0, y: 0, z: -6}
+  _cameraHalflashPitchSpeed: 40
+  _cameraHalflashYawSpeed: 40
+  _cameraLashOffset: {x: 0, y: 0, z: -3.14}
+  _lashFOV: 90
+  _cameraLashFollowSpeed: 0.01
+  _cameraLashPitchSpeed: 150
+  _cameraLashYawSpeed: 150
+  _targetLashOffset: -0.01
+  _cameraLashSmoothLerp: 0.95
+  _centerTimer: 0
+  _timeToCenter: 2
+  _centerCameraPosition: {x: 180, y: 78.27}
 --- !u!1 &716177944636030714
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +491,7 @@ Transform:
   m_GameObject: {fileID: 825794016909800940}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.45, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -981,7 +996,7 @@ Camera:
   field of view: 70
   orthographic: 0
   orthographic size: 10
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1028,7 +1043,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -3122,13 +3137,37 @@ PrefabInstance:
       value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
-      propertyPath: isGrounded
+      propertyPath: precision
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: isGrounded
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: _cameraObject
       value: 
       objectReference: {fileID: 9106837423716537563}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _cameraManager
+      value: 
+      objectReference: {fileID: 7608483872819477558}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _playerRigidbody
+      value: 
+      objectReference: {fileID: 7805067754082171660}
+    - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _rayCastMaxDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562903958970503654, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: m_Height
+      value: 1.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562903958970503654, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: m_Center.y
+      value: 0.96
+      objectReference: {fileID: 0}
     - target: {fileID: 6423912697608891000, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3549,6 +3588,11 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!54 &7805067754082171660 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 4675932026764890329, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+  m_PrefabInstance: {fileID: 3221503801061927893}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8260155533658521747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6779293006050388806, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
