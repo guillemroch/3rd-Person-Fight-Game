@@ -77,10 +77,10 @@ namespace Player.StateMachine{
         [SerializeField] private float _sprintingSpeed = 8f;
         [SerializeField] private float _rotationSpeed = 15;
     
-        [Header("Stamina")]
+        [Header("Stormlight")]
         [SerializeField] private float _stormlight = 100;
         [SerializeField] private float _stormlightRegenRate = 1;
-        [SerializeField] private float _stormlightDepletionRate = 1;
+        [SerializeField] private float _stormlightDepletionRate = 0.1f;
     
         //Jump
         [Header("Jump Speeds")] 

@@ -9263,6 +9263,26 @@ PrefabInstance:
       propertyPath: _rollLerpSpeed
       value: 0.9
       objectReference: {fileID: 0}
+    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619504762795049410, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: _timeToCenter
       value: 2

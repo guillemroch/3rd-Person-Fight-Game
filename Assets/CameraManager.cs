@@ -158,6 +158,7 @@ public class CameraManager : MonoBehaviour
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
         Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
+        //TODO: Make sure the rotation is correct cause it is not
         transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, 0.9f);
         //3 - Rotate the pivot point for the pitch
         rotation = Vector3.zero;
