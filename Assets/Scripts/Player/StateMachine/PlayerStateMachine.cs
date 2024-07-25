@@ -33,7 +33,6 @@ namespace Player.StateMachine{
         [Range(0.1f, 1.5f)] 
         [SerializeField] private float _rayCastRadius = 0.2f;
 
-
         [Header("Gravity")] 
         [SerializeField] private Vector3 _gravityDirection = Vector3.down; //What is the current gravity orientation for the player
         [SerializeField] private float _gravityIntensity = 9.8f;
@@ -79,10 +78,9 @@ namespace Player.StateMachine{
         [SerializeField] private float _rotationSpeed = 15;
     
         [Header("Stamina")]
-        [SerializeField] private float _stamina = 100;
-        [SerializeField] private float _staminaRegenRate = 1;
-        [SerializeField] private float _staminaDepletionRate = 1;
-    
+        [SerializeField] private float _stormlight = 100;
+        [SerializeField] private float _stormlightRegenRate = 1;
+        [SerializeField] private float _stormlightDepletionRate = 1;
     
         //Jump
         [Header("Jump Speeds")] 
@@ -97,6 +95,7 @@ namespace Player.StateMachine{
         [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private Transform _playerTransform;
         [SerializeField] private Rigidbody _playerRigidbody;
+        [SerializeField] private UIManager _uiManager;
     
         //State variables
         [SerializeField] public PlayerStateFactory _states;
@@ -125,9 +124,9 @@ namespace Player.StateMachine{
         public float RunningSpeed { get => _runningSpeed; set => _runningSpeed = value; }
         public float SprintingSpeed { get => _sprintingSpeed; set => _sprintingSpeed = value; }
         public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
-        public float Stamina { get => _stamina; set => _stamina = value; }
-        public float StaminaRegenRate { get => _staminaRegenRate; set => _staminaRegenRate = value; }
-        public float StaminaDepletionRate { get => _staminaDepletionRate; set => _staminaDepletionRate = value; }
+        public float Stormlight { get => _stormlight; set => _stormlight = value; }
+        public float StormlightRegenRate { get => _stormlightRegenRate; set => _stormlightRegenRate = value; }
+        public float StormlightDepletionRate { get => _stormlightDepletionRate; set => _stormlightDepletionRate = value; }
         public float JumpHeight { get => _jumpHeight; set => _jumpHeight = value; }
         public PlayerManager PlayerManager { get => _playerManager; set => _playerManager = value; }
         public AnimatorManager AnimatorManager { get => _animatorManager; set => _animatorManager = value; }
@@ -152,6 +151,7 @@ namespace Player.StateMachine{
         public float MaxTime { get => maxTime; set => maxTime = value; }
         public float TimeElapsed { get => timeElapsed; set => timeElapsed = value; }
         public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
+        public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
 
         #endregion
     
@@ -169,6 +169,7 @@ namespace Player.StateMachine{
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
             _cameraManager = Camera.main!.GetComponent<CameraManager>();
+            _uiManager = FindObjectOfType<UIManager>();
         }
         
         public void HandleAllStates()

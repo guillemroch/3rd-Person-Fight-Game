@@ -1,3 +1,4 @@
+using System;
 using Player.StateMachine;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace Player{
         [SerializeField] private AnimatorManager _animatorManager; //Calls and modifies animator in LateUpdate()
         [SerializeField] private Animator _animator;  //Calls and modifies animator in LateUpdate()
         [SerializeField] private CameraManager _cameraManager; //Calls and modifies camera in LateUpdate()
-        
+        [SerializeField] private UIManager _uiManager; // Calls and modifies UI elements in FixedUpdate()
     
         private void Awake()
         {
@@ -26,8 +27,13 @@ namespace Player{
             _animatorManager = GetComponent<AnimatorManager>();
             _animator = GetComponent<Animator>();
             _cameraManager = FindObjectOfType<CameraManager>();
+            _uiManager = FindObjectOfType<UIManager>();
         
             Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        private void Start() {
+            _uiManager.Initialize(_playerStateMachine);
         }
 
         private void Update()
@@ -38,6 +44,7 @@ namespace Player{
         private void FixedUpdate()
         {
             _playerStateMachine.HandleAllStates();
+            _uiManager.UpdateUI();
         }
 
         private void LateUpdate()

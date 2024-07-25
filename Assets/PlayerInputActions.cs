@@ -125,6 +125,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""StormlightInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""415e215b-ce23-4f76-84cd-4d8c4fc74651"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -446,6 +455,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""RollRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c87dedf9-493c-4543-90ae-d700dfc3df0c"",
+                    ""path"": ""<Keyboard>/capsLock"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StormlightInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -554,6 +574,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ChangeDirectionLash = m_Player.FindAction("ChangeDirectionLash", throwIfNotFound: true);
         m_Player_RollLeft = m_Player.FindAction("RollLeft", throwIfNotFound: true);
         m_Player_RollRight = m_Player.FindAction("RollRight", throwIfNotFound: true);
+        m_Player_StormlightInput = m_Player.FindAction("StormlightInput", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -629,6 +650,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ChangeDirectionLash;
     private readonly InputAction m_Player_RollLeft;
     private readonly InputAction m_Player_RollRight;
+    private readonly InputAction m_Player_StormlightInput;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -644,6 +666,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ChangeDirectionLash => m_Wrapper.m_Player_ChangeDirectionLash;
         public InputAction @RollLeft => m_Wrapper.m_Player_RollLeft;
         public InputAction @RollRight => m_Wrapper.m_Player_RollRight;
+        public InputAction @StormlightInput => m_Wrapper.m_Player_StormlightInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -686,6 +709,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RollRight.started += instance.OnRollRight;
             @RollRight.performed += instance.OnRollRight;
             @RollRight.canceled += instance.OnRollRight;
+            @StormlightInput.started += instance.OnStormlightInput;
+            @StormlightInput.performed += instance.OnStormlightInput;
+            @StormlightInput.canceled += instance.OnStormlightInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -723,6 +749,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RollRight.started -= instance.OnRollRight;
             @RollRight.performed -= instance.OnRollRight;
             @RollRight.canceled -= instance.OnRollRight;
+            @StormlightInput.started -= instance.OnStormlightInput;
+            @StormlightInput.performed -= instance.OnStormlightInput;
+            @StormlightInput.canceled -= instance.OnStormlightInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -844,6 +873,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnChangeDirectionLash(InputAction.CallbackContext context);
         void OnRollLeft(InputAction.CallbackContext context);
         void OnRollRight(InputAction.CallbackContext context);
+        void OnStormlightInput(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

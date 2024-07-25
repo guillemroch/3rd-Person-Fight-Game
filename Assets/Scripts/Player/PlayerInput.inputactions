@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "StormlightInput",
+                    "type": "Button",
+                    "id": "415e215b-ce23-4f76-84cd-4d8c4fc74651",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -422,6 +431,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RollRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c87dedf9-493c-4543-90ae-d700dfc3df0c",
+                    "path": "<Keyboard>/capsLock",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StormlightInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

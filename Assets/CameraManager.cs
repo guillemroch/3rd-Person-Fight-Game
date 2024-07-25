@@ -62,9 +62,9 @@ public class CameraManager : MonoBehaviour
     
     [Header("Limits")]
     [SerializeField]
-    private float minimumPitchAngle = -35;
+    private float _minimumPitchAngle = -35;
     [SerializeField]
-    private float maximumPitchAngle = 35;
+    private float _maximumPitchAngle = 35;
 
     
     [SerializeField] private  CameraMode _cameraMode = CameraMode.Normal;
@@ -150,8 +150,9 @@ public class CameraManager : MonoBehaviour
         yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraYawSpeed), _camLookSmoothTime * Time.deltaTime);
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
         pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraPitchSpeed), _camLookSmoothTime * Time.deltaTime);
+        //Limit pitch angle
+        pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
         Vector3 rotation = Vector3.zero;
-        
         
         //2 - Apply yaw rotation to transform + Up Vector Correction
         rotation.y = yawAngle;
@@ -176,12 +177,12 @@ public class CameraManager : MonoBehaviour
         pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraHalflashPitchSpeed), _camLookSmoothTime * Time.deltaTime);
 
         rotation = Vector3.zero;
-        rotation.y = yawAngle; //TODO: Change this so that it applies with the current gravity direction. 
+        rotation.y = yawAngle; 
         targetRotation = Quaternion.Euler(rotation);
         transform.rotation = targetRotation;
 
         rotation = Vector3.zero;
-        rotation.x = pitchAngle; //TODO: Change this so that it applies with the current gravity direction. 
+        rotation.x = pitchAngle; 
         targetRotation = Quaternion.Euler(rotation);
         _cameraPivot.localRotation = targetRotation;
     }

@@ -32,6 +32,7 @@ namespace Player.StateMachine.States.Lash{
             HandleGroundDetection();
             HandleGravity();
             CheckSwitchStates();
+            
         
         }
 
@@ -77,36 +78,36 @@ namespace Player.StateMachine.States.Lash{
         public override void InitializeSubState() {
         }
     
+     
+        #endregion
+    
+        #region private Methods
+
         private void HandleMovement() {
-        
             //TODO: Write a proper dive state
             //The player rotates the gravity direction it is falling towards ==== PLANE-LIKE MOVEMENT ===========
             // Disabled
             /* // Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
                         // //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
-                            
+
             Ctx.MoveDirection.Normalize();
-            
+
             Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
-            
+
             Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
             //=======================================================================================================
-        
+
             //TODO: Add proper animations to this
             //Diving system
-            Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y + Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
+            Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y +
+                                Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
-            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 15f;
+            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f;
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
-        
         }
     
-        #endregion
-    
-        #region private Methods
-
         private void HandleRotation() {
-        
+            
             //Rotate to face towards the gravity direction
             if (Ctx.GravityDirection == Vector3.zero) 
                 Ctx.GravityDirection = Ctx.PlayerTransform.up;
@@ -115,9 +116,8 @@ namespace Player.StateMachine.States.Lash{
                 Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection.normalized);
                 float rollAmount = Ctx.RollSpeed * Ctx.InputManager.RollInput;
                 Quaternion rollRotation = Quaternion.AngleAxis(rollAmount, Ctx.PlayerTransform.up);
-                Ctx.PlayerTransform.rotation = Quaternion.Lerp(Ctx.transform.rotation,  targetRotation * rollRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+                Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation * rollRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
             }
-            
         }
 
         private void HandleGroundDetection() {
