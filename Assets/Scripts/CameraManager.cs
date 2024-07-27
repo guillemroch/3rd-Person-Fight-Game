@@ -260,12 +260,12 @@ public class CameraManager : MonoBehaviour
 
     public void SetCameraMode(CameraMode cameraMode) {
         _cameraMode = cameraMode;
-
+        
         if (cameraMode == CameraMode.Lash) {
-            _camera.fieldOfView = _lashFOV;
+            //_camera.fieldOfView = _lashFOV;
         }
         else {
-            _camera.fieldOfView = _normalFOV;
+            //_camera.fieldOfView = _normalFOV;
         }
     }
 

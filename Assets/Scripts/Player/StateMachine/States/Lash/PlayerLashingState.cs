@@ -10,8 +10,6 @@ namespace Player.StateMachine.States.Lash{
         public override void EnterState() { }
 
         public override void UpdateState() {
-            //TODO: add stamina
-            HandleStamina();
         }
 
         public override void FixedUpdateState() { }
@@ -28,17 +26,6 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lash());
             }
-
-            if (Ctx.Stormlight <= 0) {
-                SwitchStates(Factory.Grounded());
-            }
-        }
-
-        private void HandleStamina() {
-            Ctx.Stormlight -= Ctx.StormlightDepletionRate;
-            if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
-            
-            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);
         }
     }
 }

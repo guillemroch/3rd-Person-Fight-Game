@@ -25,7 +25,6 @@ public class UISliderBar : MonoBehaviour{
     {
         if (_sliderComponent.value != _value) {
             _sliderComponent.value = Mathf.Lerp(_sliderComponent.value, _value, _lerpSpeed);
-            Debug.Log(Time.deltaTime);
         }
     }
 

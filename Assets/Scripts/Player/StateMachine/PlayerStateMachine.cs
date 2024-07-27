@@ -76,8 +76,9 @@ namespace Player.StateMachine{
         [SerializeField] private float _runningSpeed = 6f;
         [SerializeField] private float _sprintingSpeed = 8f;
         [SerializeField] private float _rotationSpeed = 15;
-    
-        [Header("Stormlight")]
+
+        [Header("Stormlight")] 
+        [SerializeField] private bool _isUsingStormlight = false; 
         [SerializeField] private float _stormlight = 100;
         [SerializeField] private float _stormlightRegenRate = 1;
         [SerializeField] private float _stormlightDepletionRate = 0.1f;
@@ -152,6 +153,7 @@ namespace Player.StateMachine{
         public float TimeElapsed { get => timeElapsed; set => timeElapsed = value; }
         public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
         public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
+        public bool IsUsingStormlight { get => _isUsingStormlight; set => _isUsingStormlight = value; }
 
         #endregion
     
@@ -159,7 +161,7 @@ namespace Player.StateMachine{
         {   
             //Setup state
             _states = new PlayerStateFactory(this);
-            _currentState = _states.Grounded();
+            _currentState = _states.Normal();
             _currentState.EnterState();
         
             //Get references
@@ -168,7 +170,6 @@ namespace Player.StateMachine{
             _inputManager = GetComponent<InputManager>();
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
-            _cameraManager = Camera.main!.GetComponent<CameraManager>();
             _uiManager = FindObjectOfType<UIManager>();
         }
         

@@ -1,6 +1,8 @@
 using Player.StateMachine.States.Air;
 using Player.StateMachine.States.Ground;
 using Player.StateMachine.States.Lash;
+using Player.StateMachine.States.Normal;
+using Player.StateMachine.States.Stormlight;
 
 namespace Player.StateMachine{
     public class PlayerStateFactory
@@ -11,6 +13,14 @@ namespace Player.StateMachine{
             _context = currentContext;
         }
     
+        //Root States
+        public PlayerBaseState Normal() {
+            return new PlayerNormalState(_context, this);
+        }
+
+        public PlayerBaseState Stormlight() {
+            return new PlayerStormlightState(_context, this);
+        }
         //Ground States
         public PlayerBaseState Grounded() {
             return new PlayerGroundedState(_context,this);

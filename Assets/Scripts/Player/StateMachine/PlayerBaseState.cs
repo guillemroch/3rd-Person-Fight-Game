@@ -12,7 +12,7 @@ namespace Player.StateMachine{
         [SerializeField]
         public string name;
         public PlayerBaseState _currentSuperState;
-        private PlayerBaseState _currentSubState;
+        public PlayerBaseState _currentSubState;
     
         //Getters and Setters
         protected PlayerStateMachine Ctx { get { return _ctx; } }
@@ -37,6 +37,10 @@ namespace Player.StateMachine{
         public void UpdateStates() {
             UpdateState();
             _currentSubState?.UpdateStates();
+
+            if (_isRootState) {
+                Debug.Log("States: [" + _currentSuperState?.name + "] ||=> [" + name + "] ||=> [" + _currentSubState?.name +  "] ||=> [" + _currentSubState?._currentSubState?.name + "]");
+            }
         }
         
         public void ExitStates() {
@@ -46,33 +50,41 @@ namespace Player.StateMachine{
 
         protected void SwitchStates(PlayerBaseState newState) {
 
-            if (newState.IsRootState) {
-                
-                ExitState();
-                
-                if (_currentSubState != null) {
-                    _currentSubState.ExitStates();
+            if (newState.IsRootState) {//Middle and Upper layers
+
+                if (_currentSuperState != null) {//Case for Middle Layers
+                    ExitState();
+
+                    if (_currentSubState != null) {
+                        _currentSubState.ExitStates();
+                    }
+
+                    //newState.EnterState();
+                    SetSubStates(newState);
+                    //switch current state of context
+                    //Ctx.CurrentState = newState;
+                    Debug.Log("<color=orange>[MID]: " + _currentSuperState?.name + "||=>" + name + "||=>" + _currentSubState?.name + "</color>");
                 }
+                else {//Case for First Layer
+                    Ctx.CurrentState = newState;
+                    newState.EnterState();
+                    Debug.Log("<color=red>[ROOT]: " +  name + "||=>" + _currentSubState?.name + "||=>" + _currentSubState?.CurrentSubState?.name + "</color>");
+                }
+
+            }else {//Just for lower layers
                 
-                newState.EnterState();
+                if (_currentSuperState != null) {//Change the state of the super state 
+                    
+                    //switch current sub state of super state
+                    _currentSuperState.SetSubStates(newState);
+                    Debug.Log("<color=green>[SUB]: " + _currentSuperState?.CurrentSuperState?.name + "||=>" + _currentSuperState?.name + "||=>" + _currentSubState?.name+ "</color>");
                 
-                //Debug.Log("<color=orange>[ROOT]: " + newState.GetType() + "</color>");
-                //switch current state of context
-                Ctx.CurrentState = newState;
-                
-            }else {
-                if (_currentSuperState != null) {
-                //switch current sub state of super state
-                //Debug.Log("<color=green>[SUB]: " + newState.GetType() + "</color>");
-                _currentSuperState.SetSubStates(newState);
                 } else if (_isRootState) {
                     //switch current state of context
                     SetSubStates(newState);
-                    //Debug.Log("<color=yellow>[SUB]: " + newState.GetType() + "</color>");
+                    Debug.Log("<color=yellow>[SUB]: " +_currentSuperState?. name + "||=>" + name + "||=>" + _currentSubState?.name  + "</color>");
                 }
-                
             }
-        
         }
 
         protected void SetSuperState(PlayerBaseState newSuperState) {

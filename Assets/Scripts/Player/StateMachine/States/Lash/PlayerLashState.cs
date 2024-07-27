@@ -8,7 +8,7 @@ namespace Player.StateMachine.States.Lash{
     {
         
         #region State methods
-        public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash[Root]") { }
+        public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash]") { }
         public override void EnterState() {
             Ctx.InAirTimer = 0;
             Ctx.isGrounded = false;

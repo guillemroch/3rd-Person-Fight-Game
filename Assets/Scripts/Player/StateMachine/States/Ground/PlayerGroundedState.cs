@@ -29,7 +29,11 @@ namespace Player.StateMachine.States.Ground{
         public override void CheckSwitchStates() {
             if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
                 SwitchStates(Factory.Air());
-            } 
+            }
+
+            if (!Ctx.IsUsingStormlight) {
+                return;
+            }
             if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
                 SwitchStates(Factory.Lashing());
             }
