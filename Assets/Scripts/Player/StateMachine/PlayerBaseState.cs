@@ -9,8 +9,7 @@ namespace Player.StateMachine{
         private bool _isRootState;
         private PlayerStateMachine _ctx;
         private PlayerStateFactory _factory;
-        [SerializeField]
-        public string name;
+        [SerializeField] public string name;
         public PlayerBaseState _currentSuperState;
         public PlayerBaseState _currentSubState;
     
@@ -39,7 +38,7 @@ namespace Player.StateMachine{
             _currentSubState?.UpdateStates();
 
             if (_isRootState) {
-                Debug.Log("States: [" + _currentSuperState?.name + "] ||=> [" + name + "] ||=> [" + _currentSubState?.name +  "] ||=> [" + _currentSubState?._currentSubState?.name + "]");
+                //Debug.Log("States: [" + _currentSuperState?.name + "] ||=> [" + name + "] ||=> [" + _currentSubState?.name +  "] ||=> [" + _currentSubState?._currentSubState?.name + "]");
             }
         }
         
@@ -50,40 +49,18 @@ namespace Player.StateMachine{
 
         protected void SwitchStates(PlayerBaseState newState) {
 
-            if (newState.IsRootState) {//Middle and Upper layers
+            if (CurrentSuperState == null && newState.IsRootState) {
+               ExitStates();
+               Ctx.CurrentState = newState;
+               Ctx.CurrentState.EnterState();
 
-                if (_currentSuperState != null) {//Case for Middle Layers
-                    ExitState();
-
-                    if (_currentSubState != null) {
-                        _currentSubState.ExitStates();
-                    }
-
-                    //newState.EnterState();
-                    SetSubStates(newState);
-                    //switch current state of context
-                    //Ctx.CurrentState = newState;
-                    Debug.Log("<color=orange>[MID]: " + _currentSuperState?.name + "||=>" + name + "||=>" + _currentSubState?.name + "</color>");
-                }
-                else {//Case for First Layer
-                    Ctx.CurrentState = newState;
-                    newState.EnterState();
-                    Debug.Log("<color=red>[ROOT]: " +  name + "||=>" + _currentSubState?.name + "||=>" + _currentSubState?.CurrentSubState?.name + "</color>");
-                }
-
-            }else {//Just for lower layers
-                
-                if (_currentSuperState != null) {//Change the state of the super state 
-                    
-                    //switch current sub state of super state
-                    _currentSuperState.SetSubStates(newState);
-                    Debug.Log("<color=green>[SUB]: " + _currentSuperState?.CurrentSuperState?.name + "||=>" + _currentSuperState?.name + "||=>" + _currentSubState?.name+ "</color>");
-                
-                } else if (_isRootState) {
-                    //switch current state of context
-                    SetSubStates(newState);
-                    Debug.Log("<color=yellow>[SUB]: " +_currentSuperState?. name + "||=>" + name + "||=>" + _currentSubState?.name  + "</color>");
-                }
+            }else if (newState.IsRootState) {
+               Ctx.CurrentState.SetSubStates(newState); 
+            }else if (!IsRootState) {
+                CurrentSuperState.SetSubStates(newState);
+            }
+            else {
+                Debug.LogWarning("Somethings went wrong: " + this);
             }
         }
 

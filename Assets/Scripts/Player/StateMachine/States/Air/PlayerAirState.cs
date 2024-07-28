@@ -31,10 +31,10 @@ namespace Player.StateMachine.States.Air{
 
         public override void InitializeSubState() {
             if (Ctx.InputManager.IsJumpPressed) {
-                SwitchStates(Factory.Jump());
+                SetSubStates(Factory.Jump());
             }
             else {
-                SwitchStates(Factory.Fall());
+                SetSubStates(Factory.Fall());
             }
         }
         

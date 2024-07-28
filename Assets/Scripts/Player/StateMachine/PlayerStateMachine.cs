@@ -176,6 +176,7 @@ namespace Player.StateMachine{
         public void HandleAllStates()
         {
             _currentState.UpdateStates();
+            Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] ");
         }
 
         public void OnDrawGizmos() {

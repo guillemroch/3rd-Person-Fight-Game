@@ -4,7 +4,7 @@ namespace Player.StateMachine.States.Stormlight{
     public class PlayerStormlightState : PlayerBaseState {
     
         public PlayerStormlightState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory, "Normal") {
+            : base(currentCtx, stateFactory, "Stormlight") {
             IsRootState = true; 
             InitializeSubState();
         }
@@ -32,7 +32,7 @@ namespace Player.StateMachine.States.Stormlight{
         }
 
         public override void InitializeSubState() {
-            SwitchStates(Factory.Grounded());
+            SetSubStates(Factory.Grounded());
         }
         private void HandleStamina() {
             Ctx.Stormlight -= Ctx.StormlightDepletionRate;

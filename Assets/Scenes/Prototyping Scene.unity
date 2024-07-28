@@ -9260,6 +9260,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _stormlight
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: _rollLerpSpeed
       value: 0.9
       objectReference: {fileID: 0}

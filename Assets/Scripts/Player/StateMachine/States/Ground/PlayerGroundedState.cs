@@ -42,16 +42,16 @@ namespace Player.StateMachine.States.Ground{
         public override void InitializeSubState() {
         
             if (Ctx.InputManager.MovementInput == Vector2.zero) {
-                SwitchStates(Factory.Idle());
+                SetSubStates(Factory.Idle());
             }else if (!Ctx.InputManager.IsSprintPressed) {
                 if (Ctx.InputManager.MoveAmount <= 0.5f) {
 
-                    SwitchStates(Factory.Walk());
+                    SetSubStates(Factory.Walk());
                 }else {
-                    SwitchStates(Factory.Run());
+                    SetSubStates(Factory.Run());
                 }
             }else {
-                SwitchStates(Factory.Sprint());
+                SetSubStates(Factory.Sprint());
             }
         }
 

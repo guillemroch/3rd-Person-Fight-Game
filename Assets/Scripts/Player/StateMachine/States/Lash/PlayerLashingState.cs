@@ -20,11 +20,11 @@ namespace Player.StateMachine.States.Lash{
 
         public override void InitializeSubState() {
             if (Ctx.InputManager.LashInput ) {
-                SwitchStates(Factory.Halflash());
+                SetSubStates(Factory.Halflash());
             }
 
             if (Ctx.InputManager.SmallLashInput > 0) {
-                SwitchStates(Factory.Lash());
+                SetSubStates(Factory.Lash());
             }
         }
     }
