@@ -12,6 +12,7 @@ namespace Player.StateMachine.States.Normal{
         }
 
         public override void UpdateState() {
+            HandleInteraction();
             CheckSwitchStates();
         }
 
@@ -28,6 +29,17 @@ namespace Player.StateMachine.States.Normal{
 
         public override void InitializeSubState() {
             SetSubStates(Factory.Grounded());
+        }
+
+        private void HandleInteraction() {
+            Collider[] colliders = Physics.OverlapSphere(Ctx.PlayerTransform.position, Ctx.MaxInteractionDistance, Ctx.InteractionLayer);
+
+            foreach (var collider in colliders) {
+                if (collider.gameObject.TryGetComponent(out Pickable interactableObject)) {
+                    interactableObject.Interact(out int stormlight);
+                    Ctx.Stormlight += stormlight;
+                }
+            }
         }
 
        

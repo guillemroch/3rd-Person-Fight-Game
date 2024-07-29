@@ -217,11 +217,11 @@ namespace UnityEngine.Splines{
             CreateMeshAsset();
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos() {       
 
             SplineSampler.SampleSplineInterval(spline, transform, extrusionInterval,
                 out Vector3[] positions, out Vector3[] tangents, out Vector3[] upVectors);
-
             Handles.matrix = transform.localToWorldMatrix;
             for (int i = 1; i < positions.Length; i++) {
                 Handles.color = Color.yellow;
@@ -239,5 +239,6 @@ namespace UnityEngine.Splines{
                 Handles.ArrowHandleCap(0,positions[i],Quaternion.LookRotation(right,Vector3.up), 5f, EventType.Repaint);
             }
         }
+#endif
     }
 }

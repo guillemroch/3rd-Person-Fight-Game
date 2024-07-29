@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InfuseInput",
+                    "type": "Value",
+                    "id": "121bf69c-363e-41fe-97ca-046a1bf8f613",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -442,6 +451,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "StormlightInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc369671-2b69-411f-aac9-01a439fc20a0",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InfuseInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

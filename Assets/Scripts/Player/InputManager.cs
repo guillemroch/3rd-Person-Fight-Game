@@ -20,6 +20,7 @@ namespace Player{
         [SerializeField] [ReadOnly] private float _rollInput;
         
         [SerializeField] [ReadOnly] private bool _stormlightInput;
+        [SerializeField] [ReadOnly] private bool _infuseInput;
         
         // getters and setters
         public Vector2 LookInput { get => _lookInput; set => _lookInput = value; }
@@ -33,7 +34,7 @@ namespace Player{
         public float SmallUnLashInput { get => _smallUnLashInput; set => _smallUnLashInput = value; }
         public float RollInput { get => _rollInput; set => _rollInput = value; }
         public bool StormlightInput { get => _stormlightInput; set => _stormlightInput = value; }
-
+        public bool InfuseInput { get => _infuseInput; set => _infuseInput = value; }
 
         private void Awake()
         {
@@ -76,7 +77,9 @@ namespace Player{
 
                 _playerInputs.Player.StormlightInput.performed += i => _stormlightInput = true;
                 _playerInputs.Player.StormlightInput.canceled += i => _stormlightInput = false;
-
+                
+                _playerInputs.Player.InfuseInput.performed += i => _infuseInput = true;
+                _playerInputs.Player.InfuseInput.canceled += i => _infuseInput = false;
             }
         
             _playerInputs.Enable();

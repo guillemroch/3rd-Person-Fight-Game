@@ -134,6 +134,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InfuseInput"",
+                    ""type"": ""Value"",
+                    ""id"": ""121bf69c-363e-41fe-97ca-046a1bf8f613"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -466,6 +475,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""StormlightInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc369671-2b69-411f-aac9-01a439fc20a0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InfuseInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -575,6 +595,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_RollLeft = m_Player.FindAction("RollLeft", throwIfNotFound: true);
         m_Player_RollRight = m_Player.FindAction("RollRight", throwIfNotFound: true);
         m_Player_StormlightInput = m_Player.FindAction("StormlightInput", throwIfNotFound: true);
+        m_Player_InfuseInput = m_Player.FindAction("InfuseInput", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -651,6 +672,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RollLeft;
     private readonly InputAction m_Player_RollRight;
     private readonly InputAction m_Player_StormlightInput;
+    private readonly InputAction m_Player_InfuseInput;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -667,6 +689,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @RollLeft => m_Wrapper.m_Player_RollLeft;
         public InputAction @RollRight => m_Wrapper.m_Player_RollRight;
         public InputAction @StormlightInput => m_Wrapper.m_Player_StormlightInput;
+        public InputAction @InfuseInput => m_Wrapper.m_Player_InfuseInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -712,6 +735,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @StormlightInput.started += instance.OnStormlightInput;
             @StormlightInput.performed += instance.OnStormlightInput;
             @StormlightInput.canceled += instance.OnStormlightInput;
+            @InfuseInput.started += instance.OnInfuseInput;
+            @InfuseInput.performed += instance.OnInfuseInput;
+            @InfuseInput.canceled += instance.OnInfuseInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -752,6 +778,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @StormlightInput.started -= instance.OnStormlightInput;
             @StormlightInput.performed -= instance.OnStormlightInput;
             @StormlightInput.canceled -= instance.OnStormlightInput;
+            @InfuseInput.started -= instance.OnInfuseInput;
+            @InfuseInput.performed -= instance.OnInfuseInput;
+            @InfuseInput.canceled -= instance.OnInfuseInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -874,6 +903,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRollLeft(InputAction.CallbackContext context);
         void OnRollRight(InputAction.CallbackContext context);
         void OnStormlightInput(InputAction.CallbackContext context);
+        void OnInfuseInput(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

@@ -86,6 +86,15 @@ namespace Player.StateMachine{
         //Jump
         [Header("Jump Speeds")] 
         [SerializeField] private float _jumpHeight = 3;
+        
+        //Interaction
+        [Header("Interactions")] 
+        [SerializeField] private float _maxInteractionDistance = 2f;
+        [SerializeField] private LayerMask _interactionLayer;
+        [SerializeField] private Infusable _infusableSelectedObject;
+        [SerializeField] private bool _isInfusing;
+        
+        
 
         //References
         [Header("References")] 
@@ -97,7 +106,8 @@ namespace Player.StateMachine{
         [SerializeField] private Transform _playerTransform;
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private UIManager _uiManager;
-    
+        [SerializeField] private TrailRenderer _particleSystem;
+        
         //State variables
         [SerializeField] public PlayerStateFactory _states;
         [SerializeField] public PlayerBaseState _currentState;
@@ -154,6 +164,17 @@ namespace Player.StateMachine{
         public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
         public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
         public bool IsUsingStormlight { get => _isUsingStormlight; set => _isUsingStormlight = value; }
+        public TrailRenderer ParticleSystem { get => _particleSystem; set => _particleSystem = value; }
+        public float MaxInteractionDistance { get => _maxInteractionDistance; set => _maxInteractionDistance = value; }
+        public LayerMask InteractionLayer { get => _interactionLayer; set => _interactionLayer = value; }
+
+        public Infusable InfusableSelectedObject
+            {
+            get => _infusableSelectedObject;
+            set => _infusableSelectedObject = value;
+            }
+
+        public bool IsInfusing { get => _isInfusing; set => _isInfusing = value; }
 
         #endregion
     
@@ -171,12 +192,13 @@ namespace Player.StateMachine{
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
             _uiManager = FindObjectOfType<UIManager>();
+            _particleSystem = GetComponent<TrailRenderer>();
         }
         
         public void HandleAllStates()
         {
             _currentState.UpdateStates();
-            Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] ");
+            //Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] ");
         }
 
         public void OnDrawGizmos() {

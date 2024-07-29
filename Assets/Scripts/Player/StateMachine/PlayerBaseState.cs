@@ -14,10 +14,10 @@ namespace Player.StateMachine{
         public PlayerBaseState _currentSubState;
     
         //Getters and Setters
-        protected PlayerStateMachine Ctx { get { return _ctx; } }
-        protected PlayerStateFactory Factory { get { return _factory; }}
-        protected bool IsRootState { get { return _isRootState; } set => _isRootState = value; }
-        protected PlayerBaseState CurrentSubState { get => _currentSubState; } 
+        protected PlayerStateMachine Ctx => _ctx;
+        protected PlayerStateFactory Factory => _factory;
+        protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
+        protected PlayerBaseState CurrentSubState => _currentSubState;
         protected PlayerBaseState CurrentSuperState { get => _currentSuperState; } 
 
         public PlayerBaseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory, string name) {
@@ -36,10 +36,6 @@ namespace Player.StateMachine{
         public void UpdateStates() {
             UpdateState();
             _currentSubState?.UpdateStates();
-
-            if (_isRootState) {
-                //Debug.Log("States: [" + _currentSuperState?.name + "] ||=> [" + name + "] ||=> [" + _currentSubState?.name +  "] ||=> [" + _currentSubState?._currentSubState?.name + "]");
-            }
         }
         
         public void ExitStates() {
