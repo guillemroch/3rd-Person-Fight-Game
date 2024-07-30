@@ -147,11 +147,12 @@ public class CameraManager : MonoBehaviour
     private void RotateCamera()
     {
         //1- Calculate user input
-        yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraYawSpeed), _camLookSmoothTime * Time.deltaTime);
+        //yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraYawSpeed), _camLookSmoothTime * Time.deltaTime);
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
-        pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraPitchSpeed), _camLookSmoothTime * Time.deltaTime);
+        //pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraPitchSpeed), _camLookSmoothTime * Time.deltaTime);
+        pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
         //Limit pitch angle
-        pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
+        //pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
         Vector3 rotation = Vector3.zero;
         
         //2 - Apply yaw rotation to transform + Up Vector Correction
@@ -164,28 +165,30 @@ public class CameraManager : MonoBehaviour
         rotation = Vector3.zero;
         rotation.x = pitchAngle;
         targetRotation = quaternion.Euler(rotation);
-        _cameraPivot.localRotation = targetRotation;
+        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, 0.7f*Time.deltaTime);
         
     }
     private void RotateCameraHalfLash()
     {
         
-        Vector3 rotation;
-        Quaternion targetRotation;
+        Vector3 rotation = Vector3.zero;
         
         yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraHalflashYawSpeed), _camLookSmoothTime * Time.deltaTime);
+        yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
+        //pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraHalflashPitchSpeed), _camLookSmoothTime * Time.deltaTime);
 
-        pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraHalflashPitchSpeed), _camLookSmoothTime * Time.deltaTime);
+        pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
+        //pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
+        rotation.y = yawAngle;
+        Quaternion targetRotation = Quaternion.Euler(rotation);
+        Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
 
-        rotation = Vector3.zero;
-        rotation.y = yawAngle; 
-        targetRotation = Quaternion.Euler(rotation);
-        transform.rotation = targetRotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, 0.9f);
 
         rotation = Vector3.zero;
         rotation.x = pitchAngle; 
-        targetRotation = Quaternion.Euler(rotation);
-        _cameraPivot.localRotation = targetRotation;
+        targetRotation = quaternion.Euler(rotation);
+        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, 0.7f*Time.deltaTime);
     }
     private void RotateCameraLash() {
         //The player controls the camera Yaw and pitch, the Roll is automatically done
