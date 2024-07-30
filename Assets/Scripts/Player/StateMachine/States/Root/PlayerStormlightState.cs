@@ -53,6 +53,7 @@ namespace Player.StateMachine.States.Stormlight{
                 if (collider.gameObject.TryGetComponent(out Pickable interactableObject)) {
                     interactableObject.Interact(out int stormlight);
                     Ctx.Stormlight += stormlight;
+                    break;
                 }
                 collider.gameObject.TryGetComponent(out infusableObject);
             }

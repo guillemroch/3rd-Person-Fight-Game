@@ -12,7 +12,9 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private Vector3 _gravityDirection = Vector3.down;
     [SerializeField] private bool _active = false;
     [SerializeField] private float _outlineMaterialWidth = 1.1f;
-    [SerializeField] private MeshRenderer _meshRenderer; 
+    [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private float _smoothTime = 50f;
+    [SerializeField] private float _maxSpeed = 20f;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     public void Start() {
@@ -39,8 +41,9 @@ public class Infusable : MonoBehaviour , Interactable{
         
         
         if (_active) {
-            transform.position = _playerTransform.position + _playerTransform.forward * 3f + _playerTransform.up * 2f;
-            Vector3.SmoothDamp()
+            Vector3 offset =  _playerTransform.forward * (1.5f * _distance) + _playerTransform.up * _distance;
+            Vector3 velocity = _rigidbody.velocity;
+            transform.position = Vector3.SmoothDamp(transform.position, _playerTransform.position + offset, ref velocity, _smoothTime);
             _gravityDirection = Vector3.down * 10;
             _meshRenderer.sharedMaterials[0].SetFloat("_Width", _outlineMaterialWidth);
         }
