@@ -4,6 +4,5 @@ using UnityEngine;
 
 interface Interactable{
     public void Interact(out int value);
-
-    public void Overlay();
+    
 }

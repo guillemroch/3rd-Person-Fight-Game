@@ -11,17 +11,18 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private Rigidbody _playerRigidbody;
     [SerializeField] private Vector3 _gravityDirection = Vector3.down;
     [SerializeField] private bool _active = false;
-    [SerializeField] private float _outlineMaterialWidth = 1.1f;
-    [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private GameObject _selectedOutline;
+    [SerializeField] private GameObject _inRangeOutline;
     [SerializeField] private float _smoothTime = 50f;
     [SerializeField] private float _maxSpeed = 20f;
+    [SerializeField] private Transform _cameraTransform;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     public void Start() {
         _rigidbody = GetComponent<Rigidbody>();
         _playerTransform = GameObject.FindWithTag("Player").transform;
         _playerRigidbody = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
+        _cameraTransform = Camera.main.transform;
     }
 
     public void Interact(out int value) {
@@ -30,30 +31,37 @@ public class Infusable : MonoBehaviour , Interactable{
         _gravityDirection = _playerRigidbody.velocity + Vector3.up*_rigidbody.mass;
     }
 
-    public void Release() {
+   public void Release() {
         
         Debug.Log("Released!");
         _active = false;
-        _gravityDirection = _playerTransform.forward * 10;
+        _gravityDirection = _cameraTransform.forward * 10;
     }
 
     public void Update() {
         
         
         if (_active) {
-            Vector3 offset =  _playerTransform.forward * (1.5f * _distance) + _playerTransform.up * _distance;
+            Vector3 offset = _playerTransform.up * _distance/2 + _cameraTransform.forward * _distance;
             Vector3 velocity = _rigidbody.velocity;
             transform.position = Vector3.SmoothDamp(transform.position, _playerTransform.position + offset, ref velocity, _smoothTime);
+            _rigidbody.velocity = velocity;
             _gravityDirection = Vector3.down * 10;
-            _meshRenderer.sharedMaterials[0].SetFloat("_Width", _outlineMaterialWidth);
+            _selectedOutline.SetActive(true);
+            _inRangeOutline.SetActive(false);
         }
         else {
+            _selectedOutline.SetActive(false);
             _rigidbody.AddForce(_gravityDirection);
-             _meshRenderer.sharedMaterials[0].SetFloat("_Width", 0 );
         }
     }
 
-    public void Overlay() {
+    public void ActivateOverlay() {
+        _inRangeOutline.SetActive(true);
+    }
+
+    public void DeactivateOverlay() {
+        _inRangeOutline.SetActive(false);
     }
 
     public void OnDrawGizmos() {
@@ -63,5 +71,15 @@ public class Infusable : MonoBehaviour , Interactable{
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, _gravityDirection);
 
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (!other.gameObject.CompareTag("Player")) return;
+        ActivateOverlay();
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (!other.gameObject.CompareTag("Player")) return;
+        DeactivateOverlay();
     }
 }

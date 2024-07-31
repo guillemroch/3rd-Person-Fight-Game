@@ -16,7 +16,8 @@ public class CameraManager : MonoBehaviour
     public enum CameraMode{
         Normal, 
         HalfLash, 
-        Lash
+        Lash,
+        Infusing
     }
     [Header("References")]
     [SerializeField]
@@ -116,6 +117,10 @@ public class CameraManager : MonoBehaviour
             FollowTargetLash();
             RotateCameraLash();
             HandleCameraCollisions();
+        }else if (_cameraMode == CameraMode.Infusing) {
+            FollowTargetLash();
+            RotateCameraLash();
+            HandleCameraCollisions();
         }
         else {
             Debug.LogError("No camera mode defined!");
@@ -151,8 +156,24 @@ public class CameraManager : MonoBehaviour
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
         //pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraPitchSpeed), _camLookSmoothTime * Time.deltaTime);
         pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
+        
+        
         //Limit pitch angle
         //TODO: LIMIT THE PITCH
+        float currentPitchAngle = _cameraPivot.localRotation.eulerAngles.x;
+        if (currentPitchAngle > 180f) currentPitchAngle -= 360f; // Convert to signed angle
+        //Debug.LogWarning(_cameraPivot.localRotation.eulerAngles.x + " -> " + currentPitchAngle);
+        if (pitchAngle <0) {
+            if (currentPitchAngle - pitchAngle > _maximumPitchAngle) {
+                pitchAngle = 0;
+            }
+        }
+        else {
+            if (currentPitchAngle + pitchAngle < _minimumPitchAngle) {
+                pitchAngle = 0;
+            }
+        } 
+        
         //pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
         Vector3 rotation = Vector3.zero;
         
@@ -176,10 +197,10 @@ public class CameraManager : MonoBehaviour
         
         yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraHalflashYawSpeed), _camLookSmoothTime * Time.deltaTime);
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
-        //pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraHalflashPitchSpeed), _camLookSmoothTime * Time.deltaTime);
 
         pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
-        //pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
+        
+
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
         Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);

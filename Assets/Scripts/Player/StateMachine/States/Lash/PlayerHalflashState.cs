@@ -81,7 +81,9 @@ namespace Player.StateMachine.States.Lash{
                     Ctx.GravityDirection = Vector3.down;
                     return;
                 }
+                //TODO: Fix this if think it is needed
                 Ctx.GravityDirection = closestPoint - Ctx.transform.position;
+                Ctx.GravityDirection = Vector3.down;
                 Debug.Log("Ground found: " + colliders[0].name + " | at point:  " + closestPoint + " which is closer from: " + Ctx.transform.position);
                 Debug.DrawRay(Ctx.transform.position, Ctx.GravityDirection * 10, Color.red, 10);
             }
