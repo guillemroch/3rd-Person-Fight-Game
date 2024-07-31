@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace Player.StateMachine.States.Normal{
-    public class PlayerNormalState : PlayerBaseState {
+namespace Player.StateMachine.States.Alive{
+    public class PlayerAliveState : PlayerBaseState {
     
-        public PlayerNormalState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory, "Normal") {
+        public PlayerAliveState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
+            : base(currentCtx, stateFactory, "Alive") {
             IsRootState = true;
             InitializeSubState();
         }
@@ -13,6 +13,7 @@ namespace Player.StateMachine.States.Normal{
 
         public override void UpdateState() {
             HandleInteraction();
+            HandleStormlight();
             CheckSwitchStates();
         }
 
@@ -22,8 +23,12 @@ namespace Player.StateMachine.States.Normal{
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.InputManager.StormlightInput ) {
-                SwitchStates(Factory.Stormlight());
+            //TODO: If health == 0 => die
+            /*if (Ctx.InputManager.StormlightInput ) {
+                //SwitchStates(Factory.Stormlight());
+            }*/
+            if (Ctx.InputManager.StormlightInput) {
+                Ctx.IsUsingStormlight = !Ctx.IsUsingStormlight;
             }
         }
 
@@ -40,6 +45,16 @@ namespace Player.StateMachine.States.Normal{
                     Ctx.Stormlight += stormlight;
                 }
             }
+        }
+        
+        private void HandleStormlight() {
+            if (!Ctx.IsUsingStormlight) 
+                return;
+            
+            Ctx.Stormlight -= Ctx.StormlightDepletionRate;
+            if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
+                     
+            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);
         }
 
        

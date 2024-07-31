@@ -32,7 +32,7 @@ namespace Player.StateMachine.States.Air{
                             return;
             }
             if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0)
-                SwitchStates(Factory.Lashing());
+                SwitchStates(Factory.Lashings());
         }
 
         public override void InitializeSubState() {

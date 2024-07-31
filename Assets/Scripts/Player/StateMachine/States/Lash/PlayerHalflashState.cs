@@ -6,7 +6,8 @@ namespace Player.StateMachine.States.Lash{
     //Sub State of the Lash States
     public class PlayerHalflashState : PlayerBaseState
     {
-        public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "PlayerHalflashState") { }
+        public PlayerHalflashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) :
+            base(currentCtx, stateFactory, "HalfLash") { }
         public override void EnterState() {
             Ctx.InputManager.ResetLashInput();
             Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash, true);
@@ -18,9 +19,7 @@ namespace Player.StateMachine.States.Lash{
                 //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
         
             Ctx.isGrounded = false;
-        
             Ctx.InAirTimer = 0;
-            
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);
         }
 
@@ -31,7 +30,6 @@ namespace Player.StateMachine.States.Lash{
             Vector2 lookInput = Ctx.InputManager.LookInput;
             //Ctx.transform.localRotation *= Quaternion.Euler(-lookInput.y * Ctx.RotationSpeed * 0.1f , 0 , -lookInput.x * Ctx.RotationSpeed * 0.1f);
         }
-
     
         public override void FixedUpdateState() {
         }

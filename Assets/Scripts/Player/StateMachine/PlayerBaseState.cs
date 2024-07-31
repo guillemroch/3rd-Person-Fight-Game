@@ -51,12 +51,9 @@ namespace Player.StateMachine{
                Ctx.CurrentState.EnterState();
 
             }else if (newState.IsRootState) {
-               Ctx.CurrentState.SetSubStates(newState); 
-            }else if (!IsRootState) {
-                CurrentSuperState.SetSubStates(newState);
-            }
-            else {
-                Debug.LogWarning("Somethings went wrong: " + this);
+                Ctx.CurrentState.SetSubStates(newState);
+            }else {
+                CurrentSuperState.SetSubStates(newState); 
             }
         }
 

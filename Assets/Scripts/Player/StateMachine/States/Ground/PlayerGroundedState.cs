@@ -7,7 +7,6 @@ namespace Player.StateMachine.States.Ground{
             : base(currentCtx, stateFactory, "Grounded") {
             IsRootState = true;
             InitializeSubState();
-        
         }
 
         public override void EnterState() {
@@ -31,27 +30,48 @@ namespace Player.StateMachine.States.Ground{
                 SwitchStates(Factory.Air());
             }
 
+            if (Ctx.InputManager.LightAttack) {
+                SetSubStates(Factory.Attacks());
+            }
+         
+            
             if (!Ctx.IsUsingStormlight) {
                 return;
             }
             if (Ctx.InputManager.LashInput || Ctx.InputManager.SmallLashInput > 0) {
-                SwitchStates(Factory.Lashing());
+                SwitchStates(Factory.Lashings());
+            }
+            if (Ctx.InputManager.InfuseInput && !Ctx.IsInfusing) {
+                SwitchStates(Factory.Infuse());
             }
         }
 
         public override void InitializeSubState() {
-        
-            if (Ctx.InputManager.MovementInput == Vector2.zero) {
-                SetSubStates(Factory.Idle());
-            }else if (!Ctx.InputManager.IsSprintPressed) {
-                if (Ctx.InputManager.MoveAmount <= 0.5f) {
 
-                    SetSubStates(Factory.Walk());
-                }else {
-                    SetSubStates(Factory.Run());
+            if (!Ctx.IsInfusing) {
+                if (Ctx.InputManager.MovementInput == Vector2.zero) {
+                    SetSubStates(Factory.Idle());
                 }
-            }else {
-                SetSubStates(Factory.Sprint());
+                else if (!Ctx.InputManager.IsSprintPressed) {
+                    if (Ctx.InputManager.MoveAmount <= 0.5f) {
+
+                        SetSubStates(Factory.Walk());
+                    }
+                    else {
+                        SetSubStates(Factory.Run());
+                    }
+                }
+                else {
+                    SetSubStates(Factory.Sprint());
+                }
+            }
+            else {
+                if (Ctx.InputManager.MovementInput == Vector2.zero) {
+                    SetSubStates(Factory.InteractIdleState());
+                }
+                else {
+                    SetSubStates(Factory.InteractWalk());
+                }
             }
         }
 
@@ -85,34 +105,67 @@ namespace Player.StateMachine.States.Ground{
             }
         }
     
-        private void HandleRotation()
-        {
+        private void HandleRotation() {
+            if (Ctx.IsInfusing)
+                HandleInteractingRotation();
+            else
+                HandleNormalRotation();
         
+          
+        
+        }
+
+        private void HandleNormalRotation() {
             Ctx.TargetDirection = Vector3.zero; //Resets target direction
-        
+                    
             //calculate orientation based on camera position
             Ctx.TargetDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y +
                                   Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
-        
+                    
             float moveDot = Vector3.Dot(Ctx.TargetDirection, Ctx.GravityDirection);
             float magSquared = Ctx.GravityDirection.sqrMagnitude;
-    
+                
             Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
             Ctx.TargetDirection += -projection;
             Ctx.TargetDirection.Normalize();
-        
+                    
             if (Ctx.TargetDirection == Vector3.zero)
                 Ctx.TargetDirection = Ctx.PlayerTransform.forward;
-            
+                        
             if (Ctx.GravityDirection == Vector3.zero)
                 Ctx.GravityDirection = Vector3.down;
-
+            
             Quaternion targetRotation = 
                 Quaternion.LookRotation(Ctx.TargetDirection, -Ctx.GravityDirection);
-
+            
             Ctx.transform.rotation = 
                 Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetRotation, Ctx.RotationSpeed * Time.deltaTime);
-        
+        }
+
+        private void HandleInteractingRotation() {
+              Ctx.TargetDirection = Vector3.zero; //Resets target direction
+                    
+              //calculate orientation based on camera position
+              Ctx.TargetDirection = Ctx.CameraObject.forward; 
+                    
+              float moveDot = Vector3.Dot(Ctx.TargetDirection, Ctx.GravityDirection);
+              float magSquared = Ctx.GravityDirection.sqrMagnitude;
+                
+              Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
+              Ctx.TargetDirection += -projection;
+              Ctx.TargetDirection.Normalize();
+                    
+              if (Ctx.TargetDirection == Vector3.zero)
+                  Ctx.TargetDirection = Ctx.PlayerTransform.forward;
+                        
+              if (Ctx.GravityDirection == Vector3.zero)
+                  Ctx.GravityDirection = Vector3.down;
+            
+              Quaternion targetRotation = 
+                  Quaternion.LookRotation(Ctx.TargetDirection, -Ctx.GravityDirection);
+            
+              Ctx.transform.rotation = 
+                  Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetRotation, Ctx.RotationSpeed * Time.deltaTime);
         }
 
         private void HandleGravity() {

@@ -19,6 +19,9 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
+            if (Ctx.InputManager.DashInput) {
+                SwitchStates(Factory.Dash());
+            }
             if (Ctx.InputManager.MovementInput == Vector2.zero) {
                 SwitchStates(Factory.Idle());
             }

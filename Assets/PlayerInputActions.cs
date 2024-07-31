@@ -110,18 +110,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RollLeft"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""df8272cd-a6e8-4aab-bb8c-f873a9688ba9"",
-                    ""expectedControlType"": ""Analog"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""RollRight"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""a198a32d-a366-4db0-ba22-f5a49a759cc2"",
-                    ""expectedControlType"": ""Analog"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -133,13 +133,58 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""InfuseInput"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""121bf69c-363e-41fe-97ca-046a1bf8f613"",
-                    ""expectedControlType"": ""Analog"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DashInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""e5d3d529-5d55-45fd-bc53-475bf1805576"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DiveInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdf1a2b7-d40d-4638-9b16-2647d540107d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LightAttackInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c991b2d-addb-4b08-9127-fde9e25bd88b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""HeavyAttackInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""8323caf9-0d71-4415-aa4c-8cba9d3a4150"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""BlockInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""138ebee6-c86c-406b-9bcb-4032eca9e205"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -486,6 +531,61 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""InfuseInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d119ffb9-8e9f-4a78-8be4-bb6a6b1f5a7c"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0be1bc4-d7a7-44a8-9d86-cf47e55c1199"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DiveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46efebef-71fe-43c6-9603-fdf21ecfd61b"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightAttackInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bcc6386-aab9-4655-a9c5-39252c84b225"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HeavyAttackInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7461ef01-d82e-49e5-9d41-5247cbba3d3f"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BlockInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -596,6 +696,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_RollRight = m_Player.FindAction("RollRight", throwIfNotFound: true);
         m_Player_StormlightInput = m_Player.FindAction("StormlightInput", throwIfNotFound: true);
         m_Player_InfuseInput = m_Player.FindAction("InfuseInput", throwIfNotFound: true);
+        m_Player_DashInput = m_Player.FindAction("DashInput", throwIfNotFound: true);
+        m_Player_DiveInput = m_Player.FindAction("DiveInput", throwIfNotFound: true);
+        m_Player_LightAttackInput = m_Player.FindAction("LightAttackInput", throwIfNotFound: true);
+        m_Player_HeavyAttackInput = m_Player.FindAction("HeavyAttackInput", throwIfNotFound: true);
+        m_Player_BlockInput = m_Player.FindAction("BlockInput", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -673,6 +778,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RollRight;
     private readonly InputAction m_Player_StormlightInput;
     private readonly InputAction m_Player_InfuseInput;
+    private readonly InputAction m_Player_DashInput;
+    private readonly InputAction m_Player_DiveInput;
+    private readonly InputAction m_Player_LightAttackInput;
+    private readonly InputAction m_Player_HeavyAttackInput;
+    private readonly InputAction m_Player_BlockInput;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -690,6 +800,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @RollRight => m_Wrapper.m_Player_RollRight;
         public InputAction @StormlightInput => m_Wrapper.m_Player_StormlightInput;
         public InputAction @InfuseInput => m_Wrapper.m_Player_InfuseInput;
+        public InputAction @DashInput => m_Wrapper.m_Player_DashInput;
+        public InputAction @DiveInput => m_Wrapper.m_Player_DiveInput;
+        public InputAction @LightAttackInput => m_Wrapper.m_Player_LightAttackInput;
+        public InputAction @HeavyAttackInput => m_Wrapper.m_Player_HeavyAttackInput;
+        public InputAction @BlockInput => m_Wrapper.m_Player_BlockInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -738,6 +853,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @InfuseInput.started += instance.OnInfuseInput;
             @InfuseInput.performed += instance.OnInfuseInput;
             @InfuseInput.canceled += instance.OnInfuseInput;
+            @DashInput.started += instance.OnDashInput;
+            @DashInput.performed += instance.OnDashInput;
+            @DashInput.canceled += instance.OnDashInput;
+            @DiveInput.started += instance.OnDiveInput;
+            @DiveInput.performed += instance.OnDiveInput;
+            @DiveInput.canceled += instance.OnDiveInput;
+            @LightAttackInput.started += instance.OnLightAttackInput;
+            @LightAttackInput.performed += instance.OnLightAttackInput;
+            @LightAttackInput.canceled += instance.OnLightAttackInput;
+            @HeavyAttackInput.started += instance.OnHeavyAttackInput;
+            @HeavyAttackInput.performed += instance.OnHeavyAttackInput;
+            @HeavyAttackInput.canceled += instance.OnHeavyAttackInput;
+            @BlockInput.started += instance.OnBlockInput;
+            @BlockInput.performed += instance.OnBlockInput;
+            @BlockInput.canceled += instance.OnBlockInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -781,6 +911,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @InfuseInput.started -= instance.OnInfuseInput;
             @InfuseInput.performed -= instance.OnInfuseInput;
             @InfuseInput.canceled -= instance.OnInfuseInput;
+            @DashInput.started -= instance.OnDashInput;
+            @DashInput.performed -= instance.OnDashInput;
+            @DashInput.canceled -= instance.OnDashInput;
+            @DiveInput.started -= instance.OnDiveInput;
+            @DiveInput.performed -= instance.OnDiveInput;
+            @DiveInput.canceled -= instance.OnDiveInput;
+            @LightAttackInput.started -= instance.OnLightAttackInput;
+            @LightAttackInput.performed -= instance.OnLightAttackInput;
+            @LightAttackInput.canceled -= instance.OnLightAttackInput;
+            @HeavyAttackInput.started -= instance.OnHeavyAttackInput;
+            @HeavyAttackInput.performed -= instance.OnHeavyAttackInput;
+            @HeavyAttackInput.canceled -= instance.OnHeavyAttackInput;
+            @BlockInput.started -= instance.OnBlockInput;
+            @BlockInput.performed -= instance.OnBlockInput;
+            @BlockInput.canceled -= instance.OnBlockInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -904,6 +1049,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRollRight(InputAction.CallbackContext context);
         void OnStormlightInput(InputAction.CallbackContext context);
         void OnInfuseInput(InputAction.CallbackContext context);
+        void OnDashInput(InputAction.CallbackContext context);
+        void OnDiveInput(InputAction.CallbackContext context);
+        void OnLightAttackInput(InputAction.CallbackContext context);
+        void OnHeavyAttackInput(InputAction.CallbackContext context);
+        void OnBlockInput(InputAction.CallbackContext context);
     }
     public interface INewactionmapActions
     {

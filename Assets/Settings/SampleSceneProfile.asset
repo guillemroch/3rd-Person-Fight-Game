@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   type:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 9
   intensity:
     m_OverrideState: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70afe9e12c7a7ed47911bb608a23a8ff, type: 3}
   m_Name: SplitToning
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   shadows:
     m_OverrideState: 1
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -365,16 +365,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.93544006, y: 0.9463088, z: 1, w: 0.056801155}
+    m_Value: {x: 1, y: 0.9765403, z: 0.99579626, w: 0.21876173}
   midtones:
-    m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.15246639}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: -0.03381614}
   highlights:
-    m_OverrideState: 1
-    m_Value: {x: 0.9809892, y: 0.90137166, z: 1, w: 0.044843044}
+    m_OverrideState: 0
+    m_Value: {x: 0.9809892, y: 0.90137166, z: 1, w: -0.20393023}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -402,10 +402,10 @@ MonoBehaviour:
   active: 0
   temperature:
     m_OverrideState: 1
-    m_Value: 33
+    m_Value: 10
   tint:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 34
 --- !u!114 &7460960295644228634
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -418,22 +418,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.41
   contrast:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 5
   colorFilter:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
-    m_OverrideState: 1
-    m_Value: 5
+    m_OverrideState: 0
+    m_Value: -43
   saturation:
     m_OverrideState: 1
-    m_Value: 33
+    m_Value: 2
 --- !u!114 &8662408670308675130
 MonoBehaviour:
   m_ObjectHideFlags: 3

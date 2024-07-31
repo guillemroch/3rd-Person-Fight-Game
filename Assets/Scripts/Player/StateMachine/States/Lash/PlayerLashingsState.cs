@@ -1,8 +1,8 @@
 namespace Player.StateMachine.States.Lash{
     //Root State of the Lash States
-    public class PlayerLashingState : PlayerBaseState{
-        public PlayerLashingState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx,
-            stateFactory, "Lashing") {
+    public class PlayerLashingsState : PlayerBaseState{
+        public PlayerLashingsState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx,
+            stateFactory, "Lashings") {
             IsRootState = true;
             InitializeSubState();
         }
@@ -24,7 +24,7 @@ namespace Player.StateMachine.States.Lash{
             }
 
             if (Ctx.InputManager.SmallLashInput > 0) {
-                SetSubStates(Factory.Lash());
+                SetSubStates(Factory.LashDive());
             }
         }
     }

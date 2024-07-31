@@ -68,6 +68,14 @@ namespace Player.StateMachine.States.Lash{
                 HandleSmallLash(PlayerStateMachine.LASHING_INTENSITY_SMALL_INCREMENT * -Ctx.InputManager.SmallUnLashInput);
                 Ctx.StartCoroutine(SmallLashCooldown(0.1f));
             }
+            
+            //DIVE
+            if (Ctx.InputManager.DiveInput) {
+                SwitchStates(Factory.LashDive());
+            }
+            if (Ctx.InputManager.DashInput) {
+                SwitchStates(Factory.LashDash());
+            }
         
             //HALFLASH
             if (Ctx.LashingIntensity <= 0) {

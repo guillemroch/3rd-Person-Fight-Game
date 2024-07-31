@@ -7,7 +7,6 @@ namespace Player.StateMachine.States.Air{
             : base(currentCtx, stateFactory, "Air") {
             IsRootState = true;
             InitializeSubState();
-
         }
         public override void EnterState() {
 

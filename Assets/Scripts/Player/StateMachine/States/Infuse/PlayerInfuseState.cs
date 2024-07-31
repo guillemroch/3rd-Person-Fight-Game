@@ -1,50 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Player.StateMachine.States.Stormlight{
-    public class PlayerStormlightState : PlayerBaseState {
-    
-        public PlayerStormlightState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory)
-            : base(currentCtx, stateFactory, "Stormlight") {
-            IsRootState = true; 
+namespace Player.StateMachine.States.Infuse{
+
+    public class PlayerInfuseState : PlayerBaseState{
+        public PlayerInfuseState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) :
+            base(currentCtx, stateFactory, "Infuse") {
+            IsRootState = true;
+        }
+        
+        public override void EnterState() {
+            Ctx.IsInfusing = true;
             InitializeSubState();
         }
 
-        public override void EnterState() {
-            Ctx.IsUsingStormlight = true;
-            Ctx.InputManager.ResetStormlightInput();
-            Ctx.ParticleSystem.enabled = true;
-        }
-
         public override void UpdateState() {
-            HandleStamina();
             HandleInteraction();
             CheckSwitchStates();
         }
 
-        public override void FixedUpdateState() { }
+        public override void FixedUpdateState() {
+        }
 
         public override void ExitState() {
-            Ctx.IsUsingStormlight = false;
-            Ctx.GravityDirection = Vector3.down;
-            Ctx.LashingIntensity = 0;
-            Ctx.ParticleSystem.enabled = false;
+            Ctx.IsInfusing = false;
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.Stormlight == 0 ) {
-               SwitchStates(Factory.Normal()); 
-            } 
+            if (Ctx.InfusableSelectedObject.IsUnityNull()) {
+                SwitchStates(Factory.Grounded());
+            }
         }
 
         public override void InitializeSubState() {
-            SetSubStates(Factory.Grounded());
+            if (Ctx.IsGrounded) {
+                SetSubStates(Factory.Grounded());
+            }
         }
-        private void HandleStamina() {
-            Ctx.Stormlight -= Ctx.StormlightDepletionRate;
-            if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
-                     
-            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);
-        }
+        
         private void HandleInteraction() {
             Collider[] colliders = Physics.OverlapSphere(Ctx.PlayerTransform.position, Ctx.MaxInteractionDistance, Ctx.InteractionLayer);
             Infusable infusableObject = null;
@@ -67,7 +62,7 @@ namespace Player.StateMachine.States.Stormlight{
                 Ctx.InfusableSelectedObject = null;
             }
         }
-
+        
         private void HandleInfusion(Infusable infusable) {
             if (infusable != null) {
                 if (Ctx.InfusableSelectedObject == null) {
@@ -82,11 +77,10 @@ namespace Player.StateMachine.States.Stormlight{
                     Ctx.Stormlight -= stormlightDrainadge*0.1f;
                 }
             }
-        
+                
             //TODO: Activate Animation
             //TODO: Control distance using wheel or something idk
-            
+                    
         }
-
     }
 }

@@ -21,6 +21,13 @@ namespace Player{
         
         [SerializeField] [ReadOnly] private bool _stormlightInput;
         [SerializeField] [ReadOnly] private bool _infuseInput;
+
+        [SerializeField] [ReadOnly] private bool _dashInput;
+        [SerializeField] [ReadOnly] private bool _diveInput;
+
+        [SerializeField] [ReadOnly] private bool _lightAttack;
+        [SerializeField] [ReadOnly] private bool _heavyAttack;
+        [SerializeField] [ReadOnly] private bool _blockAttack;
         
         // getters and setters
         public Vector2 LookInput { get => _lookInput; set => _lookInput = value; }
@@ -35,6 +42,11 @@ namespace Player{
         public float RollInput { get => _rollInput; set => _rollInput = value; }
         public bool StormlightInput { get => _stormlightInput; set => _stormlightInput = value; }
         public bool InfuseInput { get => _infuseInput; set => _infuseInput = value; }
+        public bool DashInput { get => _dashInput; set => _dashInput = value; }
+        public bool DiveInput { get => _diveInput; set => _diveInput = value; }
+        public bool LightAttack { get => _lightAttack; set => _lightAttack = value; }
+        public bool HeavyAttack { get => _heavyAttack; set => _heavyAttack = value; }
+        public bool BlockAttack { get => _blockAttack; set => _blockAttack = value; }
 
         private void Awake()
         {
@@ -78,8 +90,23 @@ namespace Player{
                 _playerInputs.Player.StormlightInput.performed += i => _stormlightInput = true;
                 _playerInputs.Player.StormlightInput.canceled += i => _stormlightInput = false;
                 
-                _playerInputs.Player.InfuseInput.performed += i => _infuseInput = true;
-                _playerInputs.Player.InfuseInput.canceled += i => _infuseInput = false;
+                _playerInputs.Player.InfuseInput.performed += _ => _infuseInput = true;
+                _playerInputs.Player.InfuseInput.canceled += _ => _infuseInput = false;
+                
+                _playerInputs.Player.DashInput.performed += _ => _dashInput = true;
+                _playerInputs.Player.DashInput.canceled += _ => _infuseInput = false;
+
+                _playerInputs.Player.DiveInput.performed += _ => _diveInput = true;
+                _playerInputs.Player.DiveInput.canceled += _ => _diveInput = false;
+                
+                _playerInputs.Player.LightAttackInput.performed += _ => _lightAttack = true;
+                _playerInputs.Player.LightAttackInput.canceled += _ => _lightAttack = false;
+                
+                _playerInputs.Player.HeavyAttackInput.performed += _ => _heavyAttack = true;
+                _playerInputs.Player.HeavyAttackInput.canceled += _ => _heavyAttack = false;
+                
+                _playerInputs.Player.BlockInput.performed += _ => _blockAttack = true;
+                _playerInputs.Player.BlockInput.canceled += _ => _blockAttack = false;
             }
         
             _playerInputs.Enable();
