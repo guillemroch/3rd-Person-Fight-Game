@@ -28,8 +28,17 @@ namespace Player.StateMachine.States.Alive{
                 //SwitchStates(Factory.Stormlight());
             }*/
             if (Ctx.InputManager.StormlightInput) {
+                Ctx.InputManager.ResetStormlightInput();
                 Ctx.IsUsingStormlight = !Ctx.IsUsingStormlight;
+                if (!Ctx.IsUsingStormlight) {
+                    Ctx.ParticleSystem.Stop();
+                }
+                else {
+                    Ctx.ParticleSystem.Play();
+                }
             }
+
+           
         }
 
         public override void InitializeSubState() {
@@ -48,7 +57,7 @@ namespace Player.StateMachine.States.Alive{
         }
         
         private void HandleStormlight() {
-            if (!Ctx.IsUsingStormlight) 
+            if (!Ctx.IsUsingStormlight)
                 return;
             
             Ctx.Stormlight -= Ctx.StormlightDepletionRate;

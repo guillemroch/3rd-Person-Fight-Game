@@ -285,7 +285,7 @@ Rigidbody:
   m_GameObject: {fileID: 8259644354206114546}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -300,9 +300,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 2
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!114 &7973144911057537631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +326,7 @@ MonoBehaviour:
   _inRangeOutline: {fileID: 4028128956926157792}
   _smoothTime: 0.3
   _maxSpeed: 100
+  _cameraTransform: {fileID: 0}
 --- !u!65 &5797222314637803431
 BoxCollider:
   m_ObjectHideFlags: 0

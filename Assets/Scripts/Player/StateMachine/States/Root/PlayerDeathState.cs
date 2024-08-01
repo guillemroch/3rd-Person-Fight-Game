@@ -12,7 +12,7 @@ namespace Player.StateMachine.States.Root{
         public override void EnterState() {
             Ctx.IsUsingStormlight = true;
             Ctx.InputManager.ResetStormlightInput();
-            Ctx.ParticleSystem.enabled = true;
+            //Ctx.ParticleSystem.enabled = true;
         }
 
         public override void UpdateState() {
@@ -26,7 +26,7 @@ namespace Player.StateMachine.States.Root{
             Ctx.IsUsingStormlight = false;
             Ctx.GravityDirection = Vector3.down;
             Ctx.LashingIntensity = 0;
-            Ctx.ParticleSystem.enabled = false;
+            //Ctx.ParticleSystem.enabled = false;
         }
 
         public override void CheckSwitchStates() {

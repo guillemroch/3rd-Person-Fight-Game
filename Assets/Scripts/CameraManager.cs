@@ -29,7 +29,6 @@ public class CameraManager : MonoBehaviour
     private Transform _cameraTransform; //Transform of the real camera
     private Camera _camera;
     private PlayerStateMachine _playerStateMachine;
-    [SerializeField] private Quaternion localTransformRotation;    
     private float _defaultPosition; // Where the camera goes when there are no collisions
     private Vector3 _cameraFollowVelocity = Vector3.zero;
     private Vector3 _cameraVectorPosition;
@@ -51,6 +50,8 @@ public class CameraManager : MonoBehaviour
     private float _cameraPitchSpeed = 15;
     [SerializeField]
     private float _cameraYawSpeed = 15;
+
+    [SerializeField] private Vector3 _targetOffset;
     [SerializeField]
     [Tooltip("The higher the value the faster the camera moves")]
     private float _camLookSmoothTime = 25f;
@@ -127,24 +128,29 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private void FollowTarget()
-    {
+    private void FollowTarget() {
+        //_cameraTransform.localPosition = _targetOffset;
+        Vector3 offsetTargetPosition = _targetOffset.x * transform.right + _targetOffset.y * transform.up +
+                                       _targetOffset.z * transform.forward;
         Vector3 lookAtPosition = 
-            Vector3.SmoothDamp(transform.position, _target.position, ref _cameraFollowVelocity, _cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, _target.position + offsetTargetPosition, ref _cameraFollowVelocity, _cameraFollowSpeed);
         transform.position = lookAtPosition;
     }
     private void FollowTargetHalfLash()
     {
-        _cameraTransform.localPosition = _cameraHalflashOffset;
+        //_cameraTransform.localPosition = _cameraHalflashOffset;
+         Vector3 offsetTargetPosition = _cameraHalflashOffset.x * transform.right + _cameraHalflashOffset.y * transform.up +
+                                               _cameraHalflashOffset.z * transform.forward;
         Vector3 lookAtPosition = 
-            Vector3.SmoothDamp(transform.position, _target.position, ref _cameraFollowVelocity, _cameraFollowSpeed);
+            Vector3.SmoothDamp(transform.position, _target.position + offsetTargetPosition, ref _cameraFollowVelocity, _cameraFollowSpeed);
         transform.position = lookAtPosition;
     }
     
     private void FollowTargetLash()
     {
-        _cameraTransform.localPosition = _cameraLashOffset;
-        Vector3 offsetedTargetPosition = _target.position + _target.up * (_targetLashOffset * _playerStateMachine.PlayerRigidbody.velocity.magnitude);
+        //_cameraTransform.localPosition = _cameraLashOffset;
+        Vector3 offsetedTargetPosition = _target.position + _target.up * (_cameraLashOffset.y * _playerStateMachine.PlayerRigidbody.velocity.magnitude)
+            + _cameraLashOffset.x * transform.right + _cameraLashOffset.z * transform.forward;
         Vector3 lookAtPosition = 
             Vector3.SmoothDamp(transform.position, offsetedTargetPosition, ref _cameraFollowVelocity, _cameraLashFollowSpeed);
         transform.position = lookAtPosition;
@@ -163,8 +169,8 @@ public class CameraManager : MonoBehaviour
         float currentPitchAngle = _cameraPivot.localRotation.eulerAngles.x;
         if (currentPitchAngle > 180f) currentPitchAngle -= 360f; // Convert to signed angle
         //Debug.LogWarning(_cameraPivot.localRotation.eulerAngles.x + " -> " + currentPitchAngle);
-        if (pitchAngle <0) {
-            if (currentPitchAngle - pitchAngle > _maximumPitchAngle) {
+        if (pitchAngle > 0) {
+            if (currentPitchAngle + pitchAngle > _maximumPitchAngle) {
                 pitchAngle = 0;
             }
         }
@@ -195,17 +201,14 @@ public class CameraManager : MonoBehaviour
         
         Vector3 rotation = Vector3.zero;
         
-        yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraHalflashYawSpeed), _camLookSmoothTime * Time.deltaTime);
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
-
         pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
         
-
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
-        Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
+        //Quaternion upAlignRotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, 0.9f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation, 0.9f);
 
         rotation = Vector3.zero;
         rotation.x = pitchAngle; 
@@ -223,7 +226,7 @@ public class CameraManager : MonoBehaviour
 
             yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed;
             pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed;
-            targetRotation = Quaternion.AngleAxis(yawAngle, transform.up);
+            targetRotation = Quaternion.AngleAxis(yawAngle, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation , _cameraLashSmoothLerp * Time.deltaTime);
 
             targetRotation = Quaternion.AngleAxis(pitchAngle, Vector3.right);
@@ -284,14 +287,24 @@ public class CameraManager : MonoBehaviour
     }
 
     public void SetCameraMode(CameraMode cameraMode) {
+        if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) {
+            //_camera.fieldOfView = _lashFOV;
+
+            transform.rotation = _target.rotation;
+            _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+        }
+
+        if (cameraMode != CameraMode.Normal) {
+            Vector3 rotation = _target.rotation.eulerAngles;
+            rotation.x = 0;
+            rotation.z = 0;
+
+            transform.rotation = Quaternion.Euler(rotation);
+             _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+        }
         _cameraMode = cameraMode;
         
-        if (cameraMode == CameraMode.Lash) {
-            //_camera.fieldOfView = _lashFOV;
-        }
-        else {
-            //_camera.fieldOfView = _normalFOV;
-        }
+       
     }
 
     private void OnDrawGizmos() {

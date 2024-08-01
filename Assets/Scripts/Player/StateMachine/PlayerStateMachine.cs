@@ -86,6 +86,7 @@ namespace Player.StateMachine{
         //Jump
         [Header("Jump Speeds")] 
         [SerializeField] private float _jumpHeight = 3;
+        [SerializeField] private float _dashForce = 25;
         
         //Interaction
         [Header("Interactions")] 
@@ -93,7 +94,6 @@ namespace Player.StateMachine{
         [SerializeField] private LayerMask _interactionLayer;
         [SerializeField] private Infusable _infusableSelectedObject;
         [SerializeField] private bool _isInfusing;
-        
         
 
         //References
@@ -106,7 +106,7 @@ namespace Player.StateMachine{
         [SerializeField] private Transform _playerTransform;
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private UIManager _uiManager;
-        [SerializeField] private TrailRenderer _particleSystem;
+        [SerializeField] private ParticleSystem _particleSystem;
         
         //State variables
         [SerializeField] public PlayerStateFactory _states;
@@ -164,7 +164,7 @@ namespace Player.StateMachine{
         public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
         public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
         public bool IsUsingStormlight { get => _isUsingStormlight; set => _isUsingStormlight = value; }
-        public TrailRenderer ParticleSystem { get => _particleSystem; set => _particleSystem = value; }
+        public ParticleSystem ParticleSystem { get => _particleSystem; set => _particleSystem = value; }
         public float MaxInteractionDistance { get => _maxInteractionDistance; set => _maxInteractionDistance = value; }
         public LayerMask InteractionLayer { get => _interactionLayer; set => _interactionLayer = value; }
 
@@ -175,6 +175,7 @@ namespace Player.StateMachine{
             }
 
         public bool IsInfusing { get => _isInfusing; set => _isInfusing = value; }
+        public float DashForce { get => _dashForce; set => _dashForce = value; }
 
         #endregion
     
@@ -192,7 +193,7 @@ namespace Player.StateMachine{
             _playerRigidbody = GetComponent<Rigidbody>();
             _cameraObject = Camera.main!.transform;
             _uiManager = FindObjectOfType<UIManager>();
-            _particleSystem = GetComponent<TrailRenderer>();
+            _particleSystem = GetComponent<ParticleSystem>();
         }
         
         public void HandleAllStates()
