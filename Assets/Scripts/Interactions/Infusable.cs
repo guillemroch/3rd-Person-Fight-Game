@@ -42,9 +42,10 @@ public class Infusable : MonoBehaviour , Interactable{
         
         
         if (_active) {
-            Vector3 offset = _playerTransform.up * _distance/2 + _cameraTransform.forward * _distance;
+            
+            Vector3 offset =  _cameraTransform.forward * (Vector3.Distance(_playerTransform.position, _cameraTransform.position) * _distance);
             Vector3 velocity = _rigidbody.velocity;
-            transform.position = Vector3.SmoothDamp(transform.position, _playerTransform.position + offset, ref velocity, _smoothTime);
+            transform.position = Vector3.SmoothDamp(transform.position, _cameraTransform.position + offset, ref velocity, _smoothTime);
             _rigidbody.velocity = velocity;
             _gravityDirection = Vector3.down * 10;
             _selectedOutline.SetActive(true);

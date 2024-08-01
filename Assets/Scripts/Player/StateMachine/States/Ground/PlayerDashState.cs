@@ -8,9 +8,14 @@ namespace Player.StateMachine.States.Ground{
         public PlayerDashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) :
             base(currentCtx, stateFactory, "Dash") { }
         public override void EnterState() {
+            Ctx.InputManager.ResetDashInput();
+            //Play animation
         }
 
         public override void UpdateState() {
+
+            HandleDash();
+            CheckSwitchStates();
         }
 
         public override void FixedUpdateState() {
@@ -20,9 +25,20 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
+            SwitchStates(Factory.Grounded());
         }
 
         public override void InitializeSubState() {
+        }
+
+        private void HandleDash() {
+            Vector3 dashDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y + Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
+
+            if (dashDirection == Vector3.zero)
+                dashDirection = Ctx.PlayerTransform.forward;
+            
+            dashDirection.Normalize();
+            Ctx.PlayerRigidbody.AddForce(dashDirection * Ctx.DashForce, ForceMode.Impulse);
         }
     }
 }

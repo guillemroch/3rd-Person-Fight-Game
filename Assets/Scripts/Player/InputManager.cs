@@ -154,5 +154,9 @@ namespace Player{
         public void ResetStormlightInput() {
             _stormlightInput = false;
         }
+
+        public void ResetDashInput() {
+            _dashInput = false;
+        }
     }
 }

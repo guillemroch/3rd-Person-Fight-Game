@@ -9343,18 +9343,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1200651639947972089, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: isGrounded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: _maximumPitchAngle
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
-      propertyPath: _minimumPitchAngle
-      value: -35
-      objectReference: {fileID: 0}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name
       value: PlayerController
@@ -9412,18 +9400,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5314783107226859396, guid: 0c5fa92380c0e8345ab24631db9175e5, type: 3}
-      propertyPath: m_Drag
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5314783107226859396, guid: 0c5fa92380c0e8345ab24631db9175e5, type: 3}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5314783107226859396, guid: 0c5fa92380c0e8345ab24631db9175e5, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8259644354206114546, guid: 0c5fa92380c0e8345ab24631db9175e5, type: 3}
       propertyPath: m_Name
       value: Infusable Cube
