@@ -25,7 +25,7 @@ namespace Player{
             _inputManager = GetComponent<InputManager>();
             _playerStateMachine = GetComponent<PlayerStateMachine>();
             _animatorManager = GetComponent<AnimatorManager>();
-            _animator = GetComponent<Animator>();
+            //_animator = GetComponent<Animator>();
             _cameraManager = FindObjectOfType<CameraManager>();
             _uiManager = FindObjectOfType<UIManager>();
         

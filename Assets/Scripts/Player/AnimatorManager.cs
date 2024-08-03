@@ -25,7 +25,7 @@ namespace Player{
 
         private void Awake()
         {
-            animator = GetComponent<Animator>();
+            //animator = GetComponent<Animator>();
             _horizontalHash = Animator.StringToHash("Horizontal");
             _verticalHash = Animator.StringToHash("Vertical");
             _isGroundedHash = Animator.StringToHash("isGrounded");
