@@ -6,7 +6,8 @@ namespace Player.StateMachine.States.Air{
         public PlayerLandState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Land") { }
         public override void EnterState() {
 
-            Ctx.AnimatorManager.PlayTargetAnimation("Land");
+            //Ctx.AnimatorManager.PlayTargetAnimation("Land Blend Tree");
+            //TODO: [Animation] -> set land blend tree value
         }
 
         public override void UpdateState() {

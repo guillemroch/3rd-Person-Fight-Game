@@ -6,7 +6,7 @@ namespace Player.StateMachine.States.Air{
         public PlayerFallState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Fall") { }
         public override void EnterState() {
 
-            Ctx.AnimatorManager.PlayTargetAnimation("Fall");
+            Ctx.IsFalling = true;
         }
 
         public override void UpdateState() {
@@ -21,7 +21,7 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void ExitState() {
-            
+            Ctx.IsFalling = false;
         }
 
         public override void CheckSwitchStates() {

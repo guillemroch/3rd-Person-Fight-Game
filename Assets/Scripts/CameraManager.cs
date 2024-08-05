@@ -32,7 +32,7 @@ public class CameraManager : MonoBehaviour
     private float _defaultPosition; // Where the camera goes when there are no collisions
     private Vector3 _cameraFollowVelocity = Vector3.zero;
     private Vector3 _cameraVectorPosition;
-    
+    [SerializeField] private float _pitchRotation; 
     [Header("Collisions")]
     [SerializeField]
     private float _cameraCollisionOffset = 0.2f;
@@ -92,9 +92,12 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private float _centerTimer = 0f;
     [SerializeField] private float _timeToCenter = 2f;
-    [SerializeField] private Vector2 _centerCameraPosition; 
+    [SerializeField] private Vector2 _centerCameraPosition;
     
-    
+    [Header("Infusing")]
+    [SerializeField] private Vector3 _cameraInfusingOffset;
+    public float PitchRotation { get => _pitchRotation; set => _pitchRotation = value; }
+
     public void Awake()
     {
         _inputManager = FindObjectOfType<InputManager>();
@@ -104,8 +107,10 @@ public class CameraManager : MonoBehaviour
         _playerStateMachine = FindObjectOfType<PlayerStateMachine>();
     }
 
-    public void HandleAllCameraMovement()
-    {
+    public void HandleAllCameraMovement() {
+        _pitchRotation = _cameraPivot.localRotation.eulerAngles.x;
+        if (_pitchRotation > 180f) _pitchRotation -= 360f;
+        _pitchRotation /= _maximumPitchAngle;
         if (_cameraMode == CameraMode.Normal) {
             FollowTarget();
             RotateCamera();
@@ -119,8 +124,8 @@ public class CameraManager : MonoBehaviour
             RotateCameraLash();
             HandleCameraCollisions();
         }else if (_cameraMode == CameraMode.Infusing) {
-            FollowTargetLash();
-            RotateCameraLash();
+            FollowTargetInfusing();
+            RotateCamera();
             HandleCameraCollisions();
         }
         else {
@@ -153,6 +158,14 @@ public class CameraManager : MonoBehaviour
             + _cameraLashOffset.x * transform.right + _cameraLashOffset.z * transform.forward;
         Vector3 lookAtPosition = 
             Vector3.SmoothDamp(transform.position, offsetedTargetPosition, ref _cameraFollowVelocity, _cameraLashFollowSpeed);
+        transform.position = lookAtPosition;
+    }
+    private void FollowTargetInfusing() {
+        //_cameraTransform.localPosition = _targetOffset;
+        Vector3 offsetTargetPosition = _cameraInfusingOffset.x * _target.right + _cameraInfusingOffset.y * transform.up +
+                                       _cameraInfusingOffset.z * transform.forward;
+        Vector3 lookAtPosition = 
+            Vector3.SmoothDamp(transform.position, _target.position + offsetTargetPosition, ref _cameraFollowVelocity, _cameraFollowSpeed);
         transform.position = lookAtPosition;
     }
     private void RotateCamera()

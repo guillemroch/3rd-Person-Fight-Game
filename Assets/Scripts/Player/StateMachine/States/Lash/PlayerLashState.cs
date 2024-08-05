@@ -13,10 +13,12 @@ namespace Player.StateMachine.States.Lash{
             Ctx.InAirTimer = 0;
             Ctx.isGrounded = false;
             CheckSwitchStates();
-            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
-            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
+            Ctx.IsLashing = true;
+            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
+            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
             
-            Ctx.AnimatorManager.PlayTargetAnimation("Lash");
+            //TODO: [Animation] -> set lash blend tree value
+            //Ctx.AnimatorManager.PlayTargetAnimation("Lash");
             float limit = Ctx.MaxAngle* Ctx.Precision;
             //Maximum time to reach the max angle for player roll rotation
             Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
@@ -40,7 +42,8 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void ExitState() {
-            Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
+            Ctx.IsLashing = false;
+            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
             Ctx.GravityDirection.Normalize();
             Ctx.LashingIntensity = 0;
         }

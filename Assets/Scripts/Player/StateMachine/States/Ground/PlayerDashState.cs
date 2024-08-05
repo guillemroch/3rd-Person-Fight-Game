@@ -10,6 +10,8 @@ namespace Player.StateMachine.States.Ground{
         public override void EnterState() {
             Ctx.InputManager.ResetDashInput();
             //Play animation
+            Ctx.AnimatorManager.PlayTargetAnimation("Dash"); 
+            //TODO: [Animation] -> set lash blend tree value
         }
 
         public override void UpdateState() {

@@ -97,7 +97,7 @@ namespace Player.StateMachine{
             return new PlayerInteractIdleState(_context,this );
         }
         public PlayerBaseState InteractWalk() {
-            return new PlayerInteractingWalkState(_context,this );
+            return new PlayerInteractingStrafeState(_context,this );
         }
            
         //Attack

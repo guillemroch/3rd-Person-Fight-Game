@@ -108,7 +108,6 @@ namespace Player{
                 _playerInputs.Player.BlockInput.performed += _ => _blockAttack = true;
                 _playerInputs.Player.BlockInput.canceled += _ => _blockAttack = false;
             }
-        
             _playerInputs.Enable();
         }
 
@@ -119,16 +118,13 @@ namespace Player{
 
         public void HandleAllInputs()
         {
-         
             HandleMovementInput();
             HandleCameraInput();
-    
         }
 
         private void HandleMovementInput()
         {
             _moveAmount = Mathf.Clamp01(Mathf.Abs(_movementInput.x) + Mathf.Abs(_movementInput.y));
-            _animatorManager.UpdateAnimatorValues(new Vector2(0, _moveAmount), _isSprintPressed && _moveAmount > 0.5f);
         }
 
         private void HandleCameraInput()

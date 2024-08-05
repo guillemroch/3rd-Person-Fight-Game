@@ -39,6 +39,7 @@ namespace Player{
         private void Update()
         {
             _inputManager.HandleAllInputs();
+            _animatorManager.UpdateValues();
         }
 
         private void FixedUpdate()
@@ -50,7 +51,9 @@ namespace Player{
         private void LateUpdate()
         {
             _cameraManager.HandleAllCameraMovement();
-            _animator.SetBool(_animatorManager.IsGroundedHash.GetHashCode(), _playerStateMachine.isGrounded);
+            //_animator.SetBool(_animatorManager.IsGroundedHash.GetHashCode(), _playerStateMachine.isGrounded);
+
+            _playerStateMachine.UpdateAnimatorValues();
         }
     }
 }

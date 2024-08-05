@@ -9,7 +9,8 @@ namespace Player.StateMachine.States.Air{
             InitializeSubState();
         }
         public override void EnterState() {
-
+            Ctx.IsLashing = false;
+            Ctx.IsHalfLashing = false;
         }
 
         public override void UpdateState() {

@@ -10,13 +10,22 @@ namespace Player.StateMachine.States.Lash{
         public override void EnterState() { }
 
         public override void UpdateState() {
+            //Check if we need to change state because of stormlight
+            CheckSwitchStates();
         }
 
         public override void FixedUpdateState() { }
 
-        public override void ExitState() { }
+        public override void ExitState() {
+            Ctx.IsLashing = false;
+            Ctx.IsHalfLashing = false;
+        }
 
-        public override void CheckSwitchStates() { }
+        public override void CheckSwitchStates() {
+            if (!Ctx.IsUsingStormlight) {
+                SwitchStates(Factory.Grounded());
+            }
+        }
 
         public override void InitializeSubState() {
             if (Ctx.InputManager.LashInput ) {

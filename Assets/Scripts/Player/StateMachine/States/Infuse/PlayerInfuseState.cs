@@ -12,6 +12,7 @@ namespace Player.StateMachine.States.Infuse{
         }
         
         public override void EnterState() {
+            Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Infusing);
             Ctx.IsInfusing = true;
             InitializeSubState();
         }

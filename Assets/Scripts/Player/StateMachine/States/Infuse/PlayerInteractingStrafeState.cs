@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Infuse{
-    public class PlayerInteractingWalkState : PlayerBaseState{
-        public PlayerInteractingWalkState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) :
-            base(currentCtx, stateFactory, "Interacting Walk") { }
+    public class PlayerInteractingStrafeState : PlayerBaseState{
+        public PlayerInteractingStrafeState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) :
+            base(currentCtx, stateFactory, "Interacting Strafe") { }
         public override void EnterState() {
         }
 

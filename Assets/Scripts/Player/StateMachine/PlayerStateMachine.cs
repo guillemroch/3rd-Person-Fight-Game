@@ -18,6 +18,7 @@ namespace Player.StateMachine{
         //Movement status flags
         [Header("Movement Flags")] 
         [SerializeField] public bool isGrounded;
+        [SerializeField] public bool _isFalling = false;
         
         //Falling and ground detection variables
         [Header("Falling")] 
@@ -47,6 +48,8 @@ namespace Player.StateMachine{
         [SerializeField] private float  _rollSpeed = 10;
         [SerializeField] private float  _rollLerpSpeed = 0.5f;
         [SerializeField] private float _maxUnlashDistance = 10;
+        [SerializeField] private bool _isLashing = false;
+        [SerializeField] private bool _isHalfLashing = false;
         
         [SerializeField] public const float DEFAULT_LASHING_INTENSITY = 5;
         [SerializeField] public const float LASHING_INTENSITY_INCREMENT = 5;
@@ -176,6 +179,9 @@ namespace Player.StateMachine{
 
         public bool IsInfusing { get => _isInfusing; set => _isInfusing = value; }
         public float DashForce { get => _dashForce; set => _dashForce = value; }
+        public bool IsLashing { get => _isLashing; set => _isLashing = value; }
+        public bool IsHalfLashing { get => _isHalfLashing; set => _isHalfLashing = value; }
+        public bool IsFalling { get => _isFalling; set => _isFalling = value; }
 
         #endregion
     
@@ -202,6 +208,32 @@ namespace Player.StateMachine{
             Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ");
         }
 
+        public void UpdateAnimatorValues() {
+            float velocityZ = InputManager.MoveAmount;
+            if (velocityZ < 0.35f) {
+                velocityZ = 0;
+            }
+            if (InputManager.IsSprintPressed) {
+                velocityZ *= 2;
+            }
+
+            float velocityX = 0;
+            if (_isInfusing) {
+                velocityX = InputManager.MovementInput.x;
+            }
+
+            float velocityY = _playerRigidbody.velocity.magnitude;
+            //TODO: normalize Y to adjust to animations and use stormlight thingui to adjust value too
+            _animatorManager.VelocityX = velocityX;
+            _animatorManager.VelocityY = velocityY ;
+            _animatorManager.VelocityZ = velocityZ;
+            _animatorManager.IsGrounded = isGrounded ;
+            _animatorManager.IsInteracting = _isInfusing;
+            _animatorManager.IsLashing = _isLashing;
+            _animatorManager.IsHalfLashing = _isHalfLashing;
+            _animatorManager.IsFalling = _isFalling;
+            _animatorManager.LookY = _cameraManager.PitchRotation;
+        }
         public void OnDrawGizmos() {
             /*Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,

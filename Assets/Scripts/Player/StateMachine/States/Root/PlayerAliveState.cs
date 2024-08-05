@@ -31,9 +31,13 @@ namespace Player.StateMachine.States.Alive{
                 Ctx.InputManager.ResetStormlightInput();
                 Ctx.IsUsingStormlight = !Ctx.IsUsingStormlight;
                 if (!Ctx.IsUsingStormlight) {
+                    //EXIT STORMLIGHT STATE
                     Ctx.ParticleSystem.Stop();
                 }
                 else {
+                    //ENTER STORMLIGHT STATE
+                    Ctx.AnimatorManager.PlayTargetAnimation("Buff");
+                    Ctx.AnimatorManager.animator.SetLayerWeight(4,1);
                     Ctx.ParticleSystem.Play();
                 }
             }
@@ -59,7 +63,7 @@ namespace Player.StateMachine.States.Alive{
         private void HandleStormlight() {
             if (!Ctx.IsUsingStormlight)
                 return;
-            
+           //UPDATE STORMLIGHT STATE
             Ctx.Stormlight -= Ctx.StormlightDepletionRate;
             if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
                      

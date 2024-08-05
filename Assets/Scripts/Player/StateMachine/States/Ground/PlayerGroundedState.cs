@@ -9,8 +9,13 @@ namespace Player.StateMachine.States.Ground{
             InitializeSubState();
         }
 
+        
         public override void EnterState() {
-            Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
+            if (!Ctx.IsInfusing)
+                Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
+            Ctx.IsLashing = false;
+            Ctx.IsHalfLashing = false;
+            
         }
 
         public override void UpdateState() {

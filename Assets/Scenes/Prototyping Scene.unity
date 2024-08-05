@@ -9375,6 +9375,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: d3d53ae7a672d244eb1fccae3435468d, type: 2}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraInfusingOffset.x
+      value: 1.668
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608483872819477558, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _cameraInfusingOffset.y
+      value: 0.22
+      objectReference: {fileID: 0}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name
       value: PlayerController
