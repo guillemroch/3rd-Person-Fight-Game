@@ -27,6 +27,7 @@ namespace Player.StateMachine.States.Infuse{
 
         public override void ExitState() {
             Ctx.IsInfusing = false;
+            Ctx.StormlightInfusingDrain = 0;
         }
 
         public override void CheckSwitchStates() {
@@ -70,12 +71,12 @@ namespace Player.StateMachine.States.Infuse{
                     Ctx.InfusableSelectedObject = infusable;
                 }
                 Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
-                Ctx.Stormlight -= stormlightDrainadge*0.1f;
+                Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
             }
             else {
                 if (Ctx.InfusableSelectedObject != null) {
                     Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
-                    Ctx.Stormlight -= stormlightDrainadge*0.1f;
+                    Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
                 }
             }
                 

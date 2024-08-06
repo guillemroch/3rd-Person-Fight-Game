@@ -12,6 +12,7 @@ namespace Player.StateMachine.States.Ground{
             //Play animation
             Ctx.AnimatorManager.PlayTargetAnimation("Dash"); 
             //TODO: [Animation] -> set lash blend tree value
+            Ctx.StormlightMovementDrain = 4;
         }
 
         public override void UpdateState() {
@@ -24,6 +25,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void ExitState() {
+            Ctx.StormlightMovementDrain = 0;
         }
 
         public override void CheckSwitchStates() {

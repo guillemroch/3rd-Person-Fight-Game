@@ -5,6 +5,8 @@ namespace Player.StateMachine.States.Ground{
     {
         public PlayerSprintState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Sprint") { }
         public override void EnterState() {
+            Ctx.StormlightMovementDrain = 1;
+
         }
 
         public override void UpdateState() {

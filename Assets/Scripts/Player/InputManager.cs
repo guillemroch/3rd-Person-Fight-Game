@@ -154,5 +154,9 @@ namespace Player{
         public void ResetDashInput() {
             _dashInput = false;
         }
+
+        public void ResetLightAttackInput() {
+            _lightAttack = false;
+        }
     }
 }

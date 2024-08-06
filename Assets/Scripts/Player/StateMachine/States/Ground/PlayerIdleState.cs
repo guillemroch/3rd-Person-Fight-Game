@@ -5,7 +5,7 @@ namespace Player.StateMachine.States.Ground{
     {
         public PlayerIdleState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Idle") { }
         public override void EnterState() {
-
+            Ctx.StormlightMovementDrain = 0;
         }
 
         public override void UpdateState() {

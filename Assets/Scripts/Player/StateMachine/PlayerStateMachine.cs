@@ -85,6 +85,11 @@ namespace Player.StateMachine{
         [SerializeField] private float _stormlight = 100;
         [SerializeField] private float _stormlightRegenRate = 1;
         [SerializeField] private float _stormlightDepletionRate = 0.1f;
+        [SerializeField] private float _stormlightBaseDrain = 0.1f;
+        [SerializeField] private float _stormlightLashingDrain = 0;
+        [SerializeField] private float _stormlightInfusingDrain = 0;
+        [SerializeField] private float _stormlightMovementDrain = 0;
+        [SerializeField] private float _stormlightHealingDrain = 0;
     
         //Jump
         [Header("Jump Speeds")] 
@@ -110,6 +115,7 @@ namespace Player.StateMachine{
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private ParticleSystem _particleSystem;
+        [SerializeField] private GameObject _spear;
         
         //State variables
         [SerializeField] public PlayerStateFactory _states;
@@ -182,6 +188,23 @@ namespace Player.StateMachine{
         public bool IsLashing { get => _isLashing; set => _isLashing = value; }
         public bool IsHalfLashing { get => _isHalfLashing; set => _isHalfLashing = value; }
         public bool IsFalling { get => _isFalling; set => _isFalling = value; }
+        public float StormlightBaseDrain { get => _stormlightBaseDrain; set => _stormlightBaseDrain = value; }
+        public float StormlightLashingDrain { get => _stormlightLashingDrain; set => _stormlightLashingDrain = value; }
+
+        public float StormlightInfusingDrain
+            {
+            get => _stormlightInfusingDrain;
+            set => _stormlightInfusingDrain = value;
+            }
+
+        public float StormlightMovementDrain
+            {
+            get => _stormlightMovementDrain;
+            set => _stormlightMovementDrain = value;
+            }
+
+        public float StormlightHealingDrain { get => _stormlightHealingDrain; set => _stormlightHealingDrain = value; }
+        public GameObject Spear { get => _spear; set => _spear = value; }
 
         #endregion
     

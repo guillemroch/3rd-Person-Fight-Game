@@ -63,7 +63,15 @@ namespace Player.StateMachine.States.Alive{
         private void HandleStormlight() {
             if (!Ctx.IsUsingStormlight)
                 return;
-           //UPDATE STORMLIGHT STATE
+            
+            //UPDATE STORMLIGHT STATE
+            //1- Calculate stormlight drain
+            Ctx.StormlightDepletionRate = Ctx.StormlightBaseDrain +
+                                          Ctx.StormlightHealingDrain +
+                                          Ctx.StormlightInfusingDrain +
+                                          Ctx.StormlightLashingDrain +
+                                          Ctx.StormlightMovementDrain;
+           
             Ctx.Stormlight -= Ctx.StormlightDepletionRate;
             if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
                      

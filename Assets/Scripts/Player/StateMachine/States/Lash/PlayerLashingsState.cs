@@ -19,6 +19,7 @@ namespace Player.StateMachine.States.Lash{
         public override void ExitState() {
             Ctx.IsLashing = false;
             Ctx.IsHalfLashing = false;
+            Ctx.StormlightLashingDrain = 0;
         }
 
         public override void CheckSwitchStates() {

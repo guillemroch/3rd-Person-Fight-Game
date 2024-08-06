@@ -27,7 +27,8 @@ namespace Player.StateMachine.States.Lash{
 
         public override void UpdateState() {
             CheckSwitchStates();
-            
+
+            Ctx.StormlightLashingDrain = 1;
             //Make the player rotate with the camera, making that we always see the back of the player
             Vector2 lookInput = Ctx.InputManager.LookInput;
             //Ctx.transform.localRotation *= Quaternion.Euler(-lookInput.y * Ctx.RotationSpeed * 0.1f , 0 , -lookInput.x * Ctx.RotationSpeed * 0.1f);

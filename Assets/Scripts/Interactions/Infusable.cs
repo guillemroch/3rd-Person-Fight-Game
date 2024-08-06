@@ -15,6 +15,7 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private GameObject _inRangeOutline;
     [SerializeField] private float _smoothTime = 50f;
     [SerializeField] private float _maxSpeed = 20f;
+    [SerializeField] private float _chargedStormlight;
     [SerializeField] private Transform _cameraTransform;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
@@ -36,7 +37,8 @@ public class Infusable : MonoBehaviour , Interactable{
         Debug.Log("Released!");
         _active = false;
         _gravityDirection = _cameraTransform.forward * 10;
-    }
+        _chargedStormlight = 100;
+   }
 
     public void Update() {
         
@@ -54,6 +56,10 @@ public class Infusable : MonoBehaviour , Interactable{
         else {
             _selectedOutline.SetActive(false);
             _rigidbody.AddForce(_gravityDirection);
+            _chargedStormlight -= 0.1f;
+            if (_chargedStormlight <= 0) {
+                _gravityDirection = Vector3.down * 10;
+            }
         }
     }
 

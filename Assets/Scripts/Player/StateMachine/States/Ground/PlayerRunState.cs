@@ -6,8 +6,7 @@ namespace Player.StateMachine.States.Ground{
         public PlayerRunState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Run") { }
         public override void EnterState() {
             //Setup starting things for animation or logic
-
-
+            Ctx.StormlightMovementDrain = 0;
         }
 
         public override void UpdateState() {

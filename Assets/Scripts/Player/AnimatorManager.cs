@@ -58,9 +58,9 @@ namespace Player{
         }
 
         public void UpdateValues() {
-            animator.SetFloat(_velocityXHash, _velocityX, 0.01f, Time.deltaTime);
+            animator.SetFloat(_velocityXHash, _velocityX, 0.2f, Time.deltaTime);
             animator.SetFloat(_velocityYHash, _velocityY, 0.2f, Time.deltaTime);
-            animator.SetFloat(_velocityZHash, _velocityZ, 0.002f, Time.deltaTime);
+            animator.SetFloat(_velocityZHash, _velocityZ, 0.2f, Time.deltaTime);
             animator.SetBool(_isGroundedHash, _isGrounded);
             animator.SetBool(_isHalfLashingHash, _isHalfLashing);
             animator.SetBool(_isLashingHash, _isLashing);
@@ -74,7 +74,7 @@ namespace Player{
 
         public void PlayTargetAnimation(string targetAnimation)
         {
-            animator.CrossFade(targetAnimation, 0.05f);
+            animator.CrossFade(targetAnimation, 0.1f);
         }
         public void UpdateVelocityValues(Vector2 movementInput, bool isSprinting)
         {

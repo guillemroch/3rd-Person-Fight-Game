@@ -302,7 +302,7 @@ public class CameraManager : MonoBehaviour
     public void SetCameraMode(CameraMode cameraMode) {
         if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) {
             //_camera.fieldOfView = _lashFOV;
-
+            Debug.Log("Reset Rotation Camera");
             transform.rotation = _target.rotation;
             _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
         }

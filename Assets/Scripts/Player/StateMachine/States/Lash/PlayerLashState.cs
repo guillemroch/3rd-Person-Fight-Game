@@ -34,8 +34,10 @@ namespace Player.StateMachine.States.Lash{
             HandleGroundDetection();
             HandleGravity();
             CheckSwitchStates();
-            
-        
+
+            Ctx.StormlightLashingDrain = Vector3.Distance(Vector3.down, Ctx.GravityDirection * Ctx.LashingIntensity);
+
+
         }
 
         public override void FixedUpdateState() {

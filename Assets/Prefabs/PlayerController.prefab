@@ -158,6 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 7273507843651196426}
   _cameraPivot: {fileID: 2619504762795049410}
+  _pitchRotation: 0
   _cameraCollisionOffset: 0.2
   _minimumCollisionOffset: 0.2
   _cameraCollisionRadius: 0.2
@@ -188,6 +189,7 @@ MonoBehaviour:
   _centerTimer: 0
   _timeToCenter: 2
   _centerCameraPosition: {x: 180, y: 78.27}
+  _cameraInfusingOffset: {x: 1.668, y: 0.22, z: 0}
 --- !u!1 &716177944636030714
 GameObject:
   m_ObjectHideFlags: 0
@@ -3125,6 +3127,14 @@ PrefabInstance:
       propertyPath: _lashInput
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3005243556766777584, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 7238949207118007758}
+    - target: {fileID: 3005243556766777584, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _animatorManager
+      value: 
+      objectReference: {fileID: 2165796366636751842}
     - target: {fileID: 3322915969423957918, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3284,6 +3294,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2339997130741813982, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
   m_PrefabInstance: {fileID: 3221503801061927893}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2165796366636751842 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3655622113326985271, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+  m_PrefabInstance: {fileID: 3221503801061927893}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8472192511585321389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b3b36cd4e9be74d9f12875e0d1a516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2536106789041188234 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1118892803420341855, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
@@ -8654,7 +8675,7 @@ Animator:
   m_GameObject: {fileID: 9196152099961071016}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 357a946cd05af1946bb2ce0aecf177a6, type: 2}
-  m_Controller: {fileID: 9100000, guid: d7d8add9380ee6f4b882af077368b646, type: 2}
+  m_Controller: {fileID: 9100000, guid: d3d53ae7a672d244eb1fccae3435468d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
