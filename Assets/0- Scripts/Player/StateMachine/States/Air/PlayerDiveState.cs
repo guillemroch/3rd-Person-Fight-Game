@@ -13,7 +13,7 @@ namespace Player.StateMachine.States.Air{
         
         public override void EnterState() {
             Ctx.InAirTimer = 0;
-            Ctx.isGrounded = false;
+            Ctx.IsGrounded = false;
             CheckSwitchStates();
 
             Ctx.IsLashing = true;
@@ -52,7 +52,7 @@ namespace Player.StateMachine.States.Air{
 
         public override void CheckSwitchStates() {
             //LAND
-            if (Ctx.isGrounded) {
+            if (Ctx.IsGrounded) {
                 SwitchStates(Factory.Air());
             }
         
@@ -144,7 +144,7 @@ namespace Player.StateMachine.States.Air{
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
            
-                Ctx.isGrounded = true;
+                Ctx.IsGrounded = true;
                 Ctx.GravityDirection = -hit.normal;  
                 Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             
@@ -153,7 +153,7 @@ namespace Player.StateMachine.States.Air{
             }
             else
             {
-                Ctx.isGrounded = false;
+                Ctx.IsGrounded = false;
             }
         }
     

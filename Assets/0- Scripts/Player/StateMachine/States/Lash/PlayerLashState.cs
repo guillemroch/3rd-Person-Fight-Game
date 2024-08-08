@@ -11,7 +11,7 @@ namespace Player.StateMachine.States.Lash{
         public PlayerLashState(PlayerStateMachine currentCtx, PlayerStateFactory stateFactory) : base(currentCtx, stateFactory, "Lash]") { }
         public override void EnterState() {
             Ctx.InAirTimer = 0;
-            Ctx.isGrounded = false;
+            Ctx.IsGrounded = false;
             CheckSwitchStates();
             Ctx.IsLashing = true;
             //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
@@ -52,7 +52,7 @@ namespace Player.StateMachine.States.Lash{
 
         public override void CheckSwitchStates() {
             //LAND
-            if (Ctx.isGrounded) {
+            if (Ctx.IsGrounded) {
                 SwitchStates(Factory.Air());
             }
         
@@ -144,7 +144,7 @@ namespace Player.StateMachine.States.Lash{
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
            
-                Ctx.isGrounded = true;
+                Ctx.IsGrounded = true;
                 Ctx.GravityDirection = -hit.normal;  
                 Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             
@@ -153,13 +153,13 @@ namespace Player.StateMachine.States.Lash{
             }
             else
             {
-                Ctx.isGrounded = false;
+                Ctx.IsGrounded = false;
             }
         }
     
         private void HandleGravity() {
         
-            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier) * Ctx.LashingIntensity, ForceMode.Acceleration);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity), ForceMode.Acceleration);
 
         }
     

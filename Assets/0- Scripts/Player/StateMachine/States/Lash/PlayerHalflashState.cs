@@ -20,7 +20,7 @@ namespace Player.StateMachine.States.Lash{
             //if (Ctx.isGrounded)
                 //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
         
-            Ctx.isGrounded = false;
+            Ctx.IsGrounded = false;
             Ctx.InAirTimer = 0;
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);
         }

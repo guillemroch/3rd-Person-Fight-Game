@@ -25,7 +25,7 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.isGrounded)
+            if (Ctx.IsGrounded)
                 SwitchStates(Factory.Land());
             
             if (!Ctx.IsUsingStormlight) {
@@ -51,7 +51,7 @@ namespace Player.StateMachine.States.Air{
             
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
                     Ctx.GroundLayer)) {
-                Ctx.isGrounded = true;
+                Ctx.IsGrounded = true;
             }
 
         }

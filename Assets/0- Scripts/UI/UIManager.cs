@@ -25,7 +25,6 @@ public class UIManager : MonoBehaviour{
         _healthBar.UpdateUI();
         _stormlightBar.UpdateUI();
 
-        Debug.Log("Pause");
         if (_inputManager.ConfigurationInput) {
             _inputManager.ResetConfigurationInput();
             TogglePause();
@@ -36,7 +35,6 @@ public class UIManager : MonoBehaviour{
         _isPaused = !_isPaused;
         Time.timeScale = _isPaused ? 0 : 1; 
         _pauseMenu.SetActive(_isPaused);
-        Debug.Log("Game Paused: " + _isPaused);
         
         if (_isPaused) 
             Cursor.lockState = CursorLockMode.None;

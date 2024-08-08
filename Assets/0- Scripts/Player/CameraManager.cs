@@ -19,12 +19,12 @@ public class CameraManager : MonoBehaviour
         Lash,
         Infusing
     }
+    
+    [SerializeField] private  CameraMode _cameraMode = CameraMode.Normal;
+    
     [Header("References")]
-    [SerializeField]
-    private Transform _target; //Object to look at
-    [SerializeField]
-    private Transform _cameraPivot; //Object from where the camera rotates
-
+    [SerializeField] private Transform _target; //Object to look at
+    [SerializeField] private Transform _cameraPivot; //Object from where the camera rotates
     private InputManager _inputManager;
     private Transform _cameraTransform; //Transform of the real camera
     private Camera _camera;
@@ -33,6 +33,8 @@ public class CameraManager : MonoBehaviour
     private Vector3 _cameraFollowVelocity = Vector3.zero;
     private Vector3 _cameraVectorPosition;
     [SerializeField] private float _pitchRotation; 
+    
+    
     [Header("Collisions")]
     [SerializeField]
     private float _cameraCollisionOffset = 0.2f;
@@ -44,58 +46,54 @@ public class CameraManager : MonoBehaviour
     private LayerMask _collisionLayers; // Layers for camera collision
     
     [Header("Movement Speed")]
-    [SerializeField]
-    private float _cameraFollowSpeed = 0.1f;
-    [SerializeField]
-    private float _cameraPitchSpeed = 15;
-    [SerializeField]
-    private float _cameraYawSpeed = 15;
-
-    [SerializeField] private Vector3 _targetOffset;
-    [SerializeField]
-    [Tooltip("The higher the value the faster the camera moves")]
-    private float _camLookSmoothTime = 25f;
-
-    [SerializeField]
-    private int _normalFOV = 70;
+    [Space(10)]
     
-    [SerializeField] private float pitchAngle; //Up and Down
-    [SerializeField] private float yawAngle;// Left and Right
+    [Header("Camera Modes and Settings")]
+    [SerializeField] private float _cameraRotationLerp = 0.7f;
+
+    [SerializeField] private bool _invertedPitch;
+    [SerializeField] private bool _invertedYaw;
+    
+    [Header("Normal")]
+    [SerializeField] private Vector3 _targetOffset;
+    [SerializeField] private float _cameraFollowSpeed = 0.1f;
+    [SerializeField] private float _cameraPitchSpeed = 15;
+    [SerializeField] private float _cameraYawSpeed = 15;
+    
+    [SerializeField] private float _sensitivityMultiplier = 1;
+    
+    [SerializeField] private int _normalFOV = 70;
     
     [Header("Limits")]
-    [SerializeField]
-    private float _minimumPitchAngle = -35;
-    [SerializeField]
-    private float _maximumPitchAngle = 35;
-
+    [SerializeField] private float _minimumPitchAngle = -35;
+    [SerializeField] private float _maximumPitchAngle = 35;
     
-    [SerializeField] private  CameraMode _cameraMode = CameraMode.Normal;
-    [Header("Camera Modes and Settings")]
+    
     [Header("Halflash")]
     [SerializeField] private Vector3 _cameraHalflashOffset;
-    [SerializeField]
-    private float _cameraHalflashPitchSpeed = 25;
-    [SerializeField]
-    private float _cameraHalflashYawSpeed = 25;
+    [SerializeField] private float _cameraHalflashPitchSpeed = 25;
+    [SerializeField] private float _cameraHalflashYawSpeed = 25;
 
-    [Header("Lash")] [SerializeField] private Vector3 _cameraLashOffset;
+    [SerializeField] private float _sensitivityHalflashMultiplier = 1;
+    
+    [Header("Lash")] 
+    [SerializeField] private Vector3 _cameraLashOffset;
+    [SerializeField] private float _cameraLashFollowSpeed = 0.1f;
+    [SerializeField] private float _cameraLashPitchSpeed = 15;
+    [SerializeField] private float _cameraLashYawSpeed = 15;
+    
+    [SerializeField] private float _sensitivityLashMultiplier = 1;
     
     [SerializeField] private int _lashFOV = 90;
-    [SerializeField]
-    private float _cameraLashFollowSpeed = 0.1f;
-    [SerializeField]
-    private float _cameraLashPitchSpeed = 15;
-    [SerializeField]
-    private float _cameraLashYawSpeed = 15;
-    [SerializeField] private float _targetLashOffset = 1.5f;
-    [SerializeField] private float _cameraLashSmoothLerp = 0.7f;
 
+    //Centering
     [SerializeField] private float _centerTimer = 0f;
     [SerializeField] private float _timeToCenter = 2f;
     [SerializeField] private Vector2 _centerCameraPosition;
     
     [Header("Infusing")]
     [SerializeField] private Vector3 _cameraInfusingOffset;
+    
     public float PitchRotation { get => _pitchRotation; set => _pitchRotation = value; }
 
     public void Awake()
@@ -109,34 +107,39 @@ public class CameraManager : MonoBehaviour
 
     public void HandleAllCameraMovement() {
         
+        //Calculate the actual pitch to use the 
         _pitchRotation = _cameraPivot.localRotation.eulerAngles.x;
         if (_pitchRotation > 180f) _pitchRotation -= 360f;
         _pitchRotation /= _maximumPitchAngle;
-        if (_cameraMode == CameraMode.Normal) {
-            FollowTarget();
-            RotateCamera();
-            HandleCameraCollisions();
-        }else if (_cameraMode == CameraMode.HalfLash) {
-            FollowTargetHalfLash();
-            RotateCameraHalfLash();
-            HandleCameraCollisions();
-        }else if (_cameraMode == CameraMode.Lash) {
-            FollowTargetLash();
-            RotateCameraLash();
-            HandleCameraCollisions();
-        }else if (_cameraMode == CameraMode.Infusing) {
-            FollowTargetInfusing();
-            RotateCamera();
-            HandleCameraCollisions();
-        }
-        else {
-            Debug.LogError("No camera mode defined!");
+        
+        switch (_cameraMode) {
+            case CameraMode.Normal:
+                FollowTarget();
+                RotateCamera();
+                HandleCameraCollisions();
+                break;
+            case CameraMode.HalfLash:
+                FollowTargetHalfLash();
+                RotateCameraHalfLash();
+                HandleCameraCollisions();
+                break;
+            case CameraMode.Lash:
+                FollowTargetLash();
+                RotateCameraLash();
+                HandleCameraCollisions();
+                break;
+            case CameraMode.Infusing:
+                FollowTargetInfusing();
+                RotateCamera();
+                HandleCameraCollisions();
+                break;
+            default:
+                Debug.LogError("No camera mode defined!");
+                break;
         }
     }
 
     private void FollowTarget() {
-        Debug.Log("Follow Target");
-        //_cameraTransform.localPosition = _targetOffset;
         Vector3 offsetTargetPosition = _targetOffset.x * transform.right + _targetOffset.y * transform.up +
                                        _targetOffset.z * transform.forward;
         Vector3 lookAtPosition = 
@@ -145,7 +148,6 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowTargetHalfLash()
     {
-        //_cameraTransform.localPosition = _cameraHalflashOffset;
          Vector3 offsetTargetPosition = _cameraHalflashOffset.x * transform.right + _cameraHalflashOffset.y * transform.up +
                                                _cameraHalflashOffset.z * transform.forward;
         Vector3 lookAtPosition = 
@@ -155,7 +157,6 @@ public class CameraManager : MonoBehaviour
     
     private void FollowTargetLash()
     {
-        //_cameraTransform.localPosition = _cameraLashOffset;
         Vector3 offsetedTargetPosition = _target.position + _target.up * (_cameraLashOffset.y * _playerStateMachine.PlayerRigidbody.velocity.magnitude)
             + _cameraLashOffset.x * transform.right + _cameraLashOffset.z * transform.forward;
         Vector3 lookAtPosition = 
@@ -163,28 +164,26 @@ public class CameraManager : MonoBehaviour
         transform.position = lookAtPosition;
     }
     private void FollowTargetInfusing() {
-        //_cameraTransform.localPosition = _targetOffset;
         Vector3 offsetTargetPosition = _cameraInfusingOffset.x * _target.right + _cameraInfusingOffset.y * transform.up +
                                        _cameraInfusingOffset.z * transform.forward;
         Vector3 lookAtPosition = 
             Vector3.SmoothDamp(transform.position, _target.position + offsetTargetPosition, ref _cameraFollowVelocity, _cameraFollowSpeed);
         transform.position = lookAtPosition;
     }
+    
+    
     private void RotateCamera()
     {
-        Debug.Log("Camera rotate");
         //1- Calculate user input
-        //yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraYawSpeed), _camLookSmoothTime * Time.deltaTime);
-        yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
-        //pitchAngle = Mathf.Lerp(pitchAngle, pitchAngle - (_inputManager.LookInput.y * _cameraPitchSpeed), _camLookSmoothTime * Time.deltaTime);
-        pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
+        float yawAngle = _inputManager.LookInput.x * _cameraYawSpeed * _sensitivityMultiplier;
+        yawAngle *= _invertedYaw ? -1 : 1;
+        float pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed * _sensitivityMultiplier;
+        pitchAngle *= _invertedPitch ? -1 : 1;
         
         
         //Limit pitch angle
-        //TODO: LIMIT THE PITCH
         float currentPitchAngle = _cameraPivot.localRotation.eulerAngles.x;
         if (currentPitchAngle > 180f) currentPitchAngle -= 360f; // Convert to signed angle
-        //Debug.LogWarning(_cameraPivot.localRotation.eulerAngles.x + " -> " + currentPitchAngle);
         if (pitchAngle > 0) {
             if (currentPitchAngle + pitchAngle > _maximumPitchAngle) {
                 pitchAngle = 0;
@@ -196,7 +195,6 @@ public class CameraManager : MonoBehaviour
             }
         } 
         
-        //pitchAngle = Mathf.Clamp(pitchAngle, _minimumPitchAngle*Mathf.Deg2Rad, _maximumPitchAngle*Mathf.Deg2Rad);
         Vector3 rotation = Vector3.zero;
         
         //2 - Apply yaw rotation to transform + Up Vector Correction
@@ -204,12 +202,12 @@ public class CameraManager : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(rotation);
         Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
         //TODO: Make sure the rotation is correct cause it is not
-        transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, 0.9f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
         //3 - Rotate the pivot point for the pitch
         rotation = Vector3.zero;
         rotation.x = pitchAngle;
         targetRotation = quaternion.Euler(rotation);
-        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, 0.7f*Time.deltaTime);
+        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
         
     }
     private void RotateCameraHalfLash()
@@ -217,36 +215,39 @@ public class CameraManager : MonoBehaviour
         
         Vector3 rotation = Vector3.zero;
         
-        yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
-        pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed;
+        float yawAngle = _inputManager.LookInput.x * _cameraYawSpeed * _sensitivityHalflashMultiplier;
+        yawAngle *= _invertedYaw ? -1 : 1;
+        float pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed * _sensitivityHalflashMultiplier;
+        pitchAngle *= _invertedPitch ? -1 : 1;
         
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
-        //Quaternion upAlignRotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation, 0.9f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
 
         rotation = Vector3.zero;
         rotation.x = pitchAngle; 
         targetRotation = quaternion.Euler(rotation);
-        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, 0.7f*Time.deltaTime);
+        _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
     }
     private void RotateCameraLash() {
         //The player controls the camera Yaw and pitch, the Roll is automatically done
-        //Quaternion rollCorrection = Quaternion.FromToRotation(transform.up, _target.forward);
-        //rollCorrection = Quaternion.AngleAxis(Vector3.Angle(transform.up, -_target.forward), _target.up);
         
         if (_inputManager.LookInput.magnitude > 0) {
             _centerTimer = 0;
             Quaternion targetRotation;
 
-            yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed;
-            pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed;
+            float yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed * _sensitivityLashMultiplier;
+            yawAngle *= _invertedYaw ? -1 : 1;
+            float pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed * _sensitivityLashMultiplier;
+            pitchAngle *= _invertedPitch ? -1 : 1;
+            
+            
             targetRotation = Quaternion.AngleAxis(yawAngle, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation , _cameraLashSmoothLerp * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation , _cameraRotationLerp * Time.deltaTime);
 
             targetRotation = Quaternion.AngleAxis(pitchAngle, Vector3.right);
-            _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraLashSmoothLerp * Time.deltaTime);
+            _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp * Time.deltaTime);
 
         } else {
             
@@ -255,8 +256,8 @@ public class CameraManager : MonoBehaviour
                 Quaternion targetRotation = _target.rotation;
                 Quaternion centerPitch = Quaternion.AngleAxis(-_centerCameraPosition.y, Vector2.right);
                  
-                transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation, _cameraLashSmoothLerp * Time.deltaTime);
-                _cameraPivot.localRotation =  Quaternion.Slerp(_cameraPivot.localRotation,centerPitch, _cameraLashSmoothLerp * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation, _cameraRotationLerp * Time.deltaTime);
+                _cameraPivot.localRotation =  Quaternion.Slerp(_cameraPivot.localRotation,centerPitch, _cameraRotationLerp * Time.deltaTime);
                  
                 float angleYaw = Quaternion.Angle(transform.rotation, _target.rotation);
                 float anglePitch = Quaternion.Angle(_cameraPivot.localRotation, centerPitch);
@@ -304,8 +305,7 @@ public class CameraManager : MonoBehaviour
 
     public void SetCameraMode(CameraMode cameraMode) {
         if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) {
-            //_camera.fieldOfView = _lashFOV;
-            Debug.Log("Reset Rotation Camera");
+            _camera.fieldOfView = _lashFOV;
             transform.rotation = _target.rotation;
             _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
         }
@@ -314,6 +314,7 @@ public class CameraManager : MonoBehaviour
             Vector3 rotation = _target.rotation.eulerAngles;
             rotation.x = 0;
             rotation.z = 0;
+            _camera.fieldOfView = _normalFOV;
 
             transform.rotation = Quaternion.Euler(rotation);
              _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));

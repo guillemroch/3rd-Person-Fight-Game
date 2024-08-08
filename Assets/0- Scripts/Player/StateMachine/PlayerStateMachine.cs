@@ -15,39 +15,50 @@ namespace Player.StateMachine{
 
         //Movement status flags
         [Header("Movement Flags")] 
-        [SerializeField] public bool isGrounded;
-        [SerializeField] public bool _isFalling = false;
+        [SerializeField] private bool _isGrounded;
+        [SerializeField] private bool _isFalling;
+        [SerializeField] private bool _isUsingStormlight; 
+        [SerializeField] private bool _isInfusing;
+        [SerializeField] private bool _isLashing;
+        [SerializeField] private bool _isHalfLashing;
+        
+        //Jump
+        [Header("Jump Speeds")] 
+        [SerializeField] private float _jumpHeight = 3;
+        [SerializeField] private float _dashForce = 25;
         
         //Falling and ground detection variables
         [Header("Falling")] 
         [SerializeField] private float _inAirTimer;
         [SerializeField] private float _maxAirSpeed = 25f;
         [SerializeField] private float _leapingVelocity;
-        [SerializeField] private float _fallingVelocity;
+        [SerializeField]
+        [Tooltip("Speed that the players falls at")] private float _fallingVelocity;
         [SerializeField] private LayerMask _groundLayer;
+        
+        [Header("Raycast values")]
+        //Raycast values and origins
         [SerializeField] private float _rayCastHeightOffset = 0.5f;
         [Range(0.1f, 2f)]
         [SerializeField] private float _rayCastMaxDistance = 1;
-
         [Range(0.1f, 1.5f)] 
         [SerializeField] private float _rayCastRadius = 0.2f;
 
         [Header("Gravity")] 
         [SerializeField] private Vector3 _gravityDirection = Vector3.down; //What is the current gravity orientation for the player
         [SerializeField] private float _gravityIntensity = 9.8f;
-        [SerializeField] private float _gravityMultiplier = 2;
+        [SerializeField] [Tooltip("Change this to make the player fall faster")] private float _gravityMultiplier = 2;
         [SerializeField] private float _groundedGravity = 0.5f;
 
         [Header("Lashings")] 
-        [SerializeField] private float _halfLashingHeight = 1.0f;
-        [SerializeField] private float _lashingIntensity = 10;
+        [SerializeField] [Tooltip("Height of the jump")] private float _halfLashingHeight = 1.0f;
+        [SerializeField] [Tooltip("Added speed per each lash")]private float _lashingIntensity = 10;
         [SerializeField] private float _lashCooldown = 0;
         [SerializeField] private float _halfLashRotationSpeed = 30;
-        [SerializeField] private float  _rollSpeed = 10;
-        [SerializeField] private float  _rollLerpSpeed = 0.5f;
+        [SerializeField] private float _rollSpeed = 10;
+        [SerializeField] private float _rollLerpSpeed = 0.5f;
         [SerializeField] private float _maxUnlashDistance = 10;
-        [SerializeField] private bool _isLashing = false;
-        [SerializeField] private bool _isHalfLashing = false;
+        
         
         [SerializeField] public const float DEFAULT_LASHING_INTENSITY = 5;
         [SerializeField] public const float LASHING_INTENSITY_INCREMENT = 5;
@@ -56,19 +67,20 @@ namespace Player.StateMachine{
     
         
         [Header("Rotation Lashing")]
-        [SerializeField] private  float maxAngle = 90;//maximum angle it can rotate
-        [SerializeField] private float direction = 0; //Direction of the rotation
+        //Todo: Remove all of this as i think i do not use it anymore
+        [SerializeField] private  float _maxAngle = 90;//maximum angle it can rotate
+        [SerializeField] private float _direction = 0; //Direction of the rotation
         [Range(0, 1)]
-        [SerializeField] private float precision = 0.99f; //Defined for the calculation of the maximum time to reach the max angle
+        [SerializeField] private float _precision = 0.99f; //Defined for the calculation of the maximum time to reach the max angle
         [Range(0, 5)]
-        [SerializeField] private float damping = 2.1f; //How smooth the rotation is at the end
+        [SerializeField] private float _damping = 2.1f; //How smooth the rotation is at the end
         [Range(0, 1)]
-        [SerializeField] private float lerpSpeed = 0.5f;
-        [SerializeField] private float offset = 0; //Calculated based on the precision, the maximum angle and the damping
-        [SerializeField] private float maxTime = 1; //Calculated based on the precision, the maximum angle and the damping
-        [SerializeField] private float timeElapsed = 0;
+        [SerializeField] private float _lerpSpeed = 0.5f;
+        [SerializeField] private float _offset = 0; //Calculated based on the precision, the maximum angle and the damping
+        [SerializeField] private float _maxTime = 1; //Calculated based on the precision, the maximum angle and the damping
+        [SerializeField] private float _timeElapsed = 0;
         
-        [SerializeField] private Vector3 rotationAxis = Vector3.forward;
+        [SerializeField] private Vector3 _rotationAxis = Vector3.forward;
 
         //Speeds
         [Header("Speeds")] 
@@ -79,27 +91,21 @@ namespace Player.StateMachine{
         [SerializeField] private float _rotationSpeed = 15;
 
         [Header("Stormlight")] 
-        [SerializeField] private bool _isUsingStormlight = false; 
         [SerializeField] private float _stormlight = 100;
         [SerializeField] private float _stormlightRegenRate = 1;
         [SerializeField] private float _stormlightDepletionRate = 0.1f;
+        
         [SerializeField] private float _stormlightBaseDrain = 0.1f;
         [SerializeField] private float _stormlightLashingDrain = 0;
         [SerializeField] private float _stormlightInfusingDrain = 0;
         [SerializeField] private float _stormlightMovementDrain = 0;
         [SerializeField] private float _stormlightHealingDrain = 0;
-    
-        //Jump
-        [Header("Jump Speeds")] 
-        [SerializeField] private float _jumpHeight = 3;
-        [SerializeField] private float _dashForce = 25;
         
         //Interaction
         [Header("Interactions")] 
         [SerializeField] private float _maxInteractionDistance = 2f;
         [SerializeField] private LayerMask _interactionLayer;
         [SerializeField] private Infusable _infusableSelectedObject;
-        [SerializeField] private bool _isInfusing;
         
 
         //References
@@ -116,14 +122,14 @@ namespace Player.StateMachine{
         [SerializeField] private GameObject _spear;
         
         //State variables
-        [SerializeField] public PlayerStateFactory _states;
-        [SerializeField] public PlayerBaseState _currentState;
+        [SerializeField] private PlayerStateFactory _states;
+        [SerializeField] private PlayerBaseState _currentState;
     
         //getters and setters
         public CameraManager CameraManager { get => _cameraManager; set => _cameraManager = value; }
         public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }
         public Vector3 TargetDirection { get => _targetDirection; set => _targetDirection = value; }
-        public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+        public bool IsGrounded { get => _isGrounded; set => _isGrounded = value; }
         public float InAirTimer { get => _inAirTimer; set => _inAirTimer = value; }
         public float MaxAirSpeed { get => _maxAirSpeed; set => _maxAirSpeed = value; }
         public float LeapingVelocity { get => _leapingVelocity; set => _leapingVelocity = value; }
@@ -160,15 +166,15 @@ namespace Player.StateMachine{
         public float RollSpeed { get => _rollSpeed; set => _rollSpeed = value; }
         public float RollLerpSpeed { get => _rollLerpSpeed; set => _rollLerpSpeed = value; }
         public float MaxUnlashDistance { get => _maxUnlashDistance; set => _maxUnlashDistance = value; }
-        public float MaxAngle { get => maxAngle; set => maxAngle = value; }
-        public float Direction { get => direction; set => direction = value; }
-        public float Precision { get => precision; set => precision = value; }
-        public float Damping { get => damping; set => damping = value; }
-        public float LerpSpeed { get => lerpSpeed; set => lerpSpeed = value; }
-        public float Offset { get => offset; set => offset = value; }
-        public float MaxTime { get => maxTime; set => maxTime = value; }
-        public float TimeElapsed { get => timeElapsed; set => timeElapsed = value; }
-        public Vector3 RotationAxis { get => rotationAxis; set => rotationAxis = value; }
+        public float MaxAngle { get => _maxAngle; set => _maxAngle = value; }
+        public float Direction { get => _direction; set => _direction = value; }
+        public float Precision { get => _precision; set => _precision = value; }
+        public float Damping { get => _damping; set => _damping = value; }
+        public float LerpSpeed { get => _lerpSpeed; set => _lerpSpeed = value; }
+        public float Offset { get => _offset; set => _offset = value; }
+        public float MaxTime { get => _maxTime; set => _maxTime = value; }
+        public float TimeElapsed { get => _timeElapsed; set => _timeElapsed = value; }
+        public Vector3 RotationAxis { get => _rotationAxis; set => _rotationAxis = value; }
         public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
         public bool IsUsingStormlight { get => _isUsingStormlight; set => _isUsingStormlight = value; }
         public ParticleSystem ParticleSystem { get => _particleSystem; set => _particleSystem = value; }
@@ -248,7 +254,7 @@ namespace Player.StateMachine{
             _animatorManager.VelocityX = velocityX;
             _animatorManager.VelocityY = velocityY ;
             _animatorManager.VelocityZ = velocityZ;
-            _animatorManager.IsGrounded = isGrounded ;
+            _animatorManager.IsGrounded = _isGrounded ;
             _animatorManager.IsInteracting = _isInfusing;
             _animatorManager.IsLashing = _isLashing;
             _animatorManager.IsHalfLashing = _isHalfLashing;

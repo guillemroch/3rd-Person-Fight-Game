@@ -31,7 +31,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.InputManager.IsJumpPressed || !Ctx.isGrounded) {
+            if (Ctx.InputManager.IsJumpPressed || !Ctx.IsGrounded) {
                 SwitchStates(Factory.Air());
             }
 
@@ -93,7 +93,7 @@ namespace Player.StateMachine.States.Ground{
                     rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
                 Ctx.InAirTimer = 0;
-                Ctx.isGrounded = true;
+                Ctx.IsGrounded = true;
                 //Logic for stairs
                 Vector3 rayCastHitPoint = hit.point;
                 //targetPosition = rayCastHitPoint;
@@ -106,7 +106,7 @@ namespace Player.StateMachine.States.Ground{
             }
             else
             {
-                Ctx.isGrounded = false;
+                Ctx.IsGrounded = false;
             }
         }
     
