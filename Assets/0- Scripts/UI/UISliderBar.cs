@@ -23,7 +23,7 @@ public class UISliderBar : MonoBehaviour{
 
     public void UpdateUI()
     {
-        if (_sliderComponent.value != _value) {
+        if (_sliderComponent?.value != _value) {
             _sliderComponent.value = Mathf.Lerp(_sliderComponent.value, _value, _lerpSpeed);
         }
     }

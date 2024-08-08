@@ -108,6 +108,7 @@ public class CameraManager : MonoBehaviour
     }
 
     public void HandleAllCameraMovement() {
+        
         _pitchRotation = _cameraPivot.localRotation.eulerAngles.x;
         if (_pitchRotation > 180f) _pitchRotation -= 360f;
         _pitchRotation /= _maximumPitchAngle;
@@ -134,6 +135,7 @@ public class CameraManager : MonoBehaviour
     }
 
     private void FollowTarget() {
+        Debug.Log("Follow Target");
         //_cameraTransform.localPosition = _targetOffset;
         Vector3 offsetTargetPosition = _targetOffset.x * transform.right + _targetOffset.y * transform.up +
                                        _targetOffset.z * transform.forward;
@@ -170,6 +172,7 @@ public class CameraManager : MonoBehaviour
     }
     private void RotateCamera()
     {
+        Debug.Log("Camera rotate");
         //1- Calculate user input
         //yawAngle = Mathf.Lerp(yawAngle, yawAngle + (_inputManager.LookInput.x * _cameraYawSpeed), _camLookSmoothTime * Time.deltaTime);
         yawAngle = _inputManager.LookInput.x * _cameraYawSpeed;
@@ -320,7 +323,7 @@ public class CameraManager : MonoBehaviour
        
     }
 
-    private void OnDrawGizmos() {
+    /*private void OnDrawGizmos() {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_target.position, 0.10f);
         Gizmos.color = Color.red;
@@ -351,6 +354,6 @@ public class CameraManager : MonoBehaviour
         Gizmos.DrawLine(pivotPosition,pivotPosition + _cameraPivot.up * 0.2f);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);
-    }
+    }*/
 }
 

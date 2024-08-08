@@ -33,6 +33,7 @@ namespace Player{
 
         private void Start() {
             _uiManager.Initialize(_playerStateMachine);
+            
         }
 
         private void Update()
@@ -40,15 +41,19 @@ namespace Player{
             _inputManager.HandleAllInputs();
             _animatorManager.UpdateValues();
         }
+        
 
         private void FixedUpdate()
         {
             _playerStateMachine.HandleAllStates();
-            _uiManager.UpdateUI();
+            //_uiManager.UpdateUI();
         }
 
-        private void LateUpdate()
-        {
+        private void LateUpdate() {
+            
+            if (_uiManager.IsPaused)
+                return;
+            
             _cameraManager.HandleAllCameraMovement();
             _playerStateMachine.UpdateAnimatorValues();
         }

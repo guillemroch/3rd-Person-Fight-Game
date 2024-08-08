@@ -15,17 +15,19 @@ public class UIManager : MonoBehaviour{
     [SerializeField] private GameObject _configurationWindow;
     public UISliderBar HealthBar { get => _healthBar; set => _healthBar = value; }
     public UISliderBar StormlightBar { get => _stormlightBar; set => _stormlightBar = value; }
+    public bool IsPaused { get => _isPaused; set => _isPaused = value; }
 
     public void Initialize(PlayerStateMachine psm) {
         _stormlightBar.Initialize(psm.Stormlight);
     }
 
-    public void UpdateUI() {
+    public void Update() {
         _healthBar.UpdateUI();
         _stormlightBar.UpdateUI();
 
         Debug.Log("Pause");
         if (_inputManager.ConfigurationInput) {
+            _inputManager.ResetConfigurationInput();
             TogglePause();
         }
     }
@@ -35,9 +37,20 @@ public class UIManager : MonoBehaviour{
         Time.timeScale = _isPaused ? 0 : 1; 
         _pauseMenu.SetActive(_isPaused);
         Debug.Log("Game Paused: " + _isPaused);
+        
+        if (_isPaused) 
+            Cursor.lockState = CursorLockMode.None;
+        else {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     public void OpenConfigurationWindow() {
         
+    }
+
+    public void ExitButton() {
+        Debug.Log("Quit");
+        Application.Quit();
     }
 }
