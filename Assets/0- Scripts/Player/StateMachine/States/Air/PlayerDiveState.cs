@@ -22,11 +22,7 @@ namespace Player.StateMachine.States.Air{
             
             Ctx.AnimatorManager.PlayTargetAnimation("Lash");
             //TODO: [Animation] -> set lash blend tree value
-            float limit = Ctx.MaxAngle* Ctx.Precision;
-            //Maximum time to reach the max angle for player roll rotation
-            Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
-            Ctx.MaxTime = Ctx.Offset*2;
-            
+          
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
         
         }

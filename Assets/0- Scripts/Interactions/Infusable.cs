@@ -17,6 +17,7 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private float _maxSpeed = 20f;
     [SerializeField] private float _chargedStormlight;
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private ParticleSystem _particleSystem;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     public void Start() {
@@ -24,12 +25,14 @@ public class Infusable : MonoBehaviour , Interactable{
         _playerTransform = GameObject.FindWithTag("Player").transform;
         _playerRigidbody = GameObject.FindWithTag("Player").GetComponent<Rigidbody>();
         _cameraTransform = Camera.main.transform;
+        _particleSystem = GetComponent<ParticleSystem>();
     }
 
     public void Interact(out int value) {
         _active = true;
         value = (int)_weight;
         _gravityDirection = _playerRigidbody.velocity + Vector3.up*_rigidbody.mass;
+        
     }
 
    public void Release() {
@@ -44,7 +47,8 @@ public class Infusable : MonoBehaviour , Interactable{
         
         
         if (_active) {
-            
+            if (!_particleSystem.isPlaying)
+                _particleSystem.Play();
             Vector3 offset =  _cameraTransform.forward * (Vector3.Distance(_playerTransform.position, _cameraTransform.position) * _distance);
             Vector3 velocity = _rigidbody.velocity;
             transform.position = Vector3.SmoothDamp(transform.position, _cameraTransform.position + offset, ref velocity, _smoothTime);
@@ -58,6 +62,7 @@ public class Infusable : MonoBehaviour , Interactable{
             _rigidbody.AddForce(_gravityDirection);
             _chargedStormlight -= 0.1f;
             if (_chargedStormlight <= 0) {
+                _particleSystem.Stop();
                 _gravityDirection = Vector3.down * 10;
             }
         }

@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using Player;
 using Player.StateMachine;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -93,6 +91,7 @@ public class CameraManager : MonoBehaviour
     
     [Header("Infusing")]
     [SerializeField] private Vector3 _cameraInfusingOffset;
+
     
     public float PitchRotation { get => _pitchRotation; set => _pitchRotation = value; }
 
@@ -200,13 +199,18 @@ public class CameraManager : MonoBehaviour
         //2 - Apply yaw rotation to transform + Up Vector Correction
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
-        Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
+        //targetRotation = Quaternion.AngleAxis(yawAngle, transform.up);
+        //Quaternion upAlignRotation = Quaternion.identity;
+        //Quaternion upAlignRotation = Quaternion.FromToRotation(transform.up, _target.up);
+        //Quaternion upAlignRotation = Quaternion.RotateTowards(transform.rotation, _target.rotation, 30f);
+        //Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
         //TODO: Make sure the rotation is correct cause it is not
-        transform.rotation = Quaternion.Slerp(transform.rotation, upAlignRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * upAlignRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation,transform.rotation * targetRotation , _cameraRotationLerp*Time.deltaTime);
         //3 - Rotate the pivot point for the pitch
         rotation = Vector3.zero;
         rotation.x = pitchAngle;
-        targetRotation = quaternion.Euler(rotation);
+        targetRotation = Quaternion.Euler(rotation);
         _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
         
     }
@@ -215,9 +219,9 @@ public class CameraManager : MonoBehaviour
         
         Vector3 rotation = Vector3.zero;
         
-        float yawAngle = _inputManager.LookInput.x * _cameraYawSpeed * _sensitivityHalflashMultiplier;
+        float yawAngle = _inputManager.LookInput.x * _cameraHalflashYawSpeed * _sensitivityHalflashMultiplier;
         yawAngle *= _invertedYaw ? -1 : 1;
-        float pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed * _sensitivityHalflashMultiplier;
+        float pitchAngle =  _inputManager.LookInput.y * _cameraHalflashPitchSpeed * _sensitivityHalflashMultiplier;
         pitchAngle *= _invertedPitch ? -1 : 1;
         
         rotation.y = yawAngle;
@@ -227,13 +231,26 @@ public class CameraManager : MonoBehaviour
 
         rotation = Vector3.zero;
         rotation.x = pitchAngle; 
-        targetRotation = quaternion.Euler(rotation);
+        targetRotation = Quaternion.Euler(rotation);
         _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
     }
     private void RotateCameraLash() {
         //The player controls the camera Yaw and pitch, the Roll is automatically done
+            Quaternion targetRotation;
+
+            float yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed * _sensitivityLashMultiplier;
+            yawAngle *= _invertedYaw ? -1 : 1;
+            float pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed * _sensitivityLashMultiplier;
+            pitchAngle *= _invertedPitch ? -1 : 1;
+            
+            
+            targetRotation = Quaternion.AngleAxis(yawAngle, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetRotation , _cameraRotationLerp * Time.deltaTime);
+
+            targetRotation = Quaternion.AngleAxis(pitchAngle, Vector3.right);
+            _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, _cameraPivot.localRotation * targetRotation, _cameraRotationLerp * Time.deltaTime);
         
-        if (_inputManager.LookInput.magnitude > 0) {
+        /*if (_inputManager.LookInput.magnitude > 0) {
             _centerTimer = 0;
             Quaternion targetRotation;
 
@@ -254,7 +271,8 @@ public class CameraManager : MonoBehaviour
             if (_centerTimer > _timeToCenter) {
                 
                 Quaternion targetRotation = _target.rotation;
-                Quaternion centerPitch = Quaternion.AngleAxis(-_centerCameraPosition.y, Vector2.right);
+                targetRotation *= Quaternion.AngleAxis(90, _target.right);
+                Quaternion centerPitch = Quaternion.AngleAxis(-_centerCameraPosition.y, Vector3.right);
                  
                 transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation, _cameraRotationLerp * Time.deltaTime);
                 _cameraPivot.localRotation =  Quaternion.Slerp(_cameraPivot.localRotation,centerPitch, _cameraRotationLerp * Time.deltaTime);
@@ -278,7 +296,7 @@ public class CameraManager : MonoBehaviour
                 }
                
             }
-        } 
+        } */
     } 
     private void HandleCameraCollisions()
     {
@@ -304,27 +322,17 @@ public class CameraManager : MonoBehaviour
     }
 
     public void SetCameraMode(CameraMode cameraMode) {
-        if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) {
-            _camera.fieldOfView = _lashFOV;
-            transform.rotation = _target.rotation;
-            _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+        if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) { //Switching TO Normal mode
+            StartCoroutine(TransitionRotationToNormal(1));
         }
-
-        if (cameraMode != CameraMode.Normal) {
-            Vector3 rotation = _target.rotation.eulerAngles;
-            rotation.x = 0;
-            rotation.z = 0;
-            _camera.fieldOfView = _normalFOV;
-
-            transform.rotation = Quaternion.Euler(rotation);
-             _cameraPivot.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+        if (cameraMode != CameraMode.Normal) { //Switching to any other state that is not Normal mode
+            StartCoroutine(TransitionRotationToLash(1));
         }
         _cameraMode = cameraMode;
-        
-       
+        StartCoroutine(Transition(1));
     }
 
-    /*private void OnDrawGizmos() {
+    private void OnDrawGizmos() {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_target.position, 0.10f);
         Gizmos.color = Color.red;
@@ -355,6 +363,52 @@ public class CameraManager : MonoBehaviour
         Gizmos.DrawLine(pivotPosition,pivotPosition + _cameraPivot.up * 0.2f);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);
-    }*/
+    }
+    
+       public IEnumerator Transition(float duration) {
+           _cameraRotationLerp = 4;
+           while (duration >= 0)
+           { 
+               duration -= Time.deltaTime;
+               yield return null;
+           }
+
+           _cameraRotationLerp = 15;
+       }
+
+       public IEnumerator TransitionRotationToLash(float duration) {
+           Vector3 rotation = _target.rotation.eulerAngles;
+           rotation.x = 0;
+           rotation.z = 0;
+           Quaternion targetRotation = Quaternion.Euler(rotation);
+           Quaternion targetPivotRotation = Quaternion.Euler(new Vector3(0,0,0));
+           while (duration >= 0) {
+               duration -= Time.deltaTime;        
+               
+               _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, _lashFOV, 0.8f);
+
+               transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
+               _cameraPivot.localRotation =
+                   Quaternion.Slerp(_cameraPivot.localRotation, targetPivotRotation, 1 * Time.deltaTime);
+           }
+         
+           yield return null;  
+       }
+
+       public IEnumerator TransitionRotationToNormal(float duration) {
+           Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -_playerStateMachine.GravityDirection);
+           Quaternion targetPivotRotation = Quaternion.Euler(new Vector3(0,0,0));
+           while (duration >= 0) {
+               duration -= Time.deltaTime;        
+                 
+               _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, _normalFOV, 0.8f);
+               transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 4 * Time.deltaTime);
+               _cameraPivot.localRotation =
+                   Quaternion.Slerp(_cameraPivot.localRotation, targetPivotRotation, 4 * Time.deltaTime);
+           }
+
+           yield return null;
+       }
+       
 }
 

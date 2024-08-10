@@ -58,7 +58,7 @@ namespace Player.StateMachine{
         [SerializeField] private float _rollSpeed = 10;
         [SerializeField] private float _rollLerpSpeed = 0.5f;
         [SerializeField] private float _maxUnlashDistance = 10;
-        
+        [SerializeField] private float _angleOfIncidence = 0; // -90 means fall position, 90 means dive position 
         
         [SerializeField] public const float DEFAULT_LASHING_INTENSITY = 5;
         [SerializeField] public const float LASHING_INTENSITY_INCREMENT = 5;
@@ -166,20 +166,14 @@ namespace Player.StateMachine{
         public float RollSpeed { get => _rollSpeed; set => _rollSpeed = value; }
         public float RollLerpSpeed { get => _rollLerpSpeed; set => _rollLerpSpeed = value; }
         public float MaxUnlashDistance { get => _maxUnlashDistance; set => _maxUnlashDistance = value; }
-        public float MaxAngle { get => _maxAngle; set => _maxAngle = value; }
-        public float Direction { get => _direction; set => _direction = value; }
-        public float Precision { get => _precision; set => _precision = value; }
-        public float Damping { get => _damping; set => _damping = value; }
         public float LerpSpeed { get => _lerpSpeed; set => _lerpSpeed = value; }
-        public float Offset { get => _offset; set => _offset = value; }
-        public float MaxTime { get => _maxTime; set => _maxTime = value; }
-        public float TimeElapsed { get => _timeElapsed; set => _timeElapsed = value; }
         public Vector3 RotationAxis { get => _rotationAxis; set => _rotationAxis = value; }
         public UIManager UIManager { get => _uiManager; set => _uiManager = value; }
         public bool IsUsingStormlight { get => _isUsingStormlight; set => _isUsingStormlight = value; }
         public ParticleSystem ParticleSystem { get => _particleSystem; set => _particleSystem = value; }
         public float MaxInteractionDistance { get => _maxInteractionDistance; set => _maxInteractionDistance = value; }
         public LayerMask InteractionLayer { get => _interactionLayer; set => _interactionLayer = value; }
+        public float AngleOfIncidence { get => _angleOfIncidence; set => _angleOfIncidence = value; }
 
         public Infusable InfusableSelectedObject
             {
@@ -210,6 +204,7 @@ namespace Player.StateMachine{
         public float StormlightHealingDrain { get => _stormlightHealingDrain; set => _stormlightHealingDrain = value; }
         public GameObject Spear { get => _spear; set => _spear = value; }
 
+        private String stateString;
         #endregion
     
         private void Awake()
@@ -232,7 +227,18 @@ namespace Player.StateMachine{
         public void HandleAllStates()
         {
             _currentState.UpdateStates();
-            Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ");
+            
+            String currentState = "States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ";
+            
+            if (currentState.CompareTo(stateString) != 0) {
+                //Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ");
+                stateString = "States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name +
+                              "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name + "] " + "] ||=> [" +
+                              _currentState?._currentSubState?._currentSubState?._currentSubState?.name + "] " +
+                              "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState
+                                  ?._currentSubState?.name + "] ";
+            }
+         
         }
 
         public void UpdateAnimatorValues() {
@@ -260,9 +266,12 @@ namespace Player.StateMachine{
             _animatorManager.IsHalfLashing = _isHalfLashing;
             _animatorManager.IsFalling = _isFalling;
             _animatorManager.LookY = _cameraManager.PitchRotation;
+
+            _animatorManager.DiveAngle = _angleOfIncidence / 90;
         }
         public void OnDrawGizmos() {
-            /*Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
+#if UNITY_EDITOR
+            Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,
                 Quaternion.LookRotation(_playerTransform.up, _playerTransform.right), 1f, EventType.Repaint);
             Handles.color = Color.yellow;
@@ -270,8 +279,8 @@ namespace Player.StateMachine{
                 Quaternion.LookRotation(_gravityDirection.normalized, _playerTransform.forward),
                 _gravityDirection.magnitude, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,
-                Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
-
+                Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);
+#endif
             Gizmos.color = Color.green;
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.up * 0.2f);
             Gizmos.color = Color.red;

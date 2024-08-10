@@ -19,11 +19,7 @@ namespace Player.StateMachine.States.Lash{
             
             //TODO: [Animation] -> set lash blend tree value
             //Ctx.AnimatorManager.PlayTargetAnimation("Lash");
-            float limit = Ctx.MaxAngle* Ctx.Precision;
-            //Maximum time to reach the max angle for player roll rotation
-            Ctx.Offset = (Mathf.Log((-limit)/(-Ctx.MaxAngle + limit)) / Ctx.Damping); 
-            Ctx.MaxTime = Ctx.Offset*2;
-            
+     
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
         
         }
@@ -76,11 +72,22 @@ namespace Player.StateMachine.States.Lash{
             
             //DIVE
             if (Ctx.InputManager.DiveInput) {
-                SwitchStates(Factory.LashDive());
+                Ctx.InputManager.ResetDiveInput();
+                HandleDive();
+            }
+
+            if (Ctx.InputManager.RollInput != 0) {
+                Debug.Log("Rotate");
+                if (Ctx.InputManager.RollInput > 0 && Ctx.AngleOfIncidence < 90) {
+                    Ctx.AngleOfIncidence += Ctx.InputManager.RollInput * 1.1f;
+                }else if (Ctx.InputManager.RollInput < 0 && Ctx.AngleOfIncidence > -90) {
+                    Ctx.AngleOfIncidence += Ctx.InputManager.RollInput * 1.1f;
+                }
             }
             if (Ctx.InputManager.DashInput) {
                 SwitchStates(Factory.LashDash());
             }
+            
         
             //HALFLASH
             if (Ctx.LashingIntensity <= 0) {
@@ -97,19 +104,6 @@ namespace Player.StateMachine.States.Lash{
         #region private Methods
 
         private void HandleMovement() {
-            //TODO: Write a proper dive state
-            //The player rotates the gravity direction it is falling towards ==== PLANE-LIKE MOVEMENT ===========
-            // Disabled
-            /* // Ctx.MoveDirection = Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.y;
-                        // //    + Ctx.PlayerTransform.forward * -Ctx.InputManager.MovementInput.x;
-
-            Ctx.MoveDirection.Normalize();
-
-            Quaternion rotation = Quaternion.Euler(Ctx.MoveDirection) * Quaternion.Euler(Ctx.GravityDirection);
-
-            Ctx.GravityDirection = rotation * Ctx.GravityDirection;*/
-            //=======================================================================================================
-
             //TODO: Add proper animations to this
             //Diving system
             Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y +
@@ -123,13 +117,19 @@ namespace Player.StateMachine.States.Lash{
             
             //Rotate to face towards the gravity direction
             if (Ctx.GravityDirection == Vector3.zero) 
-                Ctx.GravityDirection = Ctx.PlayerTransform.up;
+                Ctx.GravityDirection = Ctx.CameraObject.up;
 
-            if (Ctx.InputManager.SmallLashInput == 0) {
-                Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Ctx.GravityDirection.normalized);
-                float rollAmount = Ctx.RollSpeed * Ctx.InputManager.RollInput;
-                Quaternion rollRotation = Quaternion.AngleAxis(rollAmount, Ctx.PlayerTransform.up);
-                Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation * rollRotation * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+            if (Ctx.InputManager.SmallLashInput == 0) {//TODO: I think the roll is not needed so remove the rollAmount
+                //Orient up player toward the gravity direction
+                Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection.normalized);
+                Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+                targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
+                //Roll
+                //float rollAmount = Ctx.RollSpeed * Ctx.InputManager.RollInput;
+                //Quaternion rollRotation = Quaternion.AngleAxis(rollAmount, Ctx.PlayerTransform.up);
+                
+                //Apply rotation to transform
+                Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation  * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
             }
         }
 
@@ -138,13 +138,19 @@ namespace Player.StateMachine.States.Lash{
             //Vector3 rayCastOrigin = Ctx.transform.position - Ctx.RayCastHeightOffset * Ctx.GravityDirection;
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
         
-            if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
+            if (Ctx.InAirTimer <= Ctx.MaxAirSpeed)
+                Ctx.InAirTimer += Time.deltaTime;
+            
             Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
-            if (Ctx.InAirTimer <= 0.1f) return;
+            
+            if (Ctx.InAirTimer <= 0.1f) 
+                return;
+            
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
            
                 Ctx.IsGrounded = true;
+                
                 Ctx.GravityDirection = -hit.normal;  
                 Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
             
@@ -200,6 +206,15 @@ namespace Player.StateMachine.States.Lash{
             Ctx.LashingIntensity += lashAmount ;
         }
 
+        private void HandleDive() {
+            if (Ctx.AngleOfIncidence > 0) {
+                Ctx.AngleOfIncidence = -90;
+            }
+            else {
+                Ctx.AngleOfIncidence = 90;
+            }
+            Ctx.AnimatorManager.PlayTargetAnimation("FrontFlip Fall to Lash");
+        }
         public IEnumerator TriggerLandingFromLashingCoroutine(Vector3 targetNormal, Vector3 hitPoint, float duration)
         {
             //TODO: Make it work without a Coroutine

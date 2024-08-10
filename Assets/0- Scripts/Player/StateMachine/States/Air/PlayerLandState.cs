@@ -8,11 +8,11 @@ namespace Player.StateMachine.States.Air{
 
             //Ctx.AnimatorManager.PlayTargetAnimation("Land Blend Tree");
             //TODO: [Animation] -> set land blend tree value
+            //Ctx.AnimatorManager.animator.SetBool("End", true);
         }
 
         public override void UpdateState() {
             CheckSwitchStates();
-            HandleMovement();
         }
 
         public override void FixedUpdateState() {
@@ -23,23 +23,14 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void CheckSwitchStates() {
-            SwitchStates(Factory.Grounded());
+            //if (Ctx.AnimatorManager.animator.GetBool("End")) {
+                SwitchStates(Factory.Grounded());
+            //}
         }
 
         public override void InitializeSubState() {
         }
         
-        private void HandleMovement() {
-            Ctx.MoveDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y + Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
 
-            float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
-            float magSquared = Ctx.GravityDirection.sqrMagnitude;
-    
-            Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
-            Ctx.MoveDirection += -projection;
-            Ctx.MoveDirection.Normalize();
-        
-            Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);
-        }
     }
 }

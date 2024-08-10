@@ -152,7 +152,6 @@ namespace Player{
             _unLashInput = false;
         }
 
-
         public void ResetStormlightInput() {
             _stormlightInput = false;
         }
@@ -167,6 +166,10 @@ namespace Player{
 
         public void ResetConfigurationInput() {
             _configurationInput = false;
+        }
+
+        public void ResetDiveInput() {
+            _diveInput = false;
         }
     }
 }

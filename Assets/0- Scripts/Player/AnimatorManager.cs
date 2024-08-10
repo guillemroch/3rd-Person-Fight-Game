@@ -20,6 +20,7 @@ namespace Player{
         [SerializeField] [ReadOnly] private int _isInteractingHash;
         [SerializeField] [ReadOnly] private int _isFallingHash;
         [SerializeField] [ReadOnly] private int _lookYHash;
+        [SerializeField] [ReadOnly] private int _diveAngleHash;
 
         [Header("Variables Values")]
         [SerializeField] private float _velocityX;
@@ -31,6 +32,7 @@ namespace Player{
         [SerializeField] private bool _isInteracting;
         [SerializeField] private bool _isFalling;
         [SerializeField] private float _lookY;
+        [SerializeField] private float _diveAngle;
 
         public float VelocityX { get => _velocityX; set => _velocityX = value; }
         public float VelocityY { get => _velocityY; set => _velocityY = value; }
@@ -41,6 +43,7 @@ namespace Player{
         public bool IsInteracting { get => _isInteracting; set => _isInteracting = value; }
         public bool IsFalling { get => _isFalling; set => _isFalling = value; }
         public float LookY { get => _lookY; set => _lookY = value; }
+        public float DiveAngle { get => _diveAngle; set => _diveAngle = value; }
 
         private void Awake()
         {
@@ -55,6 +58,7 @@ namespace Player{
             _isInteractingHash = Animator.StringToHash("IsInteracting");
             _isFallingHash = Animator.StringToHash("IsFalling");
             _lookYHash = Animator.StringToHash("LookY");
+            _diveAngleHash = Animator.StringToHash("DiveAngle");
         }
 
         public void UpdateValues() {
@@ -70,6 +74,7 @@ namespace Player{
            
             animator.SetLayerWeight( animator.GetLayerIndex("Interaction"), _isInteracting ? 1 : 0); 
             //animator.SetBool(_isInteractingHash, _ velocityX);
+            animator.SetFloat(_diveAngleHash, _diveAngle, 0.2f, Time.deltaTime);
         }
 
         public void PlayTargetAnimation(string targetAnimation)

@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: OutlinerSelected_MAT
   m_Shader: {fileID: -6465566751694194690, guid: 98ac78d6388006a40b03aca1affed4a3, type: 3}
-  m_Parent: {fileID: 2100000, guid: 66737b4bd3f14cc47a971804a4fe0f79, type: 2}
+  m_Parent: {fileID: -876546973899608171, guid: 98ac78d6388006a40b03aca1affed4a3, type: 3}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
