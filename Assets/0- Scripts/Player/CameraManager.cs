@@ -332,7 +332,7 @@ public class CameraManager : MonoBehaviour
         StartCoroutine(Transition(1));
     }
 
-    private void OnDrawGizmos() {
+    private void OnDrawGizmos() {/*
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_target.position, 0.10f);
         Gizmos.color = Color.red;
@@ -362,7 +362,7 @@ public class CameraManager : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(pivotPosition,pivotPosition + _cameraPivot.up * 0.2f);
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);
+        Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);*/
     }
     
        public IEnumerator Transition(float duration) {

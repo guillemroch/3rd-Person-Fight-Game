@@ -8,6 +8,10 @@ namespace Player.StateMachine{
         
         //TODO: Create in game menu to modify these values and store them in a save file
         #region Variables
+
+        [Header("Time scale")] 
+        [SerializeField] [Range(0,1)] private float _timeScale = 1f;
+        
         //Player values for movements
         [Header("Movement Variables")]
         [SerializeField] private Vector3 _moveDirection;
@@ -227,6 +231,7 @@ namespace Player.StateMachine{
         public void HandleAllStates()
         {
             _currentState.UpdateStates();
+            Time.timeScale = _timeScale;
             
             String currentState = "States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ";
             
@@ -271,7 +276,7 @@ namespace Player.StateMachine{
         }
         public void OnDrawGizmos() {
 #if UNITY_EDITOR
-            Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
+           /* Handles.SphereHandleCap(0, _playerTransform.position, Quaternion.identity, 0.1f, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,
                 Quaternion.LookRotation(_playerTransform.up, _playerTransform.right), 1f, EventType.Repaint);
             Handles.color = Color.yellow;
@@ -279,7 +284,7 @@ namespace Player.StateMachine{
                 Quaternion.LookRotation(_gravityDirection.normalized, _playerTransform.forward),
                 _gravityDirection.magnitude, EventType.Repaint);
             Handles.ArrowHandleCap(0, _playerTransform.position,
-                Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);
+                Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
 #endif
             Gizmos.color = Color.green;
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.up * 0.2f);
@@ -287,6 +292,18 @@ namespace Player.StateMachine{
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.right * 0.2f);
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward * 0.2f);
+            
+            Vector3 planeOrthogonal = Vector3.Cross(PlayerTransform.right, Vector3.down);
+            Vector3 projectedVector = Vector3.ProjectOnPlane(GravityDirection, planeOrthogonal);
+            //float angle = Vector3.Angle(Vector3.down, projectedVector);
+            float angle = Vector3.SignedAngle(Vector3.down, projectedVector, Vector3.up);
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(_playerTransform.position, GravityDirection);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawRay(_playerTransform.position, planeOrthogonal);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(_playerTransform.position, projectedVector);
         }
     }
 }

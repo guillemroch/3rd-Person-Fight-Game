@@ -77,7 +77,6 @@ namespace Player.StateMachine.States.Lash{
             }
 
             if (Ctx.InputManager.RollInput != 0) {
-                Debug.Log("Rotate");
                 if (Ctx.InputManager.RollInput > 0 && Ctx.AngleOfIncidence < 90) {
                     Ctx.AngleOfIncidence += Ctx.InputManager.RollInput * 1.1f;
                 }else if (Ctx.InputManager.RollInput < 0 && Ctx.AngleOfIncidence > -90) {
@@ -105,11 +104,18 @@ namespace Player.StateMachine.States.Lash{
 
         private void HandleMovement() {
             //TODO: Add proper animations to this
+            
             //Diving system
             Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y +
                                 Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
-            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f;
+            
+            //Calculate how much the angle of incidence affects the speed
+            float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
+            speedMultiplier *= 0.75f;
+            speedMultiplier = 1 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
+            
+            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier; //TODO: Adjust this speed based on the AngleOfIncidence
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
         }
     
@@ -119,17 +125,26 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.GravityDirection == Vector3.zero) 
                 Ctx.GravityDirection = Ctx.CameraObject.up;
 
-            if (Ctx.InputManager.SmallLashInput == 0) {//TODO: I think the roll is not needed so remove the rollAmount
+            if (Ctx.InputManager.SmallLashInput == 0) {
                 //Orient up player toward the gravity direction
                 Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection.normalized);
                 Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
                 targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
-                //Roll
-                //float rollAmount = Ctx.RollSpeed * Ctx.InputManager.RollInput;
-                //Quaternion rollRotation = Quaternion.AngleAxis(rollAmount, Ctx.PlayerTransform.up);
                 
+                //Calculate in which direction the forward vector must be
+      
                 //Apply rotation to transform
                 Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation  * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+                
+                Vector3 planeOrthogonal = Vector3.Cross(Ctx.PlayerTransform.right, Vector3.down);
+                Vector3 projectedVector = Vector3.ProjectOnPlane(Ctx.PlayerTransform.right, planeOrthogonal);
+                //float angle = Vector3.Angle(Vector3.down, projectedVector);
+                float angle =   Vector3.SignedAngle(Vector3.down, projectedVector, Ctx.GravityDirection.normalized);
+                angle = 90 + angle * ( angle > 0 ? -1 : 1);
+                Debug.Log("Angle is: " + angle);
+              
+                Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
+                Ctx.PlayerTransform.rotation *= rollCorrection;
             }
         }
 
@@ -165,7 +180,12 @@ namespace Player.StateMachine.States.Lash{
     
         private void HandleGravity() {
         
-            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity), ForceMode.Acceleration);
+            //Calculate how much the angle of incidence affects the speed
+            float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
+            speedMultiplier *= 0.75f;
+            speedMultiplier = (1 - 0.75f/2) + speedMultiplier; // Get a value between 0.75f min and 1.25f max
+            
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * speedMultiplier), ForceMode.Acceleration);
 
         }
     

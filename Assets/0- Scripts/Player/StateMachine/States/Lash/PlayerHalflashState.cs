@@ -27,6 +27,7 @@ namespace Player.StateMachine.States.Lash{
 
         public override void UpdateState() {
             CheckSwitchStates();
+            HandleRotation();
 
             Ctx.StormlightLashingDrain = 1;
             //Make the player rotate with the camera, making that we always see the back of the player
@@ -72,6 +73,12 @@ namespace Player.StateMachine.States.Lash{
                 yield return null;
             }
             Ctx.transform.rotation = targetRotation;
+        }
+
+        private void HandleRotation() {
+            Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Vector3.up);
+            Ctx.transform.rotation = Quaternion.Slerp(Ctx.transform.rotation, Ctx.transform.rotation * targetRotation,
+                2f * Time.deltaTime);
         }
         
         private void CalculateGravityDirection()
