@@ -87,7 +87,6 @@ namespace Player.StateMachine.States.Lash{
                 SwitchStates(Factory.LashDash());
             }
             
-        
             //HALFLASH
             if (Ctx.LashingIntensity <= 0) {
                 SwitchStates(Factory.Halflash());
@@ -104,9 +103,10 @@ namespace Player.StateMachine.States.Lash{
 
         private void HandleMovement() {
             //TODO: Add proper animations to this
-            
+
+            Vector3 upAxis = Vector3.Cross(Ctx.PlayerTransform.right, Ctx.GravityDirection);
             //Diving system
-            Ctx.MoveDirection = Ctx.PlayerTransform.forward * Ctx.InputManager.MovementInput.y +
+            Ctx.MoveDirection = upAxis * Ctx.InputManager.MovementInput.y +
                                 Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
             
@@ -115,8 +115,12 @@ namespace Player.StateMachine.States.Lash{
             speedMultiplier *= 0.75f;
             speedMultiplier = 1 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
             
-            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier; //TODO: Adjust this speed based on the AngleOfIncidence
+            float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier;
+            
+            //MODE 1 - DISPLACEMENT
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
+            //MODE 2 - ROTATION DEVIATION
+            //Ctx.GravityDirection += Ctx.MoveDirection * diveTranslationSpeed;
         }
     
         private void HandleRotation() {
@@ -135,13 +139,15 @@ namespace Player.StateMachine.States.Lash{
       
                 //Apply rotation to transform
                 Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation  * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
+                float angleRight = Vector3.Angle(Ctx.GravityDirection, Vector3.forward);
+                Vector3 right = angleRight > 90 ? -Ctx.PlayerTransform.right : Ctx.PlayerTransform.right;
                 
-                Vector3 planeOrthogonal = Vector3.Cross(Ctx.PlayerTransform.right, Vector3.down);
-                Vector3 projectedVector = Vector3.ProjectOnPlane(Ctx.PlayerTransform.right, planeOrthogonal);
+                Vector3 planeOrthogonal = Vector3.Cross(right, Vector3.down);
+                Vector3 projectedVector = Vector3.ProjectOnPlane(right, planeOrthogonal);
                 //float angle = Vector3.Angle(Vector3.down, projectedVector);
                 float angle =   Vector3.SignedAngle(Vector3.down, projectedVector, Ctx.GravityDirection.normalized);
                 angle = 90 + angle * ( angle > 0 ? -1 : 1);
-                Debug.Log("Angle is: " + angle);
+             
               
                 Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
                 Ctx.PlayerTransform.rotation *= rollCorrection;
