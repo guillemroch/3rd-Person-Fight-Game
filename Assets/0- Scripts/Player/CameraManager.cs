@@ -323,16 +323,16 @@ public class CameraManager : MonoBehaviour
 
     public void SetCameraMode(CameraMode cameraMode) {
         if (cameraMode == CameraMode.Normal && _cameraMode != CameraMode.Normal) { //Switching TO Normal mode
-            StartCoroutine(TransitionRotationToNormal(1));
+            //StartCoroutine(TransitionRotationToNormal(1));
         }
         if (cameraMode != CameraMode.Normal) { //Switching to any other state that is not Normal mode
-            StartCoroutine(TransitionRotationToLash(1));
+            //StartCoroutine(TransitionRotationToLash(1));
         }
         _cameraMode = cameraMode;
-        StartCoroutine(Transition(1));
+        //StartCoroutine(Transition(2));
     }
 
-    private void OnDrawGizmos() {/*
+    private void OnDrawGizmos() {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_target.position, 0.10f);
         Gizmos.color = Color.red;
@@ -362,11 +362,11 @@ public class CameraManager : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(pivotPosition,pivotPosition + _cameraPivot.up * 0.2f);
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);*/
+        Gizmos.DrawLine(pivotPosition, pivotPosition + _cameraPivot.forward * 0.2f);
     }
     
        public IEnumerator Transition(float duration) {
-           _cameraRotationLerp = 4;
+           _cameraRotationLerp = 1;
            while (duration >= 0)
            { 
                duration -= Time.deltaTime;

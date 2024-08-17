@@ -29,7 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8740853804071935262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -288,7 +288,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0.5
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -323,6 +323,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   _playerRigidbody: {fileID: 0}
   _gravityDirection: {x: 0, y: -1, z: 0}
+  _lashForce: 1
   _active: 0
   _selectedOutline: {fileID: 1874950688228616498}
   _inRangeOutline: {fileID: 4028128956926157792}
@@ -331,6 +332,9 @@ MonoBehaviour:
   _chargedStormlight: 0
   _cameraTransform: {fileID: 0}
   _particleSystem: {fileID: 0}
+  _stormlightCost: 1
+  _stormlightBaseCost: 1
+  _stormlightLashCost: 500
 --- !u!65 &5797222314637803431
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -679,9 +683,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.24
-      minScalar: 1
+      minMaxState: 3
+      scalar: 0.4
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -732,7 +736,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -785,7 +789,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:

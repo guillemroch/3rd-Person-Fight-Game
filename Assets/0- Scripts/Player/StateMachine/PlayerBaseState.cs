@@ -14,7 +14,7 @@ namespace Player.StateMachine{
         public PlayerBaseState _currentSubState;
     
         //Getters and Setters
-        protected PlayerStateMachine Ctx => _ctx;
+        protected PlayerStateMachine  Ctx => _ctx;
         protected PlayerStateFactory Factory => _factory;
         protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
         protected PlayerBaseState CurrentSubState => _currentSubState;

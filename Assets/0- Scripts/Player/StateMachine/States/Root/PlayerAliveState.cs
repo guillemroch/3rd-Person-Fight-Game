@@ -37,7 +37,7 @@ namespace Player.StateMachine.States.Alive{
                 else {
                     //ENTER STORMLIGHT STATE
                     Ctx.AnimatorManager.PlayTargetAnimation("Buff");
-                    Ctx.AnimatorManager.animator.SetLayerWeight(4,1);
+                    //Ctx.AnimatorManager.animator.SetLayerWeight(4,1);
                     Ctx.ParticleSystem.Play();
                 }
             }
@@ -72,7 +72,7 @@ namespace Player.StateMachine.States.Alive{
                                           Ctx.StormlightLashingDrain +
                                           Ctx.StormlightMovementDrain;
            
-            Ctx.Stormlight -= Ctx.StormlightDepletionRate;
+            Ctx.Stormlight -= Ctx.StormlightDepletionRate * 0.1f;
             if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
                      
             Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);

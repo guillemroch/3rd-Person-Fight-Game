@@ -34,7 +34,7 @@ namespace Player.StateMachine.States.Lash{
             }
 
             if (Ctx.InputManager.SmallLashInput > 0) {
-                SetSubStates(Factory.LashDive());
+                SetSubStates(Factory.Lash());
             }
         }
     }

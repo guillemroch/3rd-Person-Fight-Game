@@ -10,14 +10,18 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Rigidbody _playerRigidbody;
     [SerializeField] private Vector3 _gravityDirection = Vector3.down;
+    [SerializeField] private float _lashForce = 1;
     [SerializeField] private bool _active = false;
     [SerializeField] private GameObject _selectedOutline;
     [SerializeField] private GameObject _inRangeOutline;
     [SerializeField] private float _smoothTime = 50f;
     [SerializeField] private float _maxSpeed = 20f;
-    [SerializeField] private float _chargedStormlight;
+    [SerializeField] private float _chargedStormlight = 100;
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private float _stormlightCost = 1f;
+    [SerializeField] private float _stormlightBaseCost = 1f;
+    [SerializeField] private float _stormlightLashCost = 3f;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     public void Start() {
@@ -30,17 +34,18 @@ public class Infusable : MonoBehaviour , Interactable{
 
     public void Interact(out int value) {
         _active = true;
-        value = (int)_weight;
+        value = (int) _stormlightCost;
         _gravityDirection = _playerRigidbody.velocity + Vector3.up*_rigidbody.mass;
-        
+        _stormlightCost = _stormlightBaseCost;
+
     }
 
    public void Release() {
         
         Debug.Log("Released!");
         _active = false;
-        _gravityDirection = _cameraTransform.forward * 10;
-        _chargedStormlight = 100;
+        _gravityDirection = _cameraTransform.forward * (10 * _lashForce);
+        //_chargedStormlight = 100;
    }
 
     public void Update() {
@@ -66,6 +71,24 @@ public class Infusable : MonoBehaviour , Interactable{
                 _gravityDirection = Vector3.down * 10;
             }
         }
+    }
+
+    public void AddLash() {
+        _chargedStormlight += 200;
+        Debug.Log("aDD Lash");
+        _lashForce++;
+        _stormlightCost = _stormlightLashCost;
+
+        _selectedOutline.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+
+    }
+
+    public void UnLash() {
+        _chargedStormlight -= _chargedStormlight > 100 ? 100 : 0;
+        _lashForce -= _lashForce > 0 ? 1 : 0;
+        _stormlightCost = -_stormlightLashCost;
+        
+        _selectedOutline.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
     }
 
     public void ActivateOverlay() {

@@ -16,10 +16,11 @@ namespace Player.StateMachine.States.Lash{
             //Ctx.AnimatorManager.PlayTargetAnimation("Half Lashing");  //TODO: Prevent the use of this methods
 
             //TODO: [Animation] -> set lash blend tree value
-            Ctx.PlayerRigidbody.AddForce(Ctx.HalfLashingHeight * -Ctx.GravityDirection, ForceMode.Impulse);
+            if (Ctx.IsGrounded)
+                Ctx.PlayerRigidbody.AddForce(Ctx.HalfLashingHeight * Vector3.up, ForceMode.Impulse);
             //if (Ctx.isGrounded)
                 //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
-        
+            Ctx.GravityDirection = Vector3.zero;
             Ctx.IsGrounded = false;
             Ctx.InAirTimer = 0;
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);

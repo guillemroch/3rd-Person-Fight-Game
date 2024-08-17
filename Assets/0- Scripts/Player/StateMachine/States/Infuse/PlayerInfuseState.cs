@@ -77,18 +77,30 @@ namespace Player.StateMachine.States.Infuse{
                     Ctx.InfusableSelectedObject = infusable;
                 }
                 Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
+                HandleInfusionInputs(Ctx.InfusableSelectedObject);
+               
                 Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
             }
             else {
                 if (Ctx.InfusableSelectedObject != null) {
                     Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
+                    
+                HandleInfusionInputs(Ctx.InfusableSelectedObject);
                     Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
                 }
             }
-                
-            //TODO: Activate Animation
-            //TODO: Control distance using wheel or something idk
-                    
+        }
+
+        private void HandleInfusionInputs(Infusable infusable) {
+            if (Ctx.InputManager.LashInput) {
+                Ctx.InfusableSelectedObject.AddLash();
+                Ctx.InputManager.ResetLashInput();
+            }
+            
+            if (Ctx.InputManager.UnLashInput) {
+                Ctx.InfusableSelectedObject.UnLash();
+                Ctx.InputManager.ResetUnLashInput();
+            }
         }
     }
 }

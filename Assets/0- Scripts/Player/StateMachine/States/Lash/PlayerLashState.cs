@@ -40,6 +40,7 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void ExitState() {
+            Debug.Log("Exit State");
             Ctx.IsLashing = false;
             //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
             Ctx.GravityDirection.Normalize();
@@ -83,9 +84,7 @@ namespace Player.StateMachine.States.Lash{
                     Ctx.AngleOfIncidence += Ctx.InputManager.RollInput * 1.1f;
                 }
             }
-            if (Ctx.InputManager.DashInput) {
-                SwitchStates(Factory.LashDash());
-            }
+            
             
             //HALFLASH
             if (Ctx.LashingIntensity <= 0) {
@@ -104,12 +103,11 @@ namespace Player.StateMachine.States.Lash{
         private void HandleMovement() {
             //TODO: Add proper animations to this
 
-            Vector3 upAxis = Vector3.Cross(Ctx.PlayerTransform.right, Ctx.GravityDirection);
+            Vector3 upAxis = Vector3.Cross( Ctx.GravityDirection, Ctx.PlayerTransform.right);
             //Diving system
             Ctx.MoveDirection = upAxis * Ctx.InputManager.MovementInput.y +
-                                Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
+                                Ctx.PlayerTransform.right * (4 * Ctx.InputManager.MovementInput.x);
             Ctx.MoveDirection.Normalize();
-            
             //Calculate how much the angle of incidence affects the speed
             float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
             speedMultiplier *= 0.75f;
@@ -129,36 +127,39 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.GravityDirection == Vector3.zero) 
                 Ctx.GravityDirection = Ctx.CameraObject.up;
 
-            if (Ctx.InputManager.SmallLashInput == 0) {
-                //Orient up player toward the gravity direction
-                Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection.normalized);
-                Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
-                targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
-                
-                //Calculate in which direction the forward vector must be
-      
-                //Apply rotation to transform
-                Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation,  targetRotation  * Ctx.PlayerTransform.rotation, Ctx.LerpSpeed);
-                float angleRight = Vector3.Angle(Ctx.GravityDirection, Vector3.forward);
-                Vector3 right = angleRight > 90 ? -Ctx.PlayerTransform.right : Ctx.PlayerTransform.right;
-                
-                Vector3 planeOrthogonal = Vector3.Cross(right, Vector3.down);
-                Vector3 projectedVector = Vector3.ProjectOnPlane(right, planeOrthogonal);
-                //float angle = Vector3.Angle(Vector3.down, projectedVector);
-                float angle =   Vector3.SignedAngle(Vector3.down, projectedVector, Ctx.GravityDirection.normalized);
-                angle = 90 + angle * ( angle > 0 ? -1 : 1);
-             
-              
-                Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
-                Ctx.PlayerTransform.rotation *= rollCorrection;
-            }
+            if (Ctx.InputManager.SmallLashInput != 0) return;
+            
+            //ROTATION ON THE FORWARD AXIS 
+            Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection);
+           
+            //ROTATION ON THE RIGHT AXIS
+            Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            
+            targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
+            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation * Ctx.PlayerTransform.rotation  , Ctx.LerpSpeed);
+
+            
+            // ------- ROTATION ON THE UP AXIS ----------------------------------------------
+            float angleRight = Vector3.Angle(Ctx.GravityDirection, Vector3.forward);
+            Vector3 right = angleRight > 90 ? -Ctx.PlayerTransform.right : Ctx.PlayerTransform.right;
+            
+            Vector3 planeOrthogonal = Vector3.Cross(right, Vector3.down);
+            Vector3 projectedVector = Vector3.ProjectOnPlane(right, planeOrthogonal);
+            //float angle = Vector3.Angle(Vector3.down, projectedVector);
+            float angle =   Vector3.SignedAngle(Vector3.down, projectedVector, Ctx.GravityDirection.normalized);
+            angle = 90 + angle * ( angle > 0 ? -1 : 1);
+          
+            Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
+            
+            Ctx.PlayerTransform.rotation *= rollCorrection;
+            
         }
 
         private void HandleGroundDetection() {
         
             //Vector3 rayCastOrigin = Ctx.transform.position - Ctx.RayCastHeightOffset * Ctx.GravityDirection;
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
-        
+            
             if (Ctx.InAirTimer <= Ctx.MaxAirSpeed)
                 Ctx.InAirTimer += Time.deltaTime;
             
@@ -169,7 +170,7 @@ namespace Player.StateMachine.States.Lash{
             
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius*0.5f, Ctx.GravityDirection, out RaycastHit hit ,Ctx.RayCastMaxDistance, Ctx.GroundLayer))
             {
-           
+            
                 Ctx.IsGrounded = true;
                 
                 Ctx.GravityDirection = -hit.normal;  
@@ -191,7 +192,7 @@ namespace Player.StateMachine.States.Lash{
             speedMultiplier *= 0.75f;
             speedMultiplier = (1 - 0.75f/2) + speedMultiplier; // Get a value between 0.75f min and 1.25f max
             
-            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection.normalized * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * speedMultiplier), ForceMode.Acceleration);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.LashingIntensity * speedMultiplier), ForceMode.Acceleration);
 
         }
     
@@ -199,25 +200,36 @@ namespace Player.StateMachine.States.Lash{
         
             //TODO: Remove the Lashing intensity variable [OR NOT] 
             //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection if reached max intensity.
-        
+            
             //If lash is at MAX return
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY)
                 return;
         
             //Get direction of lashing based on camera position
             Vector3 lashDirection = Ctx.CameraObject.forward;
-            /*if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f)) {
-                lashDirection = (hit.point - Ctx.transform.position).normalized;
-            }*/
+            if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f, Ctx.GroundLayer)) {
+                //lashDirection = (hit.point - Ctx.transform.position).normalized;
+            }
             
-            if (lashAmount > 0) {
-                Ctx.GravityDirection += lashDirection * lashAmount;
-                Ctx.LashingIntensity = Ctx.GravityDirection.magnitude;
+            if (lashAmount >= 0) {
+                Vector3 previousDirection = Ctx.GravityDirection;
+
+                Vector3 newDirection = Ctx.LashingIntensity * Ctx.GravityDirection +
+                                      lashAmount * lashDirection;
+                if (newDirection.magnitude > 1)
+                    newDirection.Normalize();
+                
+                Ctx.GravityDirection = newDirection;
+                Ctx.LashingIntensity += lashAmount;
+
+                float angleDifference =
+                    Vector3.SignedAngle(previousDirection, Ctx.GravityDirection, Ctx.PlayerTransform.right);
+                //Ctx.AngleOfIncidence -= angleDifference;
             }
             else {
-                Ctx.GravityDirection += Ctx.GravityDirection.normalized * lashAmount;
                 Ctx.LashingIntensity += lashAmount;
             }
+            
         }
 
         private void HandleSmallLash(float lashAmount) {
@@ -228,7 +240,6 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.GravityDirection == Vector3.zero)
                 Ctx.GravityDirection = Ctx.PlayerTransform.up;
             
-            Ctx.GravityDirection += Ctx.PlayerTransform.up * lashAmount;
             Ctx.LashingIntensity += lashAmount ;
         }
 
