@@ -18,7 +18,8 @@ namespace Player.StateMachine.States.Ground{
 
             Ctx.IsLashing = false;
             Ctx.IsHalfLashing = false;
-            
+            Ctx.IsGrounded = true;
+
 
         }
 

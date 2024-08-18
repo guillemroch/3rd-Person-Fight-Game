@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
@@ -111,7 +112,7 @@ namespace Player.StateMachine.States.Lash{
             float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
             speedMultiplier *= 0.9f;
             speedMultiplier = 0.9f * 2 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
-            Debug.Log("Speed Multiplier: " + speedMultiplier); 
+            //Debug.Log("Speed Multiplier: " + speedMultiplier); 
             float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier;
             
             //MODE 1 - DISPLACEMENT
@@ -129,32 +130,21 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.InputManager.SmallLashInput != 0) return;
             
             //ROTATION ON THE FORWARD AXIS 
-            //Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection);
-            Quaternion targetRotation = Quaternion.identity;
             
-            Quaternion targetFRotation = Quaternion.AngleAxis(90f, Ctx.PlayerTransform.up); 
+
+            Vector3 projectedXZGravity = Vector3.ProjectOnPlane(Ctx.GravityDirection.normalized, Vector3.up);
+            projectedXZGravity.Normalize();
+            Vector3 rightVector = Vector3.Angle(projectedXZGravity, Vector3.forward) > 90
+                ? -Vector3.right
+                : Vector3.right;
+            Vector3 upCross = Vector3.Cross( projectedXZGravity, rightVector);
+            Quaternion targetForward = Quaternion.LookRotation(-upCross, projectedXZGravity);
             
-            // ------- ROTATION ON THE UP AXIS ----------------------------------------------
-            float angleRight = Vector3.Angle(Ctx.GravityDirection, Vector3.forward);
-            Vector3 right = angleRight > 90 ? -Ctx.PlayerTransform.right : Ctx.PlayerTransform.right;
-            
-            Vector3 planeOrthogonal = Vector3.Cross(right, Vector3.down);
-            Vector3 projectedVector = Vector3.ProjectOnPlane(right, planeOrthogonal);
-            //float angle = Vector3.Angle(Vector3.down, projectedVector);
-            float angle =   Vector3.SignedAngle(Vector3.down, projectedVector, Ctx.GravityDirection.normalized);
-            angle = 90 + angle * ( angle > 0 ? -1 : 1);
-          
-            Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
-            
-            Ctx.PlayerTransform.rotation *= rollCorrection;
+            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward, Ctx.LerpSpeed * 0.1f);
             
             //ROTATION ON THE RIGHT AXIS
             Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
-            targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
-            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation   , Ctx.LerpSpeed);
-
-            
-            
+            //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation   , Ctx.LerpSpeed);
             
         }
 

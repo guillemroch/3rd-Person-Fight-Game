@@ -79,7 +79,7 @@ namespace Player.StateMachine.States.Lash{
         private void HandleRotation() {
             Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.up, Vector3.up);
             Ctx.transform.rotation = Quaternion.Slerp(Ctx.transform.rotation, Ctx.transform.rotation * targetRotation,
-                2f * Time.deltaTime);
+                6f * Time.deltaTime);
         }
         
         private void CalculateGravityDirection()
