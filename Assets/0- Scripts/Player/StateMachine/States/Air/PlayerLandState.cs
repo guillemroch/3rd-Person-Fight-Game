@@ -8,7 +8,7 @@ namespace Player.StateMachine.States.Air{
 
             //Ctx.AnimatorManager.PlayTargetAnimation("Land Blend Tree");
             //TODO: [Animation] -> set land blend tree value
-            //Ctx.AnimatorManager.animator.SetBool("End", true);
+            Ctx.AnimatorManager.animator.SetBool("End", false);
         }
 
         public override void UpdateState() {
@@ -19,7 +19,7 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void ExitState() {
-
+            
         }
 
         public override void CheckSwitchStates() {

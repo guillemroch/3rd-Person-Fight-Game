@@ -1048,7 +1048,7 @@ AnimatorStateMachine:
     m_Position: {x: 100, y: 500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8516181277943511056}
-    m_Position: {x: 1400, y: -400, z: 0}
+    m_Position: {x: 1470, y: -250, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4703958506007327965}
     m_Position: {x: 530, y: 430, z: 0}
@@ -1216,7 +1216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92bd6c2be02ebe64b923bff30f45fd2b, type: 3}
   m_Name: 
@@ -2725,7 +2725,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92bd6c2be02ebe64b923bff30f45fd2b, type: 3}
   m_Name: 

@@ -31,8 +31,7 @@ namespace Player.StateMachine.States.Lash{
             HandleGravity();
             CheckSwitchStates();
 
-            Ctx.StormlightLashingDrain = Vector3.Distance(Vector3.down, Ctx.GravityDirection * Ctx.LashingIntensity);
-
+            Ctx.StormlightLashingDrain = Ctx.LashingIntensity;
 
         }
 
@@ -40,11 +39,11 @@ namespace Player.StateMachine.States.Lash{
         }
 
         public override void ExitState() {
-            Debug.Log("Exit State");
             Ctx.IsLashing = false;
             //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
             Ctx.GravityDirection.Normalize();
             Ctx.LashingIntensity = 0;
+            Ctx.StormlightLashingDrain = 0;
         }
 
         public override void CheckSwitchStates() {
@@ -106,13 +105,13 @@ namespace Player.StateMachine.States.Lash{
             Vector3 upAxis = Vector3.Cross( Ctx.GravityDirection, Ctx.PlayerTransform.right);
             //Diving system
             Ctx.MoveDirection = upAxis * Ctx.InputManager.MovementInput.y +
-                                Ctx.PlayerTransform.right * (4 * Ctx.InputManager.MovementInput.x);
+                                Ctx.PlayerTransform.right * Ctx.InputManager.MovementInput.x;
             Ctx.MoveDirection.Normalize();
             //Calculate how much the angle of incidence affects the speed
             float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
-            speedMultiplier *= 0.75f;
-            speedMultiplier = 1 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
-            
+            speedMultiplier *= 0.9f;
+            speedMultiplier = 0.9f * 2 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
+            Debug.Log("Speed Multiplier: " + speedMultiplier); 
             float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier;
             
             //MODE 1 - DISPLACEMENT
@@ -130,14 +129,10 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.InputManager.SmallLashInput != 0) return;
             
             //ROTATION ON THE FORWARD AXIS 
-            Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection);
-           
-            //ROTATION ON THE RIGHT AXIS
-            Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            //Quaternion targetRotation = Quaternion.FromToRotation(Ctx.PlayerTransform.forward, Ctx.GravityDirection);
+            Quaternion targetRotation = Quaternion.identity;
             
-            targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
-            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation * Ctx.PlayerTransform.rotation  , Ctx.LerpSpeed);
-
+            Quaternion targetFRotation = Quaternion.AngleAxis(90f, Ctx.PlayerTransform.up); 
             
             // ------- ROTATION ON THE UP AXIS ----------------------------------------------
             float angleRight = Vector3.Angle(Ctx.GravityDirection, Vector3.forward);
@@ -152,6 +147,14 @@ namespace Player.StateMachine.States.Lash{
             Quaternion rollCorrection = Quaternion.AngleAxis(angle, Ctx.GravityDirection.normalized);
             
             Ctx.PlayerTransform.rotation *= rollCorrection;
+            
+            //ROTATION ON THE RIGHT AXIS
+            Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
+            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetAngle   , Ctx.LerpSpeed);
+
+            
+            
             
         }
 

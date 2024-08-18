@@ -17,7 +17,7 @@ namespace Player.StateMachine.States.Lash{
 
             //TODO: [Animation] -> set lash blend tree value
             if (Ctx.IsGrounded)
-                Ctx.PlayerRigidbody.AddForce(Ctx.HalfLashingHeight * Vector3.up, ForceMode.Impulse);
+                Ctx.PlayerRigidbody.AddForce((0.1f + Ctx.HalfLashingHeight) * Vector3.up, ForceMode.Impulse);
             //if (Ctx.isGrounded)
                 //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
             Ctx.GravityDirection = Vector3.zero;

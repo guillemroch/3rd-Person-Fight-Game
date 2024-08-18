@@ -69,7 +69,7 @@ namespace Player.StateMachine.States.Alive{
             Ctx.StormlightDepletionRate = Ctx.StormlightBaseDrain +
                                           Ctx.StormlightHealingDrain +
                                           Ctx.StormlightInfusingDrain +
-                                          Ctx.StormlightLashingDrain +
+                                          Ctx.StormlightLashingDrain * 0.1f+
                                           Ctx.StormlightMovementDrain;
            
             Ctx.Stormlight -= Ctx.StormlightDepletionRate * 0.1f;

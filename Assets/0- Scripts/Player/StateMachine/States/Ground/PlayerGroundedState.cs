@@ -9,13 +9,17 @@ namespace Player.StateMachine.States.Ground{
             InitializeSubState();
         }
 
-        
+
         public override void EnterState() {
-            if (!Ctx.IsInfusing)
+            if (!Ctx.IsInfusing){
                 Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Normal);
+                Ctx.UIManager.SetKeyStates(InputsUIHelper.KeyUIStates.Grounded);
+            }
+
             Ctx.IsLashing = false;
             Ctx.IsHalfLashing = false;
             
+
         }
 
         public override void UpdateState() {
@@ -31,7 +35,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
-            if (Ctx.InputManager.IsJumpPressed || !Ctx.IsGrounded) {
+            if ((Ctx.InputManager.IsJumpPressed || !Ctx.IsGrounded) && Ctx.AnimatorManager.animator.GetBool("End")) {
                 SwitchStates(Factory.Air());
             }
 

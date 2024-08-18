@@ -20,6 +20,7 @@ namespace Player.StateMachine.States.Infuse{
             }
             else {
                 Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Infusing);
+                Ctx.UIManager.SetKeyStates(InputsUIHelper.KeyUIStates.Infusing);
             }
         }
 
@@ -77,7 +78,7 @@ namespace Player.StateMachine.States.Infuse{
                     Ctx.InfusableSelectedObject = infusable;
                 }
                 Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
-                HandleInfusionInputs(Ctx.InfusableSelectedObject);
+                HandleInfusionInputs();
                
                 Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
             }
@@ -85,13 +86,13 @@ namespace Player.StateMachine.States.Infuse{
                 if (Ctx.InfusableSelectedObject != null) {
                     Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                     
-                HandleInfusionInputs(Ctx.InfusableSelectedObject);
+                HandleInfusionInputs();
                     Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
                 }
             }
         }
 
-        private void HandleInfusionInputs(Infusable infusable) {
+        private void HandleInfusionInputs() {
             if (Ctx.InputManager.LashInput) {
                 Ctx.InfusableSelectedObject.AddLash();
                 Ctx.InputManager.ResetLashInput();

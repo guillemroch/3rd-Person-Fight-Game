@@ -7,7 +7,9 @@ namespace Player.StateMachine.States.Lash{
             InitializeSubState();
         }
 
-        public override void EnterState() { }
+        public override void EnterState() {
+            Ctx.UIManager.SetKeyStates(InputsUIHelper.KeyUIStates.Lashings);
+        }
 
         public override void UpdateState() {
             //Check if we need to change state because of stormlight
