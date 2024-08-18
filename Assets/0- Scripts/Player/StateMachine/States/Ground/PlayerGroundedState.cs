@@ -35,7 +35,7 @@ namespace Player.StateMachine.States.Ground{
         }
 
         public override void CheckSwitchStates() {
-            if ((Ctx.InputManager.IsJumpPressed || !Ctx.IsGrounded) && Ctx.AnimatorManager.animator.GetBool("End")) {
+            if ((Ctx.InputManager.IsJumpPressed || !Ctx.IsGrounded)/* && Ctx.AnimatorManager.animator.GetBool("End")*/) {
                 SwitchStates(Factory.Air());
             }
 

@@ -151,7 +151,7 @@ namespace Player.StateMachine.States.Lash{
             //ROTATION ON THE RIGHT AXIS
             Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
             targetRotation = Quaternion.Slerp(targetRotation, targetRotation * targetAngle, 50 * Time.deltaTime); 
-            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetAngle   , Ctx.LerpSpeed);
+            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation   , Ctx.LerpSpeed);
 
             
             
