@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour{
     [Header("Input helper")] 
     [SerializeField] private InputsUIHelper _inputs;
     [SerializeField] private bool _showInputs;
+
+    [Header("Infusing Modes")] 
+    [SerializeField] private InfuseModesUI _modes;
     
     public UISliderBar HealthBar { get => _healthBar; set => _healthBar = value; }
     public UISliderBar StormlightBar { get => _stormlightBar; set => _stormlightBar = value; }
@@ -64,5 +67,9 @@ public class UIManager : MonoBehaviour{
 
     public void SetKeyStates(InputsUIHelper.KeyUIStates state) {
         _inputs.UIState = state;
-    } 
+    }
+
+    public void SwitchInfuseModes(Infusable.InfusingMode mode) {
+        _modes.SwitchMode(mode);
+    }
 }

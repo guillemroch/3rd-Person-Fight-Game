@@ -8,13 +8,14 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void EnterState() {
-
+            Ctx.AnimatorManager.animator.SetBool("IsJumping", false);
             HandleJump();
         }
 
         public override void UpdateState() {
             CheckSwitchStates();
             HandleMovement();
+    
         }
 
         public override void FixedUpdateState() { }
@@ -24,7 +25,10 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void CheckSwitchStates() {
-            SwitchStates(Factory.Fall());
+            //if () {
+            if (Ctx.AnimatorManager.animator.GetBool("IsJumping"))
+                SwitchStates(Factory.Fall());
+            //}
         }
 
         public override void InitializeSubState() { }
@@ -40,6 +44,8 @@ namespace Player.StateMachine.States.Air{
         }
         
         private void HandleMovement() {
+
+            Ctx.InAirTimer += Time.deltaTime;
             Ctx.MoveDirection = Ctx.CameraObject.forward * Ctx.InputManager.MovementInput.y + Ctx.CameraObject.right * Ctx.InputManager.MovementInput.x;
 
             float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
@@ -51,6 +57,7 @@ namespace Player.StateMachine.States.Air{
         
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);
         }
+         
     }
 }
 

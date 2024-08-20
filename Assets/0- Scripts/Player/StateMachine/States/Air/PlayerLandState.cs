@@ -9,9 +9,12 @@ namespace Player.StateMachine.States.Air{
             //Ctx.AnimatorManager.PlayTargetAnimation("Land Blend Tree");
             //TODO: [Animation] -> set land blend tree value
             Ctx.AnimatorManager.animator.SetBool("End", false);
+            //Ctx.AnimatorManager.PlayTargetAnimation("Land Blend Tree");
+            Ctx.PlayerTransform.rotation *= Quaternion.FromToRotation(Ctx.PlayerTransform.up, -Ctx.GravityDirection);
         }
 
         public override void UpdateState() {
+         
             CheckSwitchStates();
         }
 
@@ -23,14 +26,14 @@ namespace Player.StateMachine.States.Air{
         }
 
         public override void CheckSwitchStates() {
-            //if (Ctx.AnimatorManager.animator.GetBool("End")) {
+           // Debug.Log(Ctx.AnimatorManager.animator.GetBool("End"));
+            if (Ctx.AnimatorManager.animator.GetBool("End")) {
                 SwitchStates(Factory.Grounded());
-            //}
+            }
         }
 
         public override void InitializeSubState() {
         }
-        
-
-    }
+      }
+    
 }

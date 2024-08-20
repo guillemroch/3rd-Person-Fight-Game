@@ -20,7 +20,7 @@ namespace Player.StateMachine.States.Lash{
                 Ctx.PlayerRigidbody.AddForce((0.1f + Ctx.HalfLashingHeight) * Vector3.up, ForceMode.Impulse);
             //if (Ctx.isGrounded)
                 //Ctx.StartCoroutine(TriggerHalfLashingRotationCoroutine(0.5f));
-            Ctx.GravityDirection = Vector3.zero;
+            //Ctx.GravityDirection = Vector3.zero;
             Ctx.IsGrounded = false;
             Ctx.InAirTimer = 0;
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.HalfLash);

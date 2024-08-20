@@ -86,7 +86,7 @@ namespace Player.StateMachine.States.Infuse{
                 if (Ctx.InfusableSelectedObject != null) {
                     Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                     
-                HandleInfusionInputs();
+                    HandleInfusionInputs();
                     Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
                 }
             }

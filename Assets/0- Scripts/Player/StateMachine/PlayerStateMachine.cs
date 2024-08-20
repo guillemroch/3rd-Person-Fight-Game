@@ -110,7 +110,7 @@ namespace Player.StateMachine{
         [SerializeField] private float _maxInteractionDistance = 2f;
         [SerializeField] private LayerMask _interactionLayer;
         [SerializeField] private Infusable _infusableSelectedObject;
-        
+        [SerializeField] private Infusable.InfusingMode _infusingMode = Infusable.InfusingMode.Full;
 
         //References
         [Header("References")] 
@@ -207,8 +207,10 @@ namespace Player.StateMachine{
 
         public float StormlightHealingDrain { get => _stormlightHealingDrain; set => _stormlightHealingDrain = value; }
         public GameObject Spear { get => _spear; set => _spear = value; }
+        public Infusable.InfusingMode InfusingMode { get => _infusingMode; set => _infusingMode = value; }
 
         private String stateString;
+        private int stateCount = 0;
         #endregion
     
         private void Awake()
@@ -236,12 +238,17 @@ namespace Player.StateMachine{
             String currentState = "States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ";
             
             if (currentState.CompareTo(stateString) != 0) {
-                Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] ");
+                
+                Debug.Log("States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name + "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?.name +  "] " + "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState?._currentSubState?.name +  "] == stateCount ==> "+ stateCount);
                 stateString = "States: [" + _currentState?.name + "] ||=> [" + _currentState?._currentSubState?.name +
                               "] ||=> [" + _currentState?._currentSubState?._currentSubState?.name + "] " + "] ||=> [" +
                               _currentState?._currentSubState?._currentSubState?._currentSubState?.name + "] " +
                               "] ||=> [" + _currentState?._currentSubState?._currentSubState?._currentSubState
                                   ?._currentSubState?.name + "] ";
+                stateCount = 0;
+            }
+            else {
+                stateCount++;
             }
          
         }
@@ -286,6 +293,7 @@ namespace Player.StateMachine{
             Handles.ArrowHandleCap(0, _playerTransform.position,
                 Quaternion.LookRotation(_cameraObject.forward, _playerTransform.up), 1f, EventType.Repaint);*/
 #endif
+            // Player Transform
             Gizmos.color = Color.green;
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.up * 0.2f);
             Gizmos.color = Color.red;
@@ -293,7 +301,7 @@ namespace Player.StateMachine{
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward * 0.2f);
             
-            Vector3 planeOrthogonal = Vector3.Cross(PlayerTransform.right, Vector3.down);
+            /*Vector3 planeOrthogonal = Vector3.Cross(PlayerTransform.right, Vector3.down);
             Vector3 projectedVector = Vector3.ProjectOnPlane(GravityDirection, planeOrthogonal);
             //float angle = Vector3.Angle(Vector3.down, projectedVector);
             float angle = Vector3.SignedAngle(Vector3.down, projectedVector, Vector3.up);
@@ -303,7 +311,24 @@ namespace Player.StateMachine{
             Gizmos.color = Color.magenta;
             Gizmos.DrawRay(_playerTransform.position, planeOrthogonal);
             Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(_playerTransform.position, projectedVector);
+            Gizmos.DrawRay(_playerTransform.position, projectedVector);*/
+            
+           //GROUND DETECTION RAYCAST 
+           Vector3 rayCastOrigin = PlayerRigidbody.worldCenterOfMass;
+           rayCastOrigin += PlayerTransform.up * RayCastHeightOffset; //Consider the orientation of the Player
+           RaycastHit hit;
+
+           Gizmos.color = Color.yellow;
+           Gizmos.DrawSphere(rayCastOrigin, 0.1f);
+           Gizmos.DrawRay(rayCastOrigin, GravityDirection*RayCastMaxDistance);
+           if (Physics.SphereCast(
+                   rayCastOrigin,RayCastRadius,GravityDirection, out hit,RayCastMaxDistance,
+                   GroundLayer)) {
+               Gizmos.color = Color.magenta;
+               Gizmos.DrawCube(hit.point, Vector3.one * RayCastRadius);
+
+           }
+
         }
     }
 }

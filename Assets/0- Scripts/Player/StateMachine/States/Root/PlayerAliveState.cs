@@ -58,6 +58,20 @@ namespace Player.StateMachine.States.Alive{
                     Ctx.Stormlight += stormlight;
                 }
             }
+
+            //Handling infuse mode changes
+            if (Ctx.InputManager.ScrollInput != 0) {
+                //Debug.Log("Switched infuse mode: " + Ctx.InputManager.ScrollInput);
+                int index = (int)Ctx.InfusingMode;
+                index += (int) Ctx.InputManager.ScrollInput;
+                if (index > 2)
+                    index = 0;
+                if (index < 0)
+                    index = 2;
+                Ctx.InfusingMode = (Infusable.InfusingMode) index;
+                Ctx.UIManager.SwitchInfuseModes(Ctx.InfusingMode);
+                Ctx.InputManager.ScrollInput = 0;
+            }
         }
         
         private void HandleStormlight() {

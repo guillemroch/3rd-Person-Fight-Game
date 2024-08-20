@@ -16,6 +16,8 @@ namespace Player.StateMachine.States.Air{
         public override void UpdateState() {
             CheckSwitchStates();
             HandleRotation();
+            HandleFalling();
+            HandleGravity();
         }
 
         public override void FixedUpdateState() {
@@ -56,9 +58,11 @@ namespace Player.StateMachine.States.Air{
         
             if (Ctx.TargetDirection == Vector3.zero)
                 Ctx.TargetDirection = Ctx.PlayerTransform.forward;
-            
-            if (Ctx.GravityDirection == Vector3.zero)
+
+            if (Ctx.GravityDirection == Vector3.zero) {
                 Ctx.GravityDirection = Vector3.down;
+                Debug.Log("Gravity was zero while falling");
+            }
 
             Quaternion targetRotation = 
                 Quaternion.LookRotation(Ctx.TargetDirection, -Ctx.GravityDirection);
@@ -67,5 +71,28 @@ namespace Player.StateMachine.States.Air{
                 Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetRotation, Ctx.RotationSpeed * Time.deltaTime);
         
         }
+          void HandleFalling() {
+                
+                    if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
+                
+                    Ctx.PlayerRigidbody.AddForce(Ctx.PlayerTransform.forward * (Ctx.LeapingVelocity * Ctx.PlayerRigidbody.velocity.magnitude), ForceMode.Force);
+                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
+                
+                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+        
+                    Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+                       rayCastOrigin += Ctx.PlayerTransform.up * Ctx.RayCastHeightOffset;
+                    
+                    if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
+                            Ctx.GroundLayer)) {
+                        Ctx.IsGrounded = true;
+                    }
+        
+                }
+        
+                void HandleGravity() {
+                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+        
+                }
     }
 }

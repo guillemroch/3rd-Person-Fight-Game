@@ -188,6 +188,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeInfuseMode"",
+                    ""type"": ""Value"",
+                    ""id"": ""bed59c53-4f6e-4cd1-9fe8-38c8af1c8d51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -586,6 +595,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""BlockInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8faab446-885a-4786-8bf0-76127aea4264"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChangeInfuseMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -701,6 +721,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_LightAttackInput = m_Player.FindAction("LightAttackInput", throwIfNotFound: true);
         m_Player_HeavyAttackInput = m_Player.FindAction("HeavyAttackInput", throwIfNotFound: true);
         m_Player_BlockInput = m_Player.FindAction("BlockInput", throwIfNotFound: true);
+        m_Player_ChangeInfuseMode = m_Player.FindAction("ChangeInfuseMode", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Configuration = m_UI.FindAction("Configuration", throwIfNotFound: true);
@@ -783,6 +804,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LightAttackInput;
     private readonly InputAction m_Player_HeavyAttackInput;
     private readonly InputAction m_Player_BlockInput;
+    private readonly InputAction m_Player_ChangeInfuseMode;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -805,6 +827,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @LightAttackInput => m_Wrapper.m_Player_LightAttackInput;
         public InputAction @HeavyAttackInput => m_Wrapper.m_Player_HeavyAttackInput;
         public InputAction @BlockInput => m_Wrapper.m_Player_BlockInput;
+        public InputAction @ChangeInfuseMode => m_Wrapper.m_Player_ChangeInfuseMode;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -868,6 +891,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @BlockInput.started += instance.OnBlockInput;
             @BlockInput.performed += instance.OnBlockInput;
             @BlockInput.canceled += instance.OnBlockInput;
+            @ChangeInfuseMode.started += instance.OnChangeInfuseMode;
+            @ChangeInfuseMode.performed += instance.OnChangeInfuseMode;
+            @ChangeInfuseMode.canceled += instance.OnChangeInfuseMode;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -926,6 +952,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @BlockInput.started -= instance.OnBlockInput;
             @BlockInput.performed -= instance.OnBlockInput;
             @BlockInput.canceled -= instance.OnBlockInput;
+            @ChangeInfuseMode.started -= instance.OnChangeInfuseMode;
+            @ChangeInfuseMode.performed -= instance.OnChangeInfuseMode;
+            @ChangeInfuseMode.canceled -= instance.OnChangeInfuseMode;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1054,6 +1083,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLightAttackInput(InputAction.CallbackContext context);
         void OnHeavyAttackInput(InputAction.CallbackContext context);
         void OnBlockInput(InputAction.CallbackContext context);
+        void OnChangeInfuseMode(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

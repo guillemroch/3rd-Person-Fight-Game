@@ -7,13 +7,15 @@ namespace Player.StateMachine.States.Air{
         public override void EnterState() {
 
             Ctx.IsFalling = true;
+            //Ctx.GravityDirection = Vector3.down;
         }
 
         public override void UpdateState() {
-            CheckSwitchStates();
-            HandleFalling();
-            HandleGravity();
+           
+            //HandleFalling();
+            //HandleGravity();
             HandleMovement();
+             CheckSwitchStates();
         
         }
 
@@ -48,6 +50,7 @@ namespace Player.StateMachine.States.Air{
             Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
 
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+               rayCastOrigin += Ctx.PlayerTransform.up * Ctx.RayCastHeightOffset;
             
             if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
                     Ctx.GroundLayer)) {

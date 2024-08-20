@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
@@ -42,7 +41,7 @@ namespace Player.StateMachine.States.Lash{
         public override void ExitState() {
             Ctx.IsLashing = false;
             //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, false);
-            Ctx.GravityDirection.Normalize();
+            //Ctx.GravityDirection.Normalize();
             Ctx.LashingIntensity = 0;
             Ctx.StormlightLashingDrain = 0;
         }
@@ -120,37 +119,54 @@ namespace Player.StateMachine.States.Lash{
             //MODE 2 - ROTATION DEVIATION
             //Ctx.GravityDirection += Ctx.MoveDirection * diveTranslationSpeed;
         }
-    
+
         private void HandleRotation() {
-            
+
             //Rotate to face towards the gravity direction
-            if (Ctx.GravityDirection == Vector3.zero) 
+            if (Ctx.GravityDirection == Vector3.zero)
                 Ctx.GravityDirection = Ctx.CameraObject.up;
 
             if (Ctx.InputManager.SmallLashInput != 0) return;
-            
+
             //ROTATION ON THE FORWARD AXIS 
-            
 
             Vector3 projectedXZGravity = Vector3.ProjectOnPlane(Ctx.GravityDirection.normalized, Vector3.up);
             projectedXZGravity.Normalize();
             Vector3 rightVector = Vector3.Angle(projectedXZGravity, Vector3.forward) > 90
                 ? -Vector3.right
                 : Vector3.right;
-            Vector3 upCross = Vector3.Cross( projectedXZGravity, rightVector);
+            Vector3 upCross = Vector3.Cross(projectedXZGravity, rightVector);
             Quaternion targetForward = Quaternion.LookRotation(-upCross, projectedXZGravity);
-            
-            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward, Ctx.LerpSpeed * 0.1f);
-            
+
+            Quaternion rotationToApply = targetForward;
+            //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward, Ctx.LerpSpeed * 0.1f);
+
             //ROTATION ON THE RIGHT AXIS
-            Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
-            //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, targetRotation   , Ctx.LerpSpeed);
-            
+            float targetAngleValue = Vector3.SignedAngle(Ctx.PlayerTransform.forward, Ctx.GravityDirection,
+                Ctx.PlayerTransform.right);
+
+            float rotationDir = 1;
+            if (targetAngleValue > Ctx.AngleOfIncidence){
+                 rotationDir = -1;
+            }
+
+            Quaternion targetedIncidentAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            Quaternion actualForwardRotation = Quaternion.AngleAxis(targetAngleValue, Ctx.PlayerTransform.right);
+
+            float angleDiff = Quaternion.Angle(targetedIncidentAngle, actualForwardRotation);
+            Debug.Log("Angle Diff: " + rotationDir*angleDiff);
+
+            if (Ctx.AngleOfIncidence == 0) angleDiff = 0;
+            Quaternion targetAngle = Quaternion.AngleAxis(rotationDir * angleDiff , Ctx.PlayerTransform.right);
+            targetAngle = Quaternion.AngleAxis(-90 + Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, Ctx.transform.rotation * targetAngle   , Ctx.LerpSpeed);
+            //Ctx.PlayerTransform.rotation *= Quaternion.AngleAxis(1f, Ctx.PlayerTransform.right);
+            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward * targetAngle, Ctx.LerpSpeed * 0.1f);
+
         }
 
         private void HandleGroundDetection() {
         
-            //Vector3 rayCastOrigin = Ctx.transform.position - Ctx.RayCastHeightOffset * Ctx.GravityDirection;
             Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
             
             if (Ctx.InAirTimer <= Ctx.MaxAirSpeed)
@@ -167,8 +183,7 @@ namespace Player.StateMachine.States.Lash{
                 Ctx.IsGrounded = true;
                 
                 Ctx.GravityDirection = -hit.normal;  
-                Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
-            
+                //Ctx.StartCoroutine(TriggerLandingFromLashingCoroutine(hit.normal, hit.point, 0.25f));
                 Ctx.InAirTimer = 0;
            
             }
@@ -191,12 +206,10 @@ namespace Player.StateMachine.States.Lash{
     
         private void HandleLash(float lashAmount) {
         
-            //TODO: Remove the Lashing intensity variable [OR NOT] 
-            //TODO: Return only if the lash is in the same aprox direction of the current GravityDirection if reached max intensity.
             
             //If lash is at MAX return
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY)
-                return;
+                return; //TODO: This return might be wrong (it is)
         
             //Get direction of lashing based on camera position
             Vector3 lashDirection = Ctx.CameraObject.forward;
@@ -215,9 +228,10 @@ namespace Player.StateMachine.States.Lash{
                 Ctx.GravityDirection = newDirection;
                 Ctx.LashingIntensity += lashAmount;
 
+                Ctx.AnimatorManager.PlayTargetAnimation("AddLash");
                 float angleDifference =
                     Vector3.SignedAngle(previousDirection, Ctx.GravityDirection, Ctx.PlayerTransform.right);
-                //Ctx.AngleOfIncidence -= angleDifference;
+                Ctx.AngleOfIncidence -= angleDifference;
             }
             else {
                 Ctx.LashingIntensity += lashAmount;
@@ -237,6 +251,7 @@ namespace Player.StateMachine.States.Lash{
         }
 
         private void HandleDive() {
+            //Ctx.AngleOfIncidence += 90;
             if (Ctx.AngleOfIncidence > 0) {
                 Ctx.AngleOfIncidence = -90;
             }

@@ -31,6 +31,8 @@ namespace Player{
         [SerializeField] [ReadOnly] private bool _heavyAttack;
         [SerializeField] [ReadOnly] private bool _blockAttack;
         
+        [SerializeField] [ReadOnly] private float _scrollInput;
+        
         // getters and setters
         public Vector2 LookInput { get => _lookInput; set => _lookInput = value; }
         public Vector2 MovementInput { get => _movementInput; set => _movementInput = value; }
@@ -50,6 +52,7 @@ namespace Player{
         public bool HeavyAttack { get => _heavyAttack; set => _heavyAttack = value; }
         public bool BlockAttack { get => _blockAttack; set => _blockAttack = value; }
         public bool ConfigurationInput { get => _configurationInput; set => _configurationInput = value; }
+        public float ScrollInput { get => _scrollInput; set => _scrollInput = value; }
 
         private void Awake()
         {
@@ -113,6 +116,9 @@ namespace Player{
                 
                 _playerInputs.Player.BlockInput.performed += _ => _blockAttack = true;
                 _playerInputs.Player.BlockInput.canceled += _ => _blockAttack = false;
+
+                _playerInputs.Player.ChangeInfuseMode.performed += i => _scrollInput = i.ReadValue<float>() > 0 ? 1 : -1;
+                //_playerInputs.Player.ChangeInfuseMode.canceled += i => _scrollInput = 0;
             }
             _playerInputs.Enable();
         }
