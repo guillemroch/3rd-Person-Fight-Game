@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Infusable : MonoBehaviour , Interactable{
@@ -40,6 +41,12 @@ public class Infusable : MonoBehaviour , Interactable{
     [SerializeField] private Rigidbody _playerRigidbody;
     [SerializeField] private GameObject _inRangeOutline;
     [SerializeField] private Transform _playerTransform;
+
+    [Header("Inverse Lash")] 
+    [SerializeField] private GameObject _forceField;
+
+    [Header("Basic Lash")] 
+    [SerializeField] private GameObject _collisionStayObject;
     public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     public void Start() {
@@ -51,33 +58,56 @@ public class Infusable : MonoBehaviour , Interactable{
     }
 
     public void Interact(out int value) {
-        value = 1;
-    }
-    public void BasicLash() {
-        
-    }
-
-    public void InverseLash() {
-        
-    }
-    public void FullLash(out int value) {
         _active = true;
-        value = (int) _stormlightCost;
-        _gravityDirection = _playerRigidbody.velocity + Vector3.up*_rigidbody.mass;
-        _stormlightCost = _stormlightBaseCost;
+        
+        if (_infusingMode == InfusingMode.Inverse) {
 
+            value = (int)_stormlightLashCost;
+            HandleInverseLash();
+
+        }else {
+            value = (int)_stormlightCost;
+            _gravityDirection = _playerRigidbody.velocity + Vector3.up * _rigidbody.mass;
+            _stormlightCost = _stormlightBaseCost;
+            
+            if (_infusingMode == InfusingMode.Basic) {
+                if (!_collisionStayObject.IsUnityNull()) {
+                    _rigidbody.drag = 5;
+                    _rigidbody.angularDrag = 5;
+                }
+            }
+        }
     }
 
-   public void Release() {
+    private void HandleInverseLash() {
+        Debug.Log("Inverse Lash");
+        _active = false;
+        _forceField.SetActive(true);
+        //_forceField.enabled = true;
+        //_forceField.gravity = new ParticleSystem.MinMaxCurve(2);
+    }
+
+    private void HandleBasicLash() {
+        
+    }
+    public void Release() {
         
         Debug.Log("Released!");
         _active = false;
-        _gravityDirection = _cameraTransform.forward * (10 * _lashForce);
+        if (_infusingMode == InfusingMode.Full) {
+            _gravityDirection = _cameraTransform.forward * (10 * _lashForce);
+        }
+
+        if (_infusingMode == InfusingMode.Basic) {
+            if (!_collisionStayObject.IsUnityNull()) {
+                _rigidbody.drag = 999999999;
+                _rigidbody.angularDrag = 9999999;
+            }
+        }
         //_chargedStormlight = 100;
-   }
+    }
 
     public void Update() {
-        
         
         if (_active) {
             if (_infusingMode == InfusingMode.Inverse) return;
@@ -85,7 +115,7 @@ public class Infusable : MonoBehaviour , Interactable{
             if (!_particleSystem.isPlaying)
                 _particleSystem.Play();
             
-            _selectedOutline.SetActive(true);
+            _selectedOutline.GetComponent<StormlightShaderToggleOpacity>().ToggleStormlight(1);
             _inRangeOutline.SetActive(false);
             
             //Object orbiting
@@ -95,11 +125,10 @@ public class Infusable : MonoBehaviour , Interactable{
             _rigidbody.velocity = velocity;
             _gravityDirection = Vector3.down * 10;
             
-            
-            
         }
         else {
-            _selectedOutline.SetActive(false);
+            
+            _selectedOutline.GetComponent<StormlightShaderToggleOpacity>().ToggleStormlight(0);
             _rigidbody.AddForce(_gravityDirection);
             _chargedStormlight -= 0.1f;
             if (_chargedStormlight <= 0) {
@@ -115,6 +144,7 @@ public class Infusable : MonoBehaviour , Interactable{
         _lashForce++;
         _stormlightCost = _stormlightLashCost;
 
+        //EFFECT
         _selectedOutline.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
 
     }
@@ -155,8 +185,18 @@ public class Infusable : MonoBehaviour , Interactable{
     }
 
     private void OnCollisionStay(Collision other) {
+        _collisionStayObject = other.gameObject;
         if (_active) return;
         // Debug.Log("Object stayed in collision: " + other.gameObject.name); 
 
+    }
+    private void OnCollisionExit(Collision other) {
+        if (other.gameObject == _collisionStayObject) {
+            _collisionStayObject = null;
+        } 
+    }
+
+    public void SetMode(InfusingMode mode) {
+        _infusingMode = mode;
     }
 }

@@ -50,22 +50,28 @@ namespace Player.StateMachine.States.Infuse{
         }
         
         private void HandleInteraction() {
+            //1- Check interactable colliders in range
             Collider[] colliders = Physics.OverlapSphere(Ctx.PlayerTransform.position, Ctx.MaxInteractionDistance, Ctx.InteractionLayer);
             Infusable infusableObject = null;
         
+            //2- If is PICKABLE, Interact
             foreach (var collider in colliders) {
                 if (collider.gameObject.TryGetComponent(out Pickable interactableObject)) {
                     interactableObject.Interact(out int stormlight);
                     Ctx.Stormlight += stormlight;
                     break;
                 }
+                
+                //3- If it is Infusable get the object
                 collider.gameObject.TryGetComponent(out infusableObject);
             }
 
             if (Ctx.InputManager.InfuseInput) { 
+               
                 HandleInfusion(infusableObject);
             }
 
+            //4- Release Object
             if (Ctx.InfusableSelectedObject != null && !Ctx.InputManager.InfuseInput) {
                 Ctx.InfusableSelectedObject.Release();
                 Ctx.InfusableSelectedObject = null;
@@ -77,16 +83,17 @@ namespace Player.StateMachine.States.Infuse{
                 if (Ctx.InfusableSelectedObject == null) {
                     Ctx.InfusableSelectedObject = infusable;
                 }
+                 infusable.SetMode(Ctx.InfusingMode);
                 Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                 HandleInfusionInputs();
                
                 Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
-            }
-            else {
+            }else {
                 if (Ctx.InfusableSelectedObject != null) {
-                    Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                     
+                    Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                     HandleInfusionInputs();
+                    
                     Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
                 }
             }
@@ -102,6 +109,9 @@ namespace Player.StateMachine.States.Infuse{
                 Ctx.InfusableSelectedObject.UnLash();
                 Ctx.InputManager.ResetUnLashInput();
             }
+
+            if (Ctx.InfusingMode == Infusable.InfusingMode.Inverse)
+                Ctx.InfusableSelectedObject = null;
         }
     }
 }
