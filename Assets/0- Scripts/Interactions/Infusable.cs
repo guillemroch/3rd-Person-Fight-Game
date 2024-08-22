@@ -82,9 +82,10 @@ public class Infusable : MonoBehaviour , Interactable{
     private void HandleInverseLash() {
         Debug.Log("Inverse Lash");
         _active = false;
-        _forceField.SetActive(true);
-        //_forceField.enabled = true;
-        //_forceField.gravity = new ParticleSystem.MinMaxCurve(2);
+        
+        if (_forceField.activeSelf == false)
+            _forceField.SetActive(true);
+        
     }
 
     private void HandleBasicLash() {

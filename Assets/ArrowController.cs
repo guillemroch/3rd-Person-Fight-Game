@@ -42,5 +42,8 @@ public class ArrowController : MonoBehaviour{
         enable = false;
         rb.isKinematic = true;
         rb.velocity = Vector3.zero;
+        transform.parent = other.transform;
+        GetComponent<Collider>().enabled = false;
+        rb.detectCollisions = false;
     }
 }

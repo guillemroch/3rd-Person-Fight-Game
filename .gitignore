@@ -72,3 +72,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Large files
+Assets/7- Textures/Background Images/WoR-wallpaper-animado-sasori-cosmere-es-v3-4K.mp

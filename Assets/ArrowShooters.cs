@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class ArrowShooters : MonoBehaviour{
@@ -9,9 +5,13 @@ public class ArrowShooters : MonoBehaviour{
     public GameObject arrow;
     public Vector3 direction;
     public float strength;
+
+    public float time = 1f;
+    public float timer;
     void Start()
     {
-       shoot = true; 
+       shoot = true;
+       timer = 0f;
     }
 
     void Update()
@@ -19,6 +19,13 @@ public class ArrowShooters : MonoBehaviour{
         if (shoot) {
             ShootArrow();
         }
+
+        timer += Time.deltaTime;
+        if (timer > time) {
+            shoot = true;
+            timer = 0;
+        }
+
     }
 
     public void ShootArrow() {
