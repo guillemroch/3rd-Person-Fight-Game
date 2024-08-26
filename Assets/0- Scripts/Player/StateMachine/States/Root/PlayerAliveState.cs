@@ -29,19 +29,24 @@ namespace Player.StateMachine.States.Alive{
             }*/
             if (Ctx.InputManager.StormlightInput) {
                 Ctx.InputManager.ResetStormlightInput();
-                Ctx.IsUsingStormlight = !Ctx.IsUsingStormlight;
-                if (!Ctx.IsUsingStormlight) {
-                    //EXIT STORMLIGHT STATE
-                    Ctx.ParticleSystem.Stop();
-                }
-                else {
-                    //ENTER STORMLIGHT STATE
-                    Ctx.AnimatorManager.PlayTargetAnimation("Buff");
-                    //Ctx.AnimatorManager.animator.SetLayerWeight(4,1);
-                    Ctx.ParticleSystem.Play();
+                
+                if (Ctx.Stormlight > 0) {
+                    Ctx.IsUsingStormlight = true;
+                    
+                     Ctx.AnimatorManager.PlayTargetAnimation("Buff");
+                     Ctx.ParticleSystem.Play();
+
+                    if (Ctx.Stormlight - Ctx.StormlightBreathConsumption < 0) {
+                        Ctx.BreathedStormlight += Ctx.Stormlight;
+                        Ctx.Stormlight = 0;
+                    }
+                    else {
+                        Ctx.Stormlight -= Ctx.StormlightBreathConsumption;
+                        Ctx.BreathedStormlight += Ctx.StormlightBreathConsumption;
+                    }
+                    
                 }
             }
-
            
         }
 
@@ -56,6 +61,13 @@ namespace Player.StateMachine.States.Alive{
                 if (collider.gameObject.TryGetComponent(out Pickable interactableObject)) {
                     interactableObject.Interact(out int stormlight);
                     Ctx.Stormlight += stormlight;
+                    if (Ctx.Stormlight > 100f) {
+                        Ctx.Stormlight = 100;
+                    }
+                }
+
+                if (collider.gameObject.TryGetComponent(out Infusable infusable)) {
+                    infusable.ActivateOverlay();
                 }
             }
 
@@ -86,10 +98,20 @@ namespace Player.StateMachine.States.Alive{
                                           Ctx.StormlightLashingDrain * 0.1f+
                                           Ctx.StormlightMovementDrain;
            
-            Ctx.Stormlight -= Ctx.StormlightDepletionRate * 0.1f;
+            Ctx.BreathedStormlight -= Ctx.StormlightDepletionRate * 0.1f;
             if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
-                     
-            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);
+            if (Ctx.BreathedStormlight <= 0) {
+                Ctx.BreathedStormlight = 0;
+                Ctx.IsUsingStormlight = false;
+                Ctx.GravityDirection = Vector3.down;
+                Ctx.ParticleSystem.Stop();
+            }
+
+            //Healing
+            if (Ctx.BreathedStormlight > 0 && Ctx.Health < Ctx.MaxHealth) {
+                Ctx.BreathedStormlight--;
+                Ctx.Health++;
+            }
         }
 
        

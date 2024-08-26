@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Player.StateMachine;
 using UnityEngine;
 
 public class ArrowController : MonoBehaviour{
@@ -23,6 +24,9 @@ public class ArrowController : MonoBehaviour{
             targetRotation = Quaternion.LookRotation(-rb.velocity.normalized, transform.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1f);
         }
+        else {
+            transform.localScale = Vector3.one;
+        }
        
     }
 
@@ -41,9 +45,13 @@ public class ArrowController : MonoBehaviour{
     private void OnCollisionEnter(Collision other) {
         enable = false;
         rb.isKinematic = true;
-        rb.velocity = Vector3.zero;
+        //rb.velocity = Vector3.zero;
         transform.parent = other.transform;
         GetComponent<Collider>().enabled = false;
         rb.detectCollisions = false;
+        if (other.gameObject.CompareTag("Player")) {
+            GameObject.DestroyImmediate(this);
+            other.gameObject.GetComponent<PlayerStateMachine>().Dammage(10);
+        }
     }
 }

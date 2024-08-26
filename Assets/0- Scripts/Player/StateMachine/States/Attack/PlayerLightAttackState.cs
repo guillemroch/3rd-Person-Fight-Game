@@ -11,10 +11,10 @@ namespace Player.StateMachine.States.Attack{
         public override void EnterState() {
             Ctx.Spear.SetActive(true);
             Ctx.InputManager.ResetLightAttackInput();
-            
+            Ctx.AnimatorManager.animator.SetBool("End", false);
             Ctx.AnimatorManager.PlayTargetAnimation("Spear Attack 4");
             Ctx.AnimatorManager.animator.SetLayerWeight(Ctx.AnimatorManager.animator.GetLayerIndex("Spear"), 1);
-            
+            Debug.Log("Entered");
         }
 
         public override void UpdateState() {
@@ -27,6 +27,7 @@ namespace Player.StateMachine.States.Attack{
         public override void ExitState() {
             Ctx.AnimatorManager.animator.SetBool("End", false);
             Ctx.Spear.SetActive(false);
+            Debug.Log("Exited");
         }
 
         public override void CheckSwitchStates() {

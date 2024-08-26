@@ -71,28 +71,31 @@ namespace Player.StateMachine.States.Air{
                 Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetRotation, Ctx.RotationSpeed * Time.deltaTime);
         
         }
-          void HandleFalling() {
+        void HandleFalling() {
                 
-                    if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
+            if (Ctx.InAirTimer <= Ctx.MaxAirSpeed) Ctx.InAirTimer += Time.deltaTime;
                 
-                    Ctx.PlayerRigidbody.AddForce(Ctx.PlayerTransform.forward * (Ctx.LeapingVelocity * Ctx.PlayerRigidbody.velocity.magnitude), ForceMode.Force);
-                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
+            Ctx.PlayerRigidbody.AddForce(Ctx.PlayerTransform.forward * (Ctx.LeapingVelocity * Ctx.PlayerRigidbody.velocity.magnitude), ForceMode.Force);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityDirection * (Ctx.FallingVelocity * Ctx.InAirTimer), ForceMode.Force);
                 
-                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
         
-                    Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
-                       rayCastOrigin += Ctx.PlayerTransform.up * Ctx.RayCastHeightOffset;
+            Vector3 rayCastOrigin = Ctx.PlayerRigidbody.worldCenterOfMass;
+            rayCastOrigin += Ctx.PlayerTransform.up * Ctx.RayCastHeightOffset;
                     
-                    if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
-                            Ctx.GroundLayer)) {
-                        Ctx.IsGrounded = true;
-                    }
-        
+            if (Physics.SphereCast(rayCastOrigin, Ctx.RayCastRadius, Ctx.GravityDirection, out _, Ctx.RayCastMaxDistance,
+                    Ctx.GroundLayer)) {
+                Ctx.IsGrounded = true;
+                if (Ctx.PlayerRigidbody.velocity.magnitude > 10f) {
+                    Ctx.Dammage(Ctx.PlayerRigidbody.velocity.magnitude);
                 }
+            }
         
-                void HandleGravity() {
-                    Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+        }
         
-                }
+        void HandleGravity() {
+            Ctx.PlayerRigidbody.AddForce(Ctx.GravityIntensity * Ctx.GravityMultiplier * Ctx.GravityDirection, ForceMode.Acceleration);
+        
+        }
     }
 }

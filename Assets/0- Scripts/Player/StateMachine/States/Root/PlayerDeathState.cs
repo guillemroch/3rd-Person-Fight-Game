@@ -42,7 +42,7 @@ namespace Player.StateMachine.States.Root{
             Ctx.Stormlight -= Ctx.StormlightDepletionRate;
             if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
                      
-            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight);
+            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight, Ctx.BreathedStormlight);
         }
 
 

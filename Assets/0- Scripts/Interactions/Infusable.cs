@@ -15,6 +15,7 @@ public class Infusable : MonoBehaviour , Interactable{
     [Header("Interaction")] 
     [SerializeField] private bool _active = false;
 
+    [SerializeField] private bool _inRange = false;
     [SerializeField] private InfusingMode _infusingMode;
     
     [Header("Full Lashing")] 
@@ -62,8 +63,7 @@ public class Infusable : MonoBehaviour , Interactable{
         
         if (_infusingMode == InfusingMode.Inverse) {
 
-            value = (int)_stormlightLashCost;
-            HandleInverseLash();
+           value = (int)_stormlightCost; 
 
         }else {
             value = (int)_stormlightCost;
@@ -109,6 +109,9 @@ public class Infusable : MonoBehaviour , Interactable{
     }
 
     public void Update() {
+
+   
+        
         
         if (_active) {
             if (_infusingMode == InfusingMode.Inverse) return;
@@ -118,6 +121,7 @@ public class Infusable : MonoBehaviour , Interactable{
             
             _selectedOutline.GetComponent<StormlightShaderToggleOpacity>().ToggleStormlight(1);
             _inRangeOutline.SetActive(false);
+            
             
             //Object orbiting
             Vector3 offset =  _cameraTransform.forward * (Vector3.Distance(_playerTransform.position, _cameraTransform.position) * _distance);
@@ -133,13 +137,29 @@ public class Infusable : MonoBehaviour , Interactable{
             _rigidbody.AddForce(_gravityDirection);
             _chargedStormlight -= 0.1f;
             if (_chargedStormlight <= 0) {
+                _chargedStormlight = 0;
                 _particleSystem.Stop();
                 _gravityDirection = Vector3.down * 10;
             }
         }
     }
 
+    private void FixedUpdate() {
+        if (_inRange) {
+            ActivateOverlay();
+            _inRange = false;
+        }
+        else {
+            DeactivateOverlay();
+        }
+    }
+
     public void AddLash() {
+        if (_infusingMode == InfusingMode.Inverse) {
+            _chargedStormlight += (int)_stormlightLashCost;
+            HandleInverseLash();
+        }
+       
         _chargedStormlight += 200;
         Debug.Log("aDD Lash");
         _lashForce++;
@@ -159,10 +179,12 @@ public class Infusable : MonoBehaviour , Interactable{
     }
 
     public void ActivateOverlay() {
+        _inRange = true;
         _inRangeOutline.SetActive(true);
     }
 
     public void DeactivateOverlay() {
+        _inRange = false;
         _inRangeOutline.SetActive(false);
     }
 
@@ -174,7 +196,7 @@ public class Infusable : MonoBehaviour , Interactable{
         Gizmos.DrawLine(transform.position, _gravityDirection);
 
     }
-
+/*
     private void OnTriggerEnter(Collider other) {
         if (!other.gameObject.CompareTag("Player")) return;
         ActivateOverlay();
@@ -183,7 +205,7 @@ public class Infusable : MonoBehaviour , Interactable{
     private void OnTriggerExit(Collider other) {
         if (!other.gameObject.CompareTag("Player")) return;
         DeactivateOverlay();
-    }
+    }*/
 
     private void OnCollisionStay(Collision other) {
         _collisionStayObject = other.gameObject;

@@ -17,6 +17,10 @@ namespace Player.StateMachine{
         [SerializeField] private Vector3 _moveDirection;
         [SerializeField] private Vector3 _targetDirection;
 
+        [Header("Health")]
+        [SerializeField] private float _health = 100f;
+        [SerializeField] private float _maxHealth = 100f;
+        
         //Movement status flags
         [Header("Movement Flags")] 
         [SerializeField] private bool _isGrounded;
@@ -96,8 +100,10 @@ namespace Player.StateMachine{
 
         [Header("Stormlight")] 
         [SerializeField] private float _stormlight = 100;
+        [SerializeField] private float _breathedStormlight = 0;
         [SerializeField] private float _stormlightRegenRate = 1;
         [SerializeField] private float _stormlightDepletionRate = 0.1f;
+        [SerializeField] private float _stormlightBreathConsumption = 20f;
         
         [SerializeField] private float _stormlightBaseDrain = 0.1f;
         [SerializeField] private float _stormlightLashingDrain = 0;
@@ -208,6 +214,17 @@ namespace Player.StateMachine{
         public float StormlightHealingDrain { get => _stormlightHealingDrain; set => _stormlightHealingDrain = value; }
         public GameObject Spear { get => _spear; set => _spear = value; }
         public Infusable.InfusingMode InfusingMode { get => _infusingMode; set => _infusingMode = value; }
+
+        public float BreathedStormlight { get => _breathedStormlight; set => _breathedStormlight = value; }
+
+        public float StormlightBreathConsumption
+            {
+            get => _stormlightBreathConsumption;
+            set => _stormlightBreathConsumption = value;
+            }
+
+        public float Health { get => _health; set => _health = value; }
+        public float MaxHealth { get => _maxHealth; set => _maxHealth = value; }
 
         private String stateString;
         private int stateCount = 0;
@@ -326,9 +343,15 @@ namespace Player.StateMachine{
                    GroundLayer)) {
                Gizmos.color = Color.magenta;
                Gizmos.DrawCube(hit.point, Vector3.one * RayCastRadius);
-
            }
+        }
 
+        public void Dammage(float health) {
+            if (Health > 0) {
+                Health -= health;
+                if (Health < 0)
+                    Health = 0;
+            }
         }
     }
 }

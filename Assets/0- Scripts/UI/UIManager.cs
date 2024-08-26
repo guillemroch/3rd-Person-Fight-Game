@@ -6,9 +6,13 @@ using Player.StateMachine;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour{
+
+    [Header("References")] [SerializeField]
+    private PlayerStateMachine psm;
+    
     [Header("Health")]
-    [SerializeField] private UISliderBar _healthBar;
-    [SerializeField] private UISliderBar _stormlightBar;
+    [SerializeField] private UISliderBarHealth _healthBar;
+    [SerializeField] private UISliderBarStormlight _stormlightBar;
     
     [Header("Menu and Inputs")]
     [SerializeField] private InputManager _inputManager;
@@ -23,15 +27,19 @@ public class UIManager : MonoBehaviour{
     [Header("Infusing Modes")] 
     [SerializeField] private InfuseModesUI _modes;
     
-    public UISliderBar HealthBar { get => _healthBar; set => _healthBar = value; }
-    public UISliderBar StormlightBar { get => _stormlightBar; set => _stormlightBar = value; }
+    public UISliderBarHealth HealthBar { get => _healthBar; set => _healthBar = value; }
+    public UISliderBarStormlight StormlightBar { get => _stormlightBar; set => _stormlightBar = value; }
     public bool IsPaused { get => _isPaused; set => _isPaused = value; }
 
     public void Initialize(PlayerStateMachine psm) {
         _stormlightBar.Initialize(psm.Stormlight);
+        _healthBar.Initialize(psm.Health);
     }
 
     public void Update() {
+        
+        _stormlightBar.Set(psm.Stormlight, psm.BreathedStormlight);
+        _healthBar.Set(psm.Health);
         _healthBar.UpdateUI();
         _stormlightBar.UpdateUI();
 

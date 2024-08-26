@@ -41,6 +41,10 @@ namespace Player.StateMachine.States.Infuse{
             if (Ctx.InfusableSelectedObject.IsUnityNull()) {
                 SwitchStates(Factory.Grounded());
             }
+
+            if (Ctx.BreathedStormlight <= 0) {
+                SwitchStates(Factory.Grounded());
+            }
         }
 
         public override void InitializeSubState() {
@@ -90,7 +94,7 @@ namespace Player.StateMachine.States.Infuse{
                 Ctx.StormlightInfusingDrain = stormlightDrainadge*0.1f;
             }else {
                 if (Ctx.InfusableSelectedObject != null) {
-                    
+                   Ctx.InfusableSelectedObject.SetMode(Ctx.InfusingMode);
                     Ctx.InfusableSelectedObject.Interact(out int stormlightDrainadge);
                     HandleInfusionInputs();
                     
@@ -110,8 +114,6 @@ namespace Player.StateMachine.States.Infuse{
                 Ctx.InputManager.ResetUnLashInput();
             }
 
-            if (Ctx.InfusingMode == Infusable.InfusingMode.Inverse)
-                Ctx.InfusableSelectedObject = null;
         }
     }
 }

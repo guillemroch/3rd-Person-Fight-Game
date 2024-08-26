@@ -34,6 +34,9 @@ public class MagnetEffect : MonoBehaviour
 
             // Apply attraction force (modify position or velocity)
             rb.MovePosition(transform.position + directionToPlayer * attractionForce * Time.fixedDeltaTime);
+          
         }
+          transform.localScale = Vector3.one;
+          transform.parent.transform.localScale = Vector3.one;
     }
 }
