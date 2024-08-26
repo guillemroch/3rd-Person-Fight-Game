@@ -42,8 +42,8 @@ namespace Player.StateMachine.States.Ground{
     
         private void HandleMovement() {
             Vector3 planeNormal = Vector3.Cross(Ctx.PlayerTransform.right, Ctx.PlayerTransform.forward);
-            Vector3 projectedCameraForward = Vector3.ProjectOnPlane(Ctx.CameraObject.forward, planeNormal);
-            Vector3 projectedCameraRight = Vector3.ProjectOnPlane(Ctx.CameraObject.right, planeNormal);
+            Vector3 projectedCameraForward = Vector3.ProjectOnPlane(Ctx.CameraObject.forward, planeNormal).normalized;
+            Vector3 projectedCameraRight = Vector3.ProjectOnPlane(Ctx.CameraObject.right, planeNormal).normalized;
             Ctx.MoveDirection = projectedCameraForward * Ctx.InputManager.MovementInput.y +projectedCameraRight * Ctx.InputManager.MovementInput.x;
 
             /*float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
