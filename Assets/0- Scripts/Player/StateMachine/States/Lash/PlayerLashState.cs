@@ -154,7 +154,7 @@ namespace Player.StateMachine.States.Lash{
             Quaternion actualForwardRotation = Quaternion.AngleAxis(targetAngleValue, Ctx.PlayerTransform.right);
 
             float angleDiff = Quaternion.Angle(targetedIncidentAngle, actualForwardRotation);
-            Debug.Log("Angle Diff: " + rotationDir*angleDiff);
+            //Debug.Log("Angle Diff: " + rotationDir*angleDiff);
 
             if (Ctx.AngleOfIncidence == 0) angleDiff = 0;
             Quaternion targetAngle = Quaternion.AngleAxis(rotationDir * angleDiff , Ctx.PlayerTransform.right);
