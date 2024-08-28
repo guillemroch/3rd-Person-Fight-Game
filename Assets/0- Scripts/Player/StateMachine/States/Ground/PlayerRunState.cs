@@ -45,12 +45,6 @@ namespace Player.StateMachine.States.Ground{
             Vector3 projectedCameraForward = Vector3.ProjectOnPlane(Ctx.CameraObject.forward, planeNormal).normalized;
             Vector3 projectedCameraRight = Vector3.ProjectOnPlane(Ctx.CameraObject.right, planeNormal).normalized;
             Ctx.MoveDirection = projectedCameraForward * Ctx.InputManager.MovementInput.y +projectedCameraRight * Ctx.InputManager.MovementInput.x;
-
-            /*float moveDot = Vector3.Dot(Ctx.MoveDirection, Ctx.GravityDirection);
-            float magSquared = Ctx.GravityDirection.sqrMagnitude;
-    
-            Vector3 projection = (moveDot / magSquared) * Ctx.GravityDirection;
-            Ctx.MoveDirection += -projection;*/
             Ctx.MoveDirection.Normalize();
         
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * Ctx.RunningSpeed, ForceMode.Force);

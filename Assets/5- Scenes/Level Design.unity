@@ -13711,6 +13711,14 @@ PrefabInstance:
       value: PlayerController
       objectReference: {fileID: 0}
     - target: {fileID: 7805067754082171660, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805067754082171660, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805067754082171660, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 1024
       objectReference: {fileID: 0}
@@ -13753,6 +13761,10 @@ PrefabInstance:
     - target: {fileID: 8460530013797635657, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9196152099961071016, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: m_Name
+      value: HumanoidCharacter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -132,8 +132,8 @@ namespace Player.StateMachine{
         [SerializeField] private GameObject _spear;
         
         //State variables
-        [SerializeField] private PlayerStateFactory _states;
-        [SerializeField] private PlayerBaseState _currentState;
+         private PlayerStateFactory _states;
+         private PlayerBaseState _currentState;
     
         //getters and setters
         public CameraManager CameraManager { get => _cameraManager; set => _cameraManager = value; }
