@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour{
 
     void Update() {
         
-        _timerUI.SetText(((int)_timer).ToString());
+        _timerUI.SetText((Mathf.Round(_timer*100)/100).ToString());
         if (_active){ _timer += Time.deltaTime;}
     }
 

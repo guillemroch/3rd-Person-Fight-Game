@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Player;
 using Player.StateMachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour{
 
@@ -80,5 +81,13 @@ public class UIManager : MonoBehaviour{
 
     public void SwitchInfuseModes(Infusable.InfusingMode mode) {
         _modes.SwitchMode(mode);
+    }
+
+    public void ToggleShowInput() {
+        _inputs.gameObject.SetActive(!_inputs.gameObject.activeSelf);
+    }
+
+    public void GoBackToMainMenu() {
+        SceneManager.LoadScene(0);
     }
 }

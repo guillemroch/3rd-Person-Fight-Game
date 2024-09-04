@@ -7,7 +7,7 @@ public class InputsUIHelper : MonoBehaviour
    public enum KeyUIStates{
       Grounded,
       Lashings,
-      Infusing
+      Infusing,
    }
 
    //TODO: Fix Inputs so that they are dinamic and not hardcoded
