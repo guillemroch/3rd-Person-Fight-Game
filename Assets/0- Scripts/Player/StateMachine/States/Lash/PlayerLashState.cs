@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Lash{
-    //Sub State of the lash state
     public class PlayerLashState : PlayerBaseState
     {
         
@@ -14,11 +13,6 @@ namespace Player.StateMachine.States.Lash{
             Ctx.IsGrounded = false;
             CheckSwitchStates();
             Ctx.IsLashing = true;
-            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsLashingHash, true);
-            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsHalfLashingHash ,false);
-            
-            //TODO: [Animation] -> set lash blend tree value
-            //Ctx.AnimatorManager.PlayTargetAnimation("Lash");
      
             Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Lash);
         
@@ -111,9 +105,8 @@ namespace Player.StateMachine.States.Lash{
             float speedMultiplier = Mathf.Abs(Ctx.AngleOfIncidence) / 90 ; //First get a magnitude of increase
             speedMultiplier *= 0.9f;
             speedMultiplier = 0.9f * 2 - speedMultiplier; //If the angle is 0, the speed is not affected (x1) If the angle is greater, the speed is reduced
-            //Debug.Log("Speed Multiplier: " + speedMultiplier); 
             float diveTranslationSpeed = Ctx.GravityDirection.magnitude * 14f * speedMultiplier;
-            
+             
             //MODE 1 - DISPLACEMENT
             Ctx.PlayerRigidbody.AddForce(Ctx.MoveDirection * diveTranslationSpeed, ForceMode.Force);
             //MODE 2 - ROTATION DEVIATION
@@ -206,7 +199,6 @@ namespace Player.StateMachine.States.Lash{
     
         private void HandleLash(float lashAmount) {
         
-            
             //If lash is at MAX return
             if (lashAmount > 0 && Ctx.LashingIntensity > PlayerStateMachine.MAX_LASHING_INTENSITY)
                 return; //TODO: This return might be wrong (it is)
@@ -216,7 +208,6 @@ namespace Player.StateMachine.States.Lash{
             if (Physics.Raycast(Ctx.CameraObject.transform.position, lashDirection, out RaycastHit hit, 10000f, Ctx.GroundLayer)) {
                 //lashDirection = (hit.point - Ctx.transform.position).normalized;
             }
-            
             if (lashAmount >= 0) {
                 Vector3 previousDirection = Ctx.GravityDirection;
 
@@ -236,7 +227,6 @@ namespace Player.StateMachine.States.Lash{
             else {
                 Ctx.LashingIntensity += lashAmount;
             }
-            
         }
 
         private void HandleSmallLash(float lashAmount) {

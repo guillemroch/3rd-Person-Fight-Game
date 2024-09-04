@@ -30,9 +30,16 @@ public class CameraManager : MonoBehaviour
     private float _defaultPosition; // Where the camera goes when there are no collisions
     private Vector3 _cameraFollowVelocity = Vector3.zero;
     private Vector3 _cameraVectorPosition;
-    [SerializeField] private float _pitchRotation; 
-    
-    
+    [SerializeField] private float _pitchRotation;
+
+    [SerializeField] private float _generalSensitivityMultiplier = 1f;
+
+    public float GeneralSensitivityMultiplier
+        {
+        get => _generalSensitivityMultiplier;
+        set => _generalSensitivityMultiplier = value;
+        }
+
     [Header("Collisions")]
     [SerializeField]
     private float _cameraCollisionOffset = 0.2f;
@@ -51,7 +58,10 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private bool _invertedPitch;
     [SerializeField] private bool _invertedYaw;
-    
+
+    public bool InvertedPitch { get => _invertedPitch; set => _invertedPitch = value; }
+    public bool InvertedYaw { get => _invertedYaw; set => _invertedYaw = value; }
+
     [Header("Normal")]
     [SerializeField] private Vector3 _targetOffset;
     [SerializeField] private float _cameraFollowSpeed = 0.1f;
@@ -174,9 +184,9 @@ public class CameraManager : MonoBehaviour
     private void RotateCamera()
     {
         //1- Calculate user input
-        float yawAngle = _inputManager.LookInput.x * _cameraYawSpeed * _sensitivityMultiplier;
+        float yawAngle = _inputManager.LookInput.x * _cameraYawSpeed * _sensitivityMultiplier * _generalSensitivityMultiplier;
         yawAngle *= _invertedYaw ? -1 : 1;
-        float pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed * _sensitivityMultiplier;
+        float pitchAngle =  _inputManager.LookInput.y * _cameraPitchSpeed * _sensitivityMultiplier* _generalSensitivityMultiplier;
         pitchAngle *= _invertedPitch ? -1 : 1;
         
         
@@ -219,9 +229,9 @@ public class CameraManager : MonoBehaviour
         
         Vector3 rotation = Vector3.zero;
         
-        float yawAngle = _inputManager.LookInput.x * _cameraHalflashYawSpeed * _sensitivityHalflashMultiplier;
+        float yawAngle = _inputManager.LookInput.x * _cameraHalflashYawSpeed * _sensitivityHalflashMultiplier* _generalSensitivityMultiplier;
         yawAngle *= _invertedYaw ? -1 : 1;
-        float pitchAngle =  _inputManager.LookInput.y * _cameraHalflashPitchSpeed * _sensitivityHalflashMultiplier;
+        float pitchAngle =  _inputManager.LookInput.y * _cameraHalflashPitchSpeed * _sensitivityHalflashMultiplier* _generalSensitivityMultiplier;
         pitchAngle *= _invertedPitch ? -1 : 1;
         
         rotation.y = yawAngle;
@@ -238,9 +248,9 @@ public class CameraManager : MonoBehaviour
         //The player controls the camera Yaw and pitch, the Roll is automatically done
             Quaternion targetRotation;
 
-            float yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed * _sensitivityLashMultiplier;
+            float yawAngle = _inputManager.LookInput.x * _cameraLashYawSpeed * _sensitivityLashMultiplier* _generalSensitivityMultiplier;
             yawAngle *= _invertedYaw ? -1 : 1;
-            float pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed * _sensitivityLashMultiplier;
+            float pitchAngle = _inputManager.LookInput.y * _cameraLashPitchSpeed * _sensitivityLashMultiplier* _generalSensitivityMultiplier;
             pitchAngle *= _invertedPitch ? -1 : 1;
             
             

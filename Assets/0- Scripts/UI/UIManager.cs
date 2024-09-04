@@ -64,8 +64,9 @@ public class UIManager : MonoBehaviour{
         }
     }
 
-    public void OpenConfigurationWindow() {
-        
+    public void ToggleConfigurationWindow() {
+       
+       _configurationWindow.SetActive(!_configurationWindow.activeSelf); 
     }
 
     public void ExitButton() {

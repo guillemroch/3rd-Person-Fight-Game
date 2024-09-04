@@ -44,10 +44,8 @@ namespace Player.StateMachine.States.Alive{
                         Ctx.Stormlight -= Ctx.StormlightBreathConsumption;
                         Ctx.BreathedStormlight += Ctx.StormlightBreathConsumption;
                     }
-                    
                 }
             }
-           
         }
 
         public override void InitializeSubState() {

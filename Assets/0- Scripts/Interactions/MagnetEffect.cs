@@ -11,32 +11,22 @@ public class MagnetEffect : MonoBehaviour
 
     void Start()
     {
-        // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
-
-        // If the player reference isn't set in the Inspector, find the player automatically by tag
-        if (player == null)
-        {
+        if (player == null) {
             player = GameObject.FindGameObjectWithTag("Player").transform;
         }
     }
 
     void FixedUpdate()
     {
-        // Calculate distance to the player
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        // If the player is within the detection radius and the sphere isn't too close
         if (distanceToPlayer < detectionRadius && distanceToPlayer > stopDistance)
         {
-            // Calculate direction towards the player
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
-
-            // Apply attraction force (modify position or velocity)
-            rb.MovePosition(transform.position + directionToPlayer * attractionForce * Time.fixedDeltaTime);
+            rb.MovePosition(transform.position + directionToPlayer * (attractionForce * Time.fixedDeltaTime));
           
         }
-          transform.localScale = Vector3.one;
-          transform.parent.transform.localScale = Vector3.one;
+        transform.localScale = Vector3.one;
+        transform.parent.transform.localScale = Vector3.one;
     }
 }

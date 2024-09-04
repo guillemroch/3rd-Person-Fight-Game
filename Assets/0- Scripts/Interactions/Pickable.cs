@@ -11,11 +11,8 @@ public class Pickable : MonoBehaviour, Interactable{
     }
 
     public void Interact(out int value) {
-        
-        Debug.Log("Interacted with Pickle");
         value = _value;
-        DestroyImmediate(this.gameObject);  
-        
+        DestroyImmediate(gameObject);  
     }
 
     public void Overlay() {

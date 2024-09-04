@@ -35,10 +35,7 @@ namespace Player.StateMachine.States.Air{
 
         void HandleJump() {
             Ctx.InputManager.ResetJumpInput();
-            //Ctx.AnimatorManager.animator.SetBool(Ctx.AnimatorManager.IsJumpingHash, true);
-            //TODO: [Animation] -> set jump blend tree value
             Ctx.AnimatorManager.PlayTargetAnimation("Jump Blend Tree");
-
             float jumpingVelocity = Mathf.Sqrt(2 * Ctx.GravityIntensity  *  Ctx.JumpHeight);
             Ctx.PlayerRigidbody.AddForce(jumpingVelocity * -Ctx.GravityDirection, ForceMode.Impulse);
         }
