@@ -122,7 +122,6 @@ namespace Player.StateMachine.States.Lash{
             if (Ctx.InputManager.SmallLashInput != 0) return;
 
             //ROTATION ON THE FORWARD AXIS 
-
             Vector3 projectedXZGravity = Vector3.ProjectOnPlane(Ctx.GravityDirection.normalized, Vector3.up);
             projectedXZGravity.Normalize();
             Vector3 rightVector = Vector3.Angle(projectedXZGravity, Vector3.forward) > 90
