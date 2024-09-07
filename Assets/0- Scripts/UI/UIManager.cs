@@ -28,7 +28,9 @@ public class UIManager : MonoBehaviour{
 
     [Header("Infusing Modes")] 
     [SerializeField] private InfuseModesUI _modes;
-    
+
+    [SerializeField] private GameObject _deathPanel;
+    [SerializeField] private GameObject _nextLevelPanel;
     public UISliderBarHealth HealthBar { get => _healthBar; set => _healthBar = value; }
     public UISliderBarStormlight StormlightBar { get => _stormlightBar; set => _stormlightBar = value; }
     public bool IsPaused { get => _isPaused; set => _isPaused = value; }
@@ -95,4 +97,16 @@ public class UIManager : MonoBehaviour{
     public void ResetLevel() {
         psm.ResetLevel();
     }
+
+    public void OpenDeadPanel() {
+        _deathPanel.SetActive(true);
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    
+      public void OpenNextLevelPanel() {
+            _nextLevelPanel.SetActive(true);
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+        }
 }

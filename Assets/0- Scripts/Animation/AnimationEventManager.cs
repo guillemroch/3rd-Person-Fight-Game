@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class AnimationEventManager : MonoBehaviour{
     [SerializeField] private Animator _animator;
+
+    [SerializeField] private UIManager _uiManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +30,9 @@ public class AnimationEventManager : MonoBehaviour{
 
     public void ResetFall() {
         _animator.SetBool("End", true);
+    }
+
+    public void AfterDeathUI() {
+        _uiManager.OpenDeadPanel();
     }
 }

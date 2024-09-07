@@ -11,6 +11,7 @@ namespace Player.StateMachine.States.Root{
         }
 
         public override void EnterState() {
+            
             Ctx.AnimatorManager.PlayTargetAnimation("Death");
         }
 

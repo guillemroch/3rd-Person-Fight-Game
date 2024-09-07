@@ -13216,6 +13216,10 @@ PrefabInstance:
       propertyPath: _uiManager
       value: 
       objectReference: {fileID: 2393587}
+    - target: {fileID: 6409068489135643029, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
+      propertyPath: _uiManager
+      value: 
+      objectReference: {fileID: 2393587}
     - target: {fileID: 7684327288179346677, guid: ddd2fcb561bdfd647bb7439aed8fcbb3, type: 3}
       propertyPath: m_Name
       value: PlayerController
@@ -32792,6 +32796,10 @@ PrefabInstance:
       propertyPath: _inputManager
       value: 
       objectReference: {fileID: 1086632130}
+    - target: {fileID: 6260965064614979341, guid: a4cd7a97169a6884f98a1b86d41da9ef, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1086632138}
     - target: {fileID: 6318595737526615422, guid: a4cd7a97169a6884f98a1b86d41da9ef, type: 3}
       propertyPath: _loader
       value: 
@@ -50659,6 +50667,10 @@ PrefabInstance:
       propertyPath: _endPanel
       value: 
       objectReference: {fileID: 1975947317}
+    - target: {fileID: 3370924004592148278, guid: daa12121cd651ec479a302dfd61d6575, type: 3}
+      propertyPath: _uiManager
+      value: 
+      objectReference: {fileID: 2393587}
     - target: {fileID: 6822230759464714004, guid: daa12121cd651ec479a302dfd61d6575, type: 3}
       propertyPath: _camera
       value: 

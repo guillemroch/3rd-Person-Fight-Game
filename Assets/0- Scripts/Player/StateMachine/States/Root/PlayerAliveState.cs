@@ -65,6 +65,8 @@ namespace Player.StateMachine.States.Alive{
                     if (Ctx.Stormlight > 100f) {
                         Ctx.Stormlight = 100;
                     }
+
+                    continue;
                 }
 
                 if (collider.gameObject.TryGetComponent(out Infusable infusable)) {

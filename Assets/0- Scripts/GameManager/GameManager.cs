@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour{
     [SerializeField] private GameObject _endGate;
     [SerializeField] private bool _active = false;
     [SerializeField] private float _timer;
-    [SerializeField] private GameObject _endPanel;
+    [SerializeField] private UIManager _uiManager;
 
     [SerializeField] private TextMeshProUGUI _timerUI;
     void Start() {
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour{
 
     public void EndTimer() {
         _active = false;
-        _endPanel.SetActive(true);
+        _uiManager.OpenNextLevelPanel();
     }
 
     public void NextLevel() {
