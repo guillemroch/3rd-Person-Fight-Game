@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour{
     [SerializeField] private LoadingScreen _loadingScreen;
+    [SerializeField] private GameObject _settingsMenu;
     void Start()
     {
         
@@ -21,6 +22,7 @@ public class MainMenu : MonoBehaviour{
 
     public void SettingButtonPressed() {
         
+        _settingsMenu.SetActive(true);
     }
 
     public void ExitButtonPressed() {

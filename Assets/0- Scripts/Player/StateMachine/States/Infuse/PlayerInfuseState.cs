@@ -16,7 +16,8 @@ namespace Player.StateMachine.States.Infuse{
             InitializeSubState();
             HandleInteraction();
             if (Ctx.InfusableSelectedObject == null) {
-                SwitchStates(Factory.Grounded());
+                Debug.Log("Returning as no object was found");
+                //SwitchStates(Factory.Grounded());
             }
             else {
                 Ctx.CameraManager.SetCameraMode(CameraManager.CameraMode.Infusing);
@@ -35,6 +36,10 @@ namespace Player.StateMachine.States.Infuse{
         public override void ExitState() {
             Ctx.IsInfusing = false;
             Ctx.StormlightInfusingDrain = 0;
+            if (Ctx.InfusableSelectedObject != null) {
+                Ctx.InfusableSelectedObject.Release();
+                Ctx.InfusableSelectedObject = null;
+            }
         }
 
         public override void CheckSwitchStates() {

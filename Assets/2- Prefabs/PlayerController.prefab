@@ -20641,7 +20641,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2aafe74c98ea2574ca4691f15f63ec60, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6149807252014923404}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2aafe74c98ea2574ca4691f15f63ec60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3212505138953852136}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2aafe74c98ea2574ca4691f15f63ec60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 255858112637727841}
   m_SourcePrefab: {fileID: 100100000, guid: 2aafe74c98ea2574ca4691f15f63ec60, type: 3}
 --- !u!4 &452594326675795403 stripped
 Transform:
@@ -20653,6 +20659,40 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2aafe74c98ea2574ca4691f15f63ec60, type: 3}
   m_PrefabInstance: {fileID: 129840611307244064}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3212505138953852136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940162194969884529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e842040daf351584d8f97afef2b67c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 100
+--- !u!65 &255858112637727841
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940162194969884529}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.00021886102, y: 0.000745963, z: 0.020025788}
+  m_Center: {x: -0.0000023484934, y: -0.0000073683773, z: 0.0044910833}
 --- !u!1001 &3221503801061927893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20673,6 +20713,10 @@ PrefabInstance:
       propertyPath: _animator
       value: 
       objectReference: {fileID: 7238949207118007758}
+    - target: {fileID: 3005243556766777584, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
+      propertyPath: _cameraManager
+      value: 
+      objectReference: {fileID: 7608483872819477558}
     - target: {fileID: 3005243556766777584, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: _animatorManager
       value: 
@@ -20739,7 +20783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: _lerpSpeed
-      value: 0.158
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4331485296954385964, guid: ca6b48893e2b4f44f92ec1a20ebe8467, type: 3}
       propertyPath: _rollSpeed

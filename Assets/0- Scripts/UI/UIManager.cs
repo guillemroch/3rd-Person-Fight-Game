@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour{
     [Header("Input helper")] 
     [SerializeField] private InputsUIHelper _inputs;
     [SerializeField] private bool _showInputs;
+    public bool ShowInputs { get => _showInputs; set => _showInputs = value; }
 
     [Header("Infusing Modes")] 
     [SerializeField] private InfuseModesUI _modes;
@@ -38,7 +39,7 @@ public class UIManager : MonoBehaviour{
     }
 
     public void Update() {
-        
+        _inputs.gameObject.SetActive(_showInputs); 
         _stormlightBar.Set(psm.Stormlight, psm.BreathedStormlight);
         _healthBar.Set(psm.Health);
         _healthBar.UpdateUI();
@@ -89,5 +90,9 @@ public class UIManager : MonoBehaviour{
 
     public void GoBackToMainMenu() {
         SceneManager.LoadScene(0);
+    }
+
+    public void ResetLevel() {
+        psm.ResetLevel();
     }
 }

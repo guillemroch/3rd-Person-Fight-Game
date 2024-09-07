@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Player.StateMachine.States.Root{
@@ -10,43 +11,27 @@ namespace Player.StateMachine.States.Root{
         }
 
         public override void EnterState() {
-            Ctx.IsUsingStormlight = true;
-            Ctx.InputManager.ResetStormlightInput();
-            //Ctx.ParticleSystem.enabled = true;
+            Ctx.AnimatorManager.PlayTargetAnimation("Death");
         }
 
         public override void UpdateState() {
-            HandleStamina();
             CheckSwitchStates();
         }
 
         public override void FixedUpdateState() { }
 
         public override void ExitState() {
-            Ctx.IsUsingStormlight = false;
-            Ctx.GravityDirection = Vector3.down;
-            Ctx.LashingIntensity = 0;
-            //Ctx.ParticleSystem.enabled = false;
+           
         }
 
         public override void CheckSwitchStates() {
             if (Ctx.Stormlight == 0 ) {
-               //SwitchStates(Factory.Normal()); 
             } 
         }
 
         public override void InitializeSubState() {
-            SetSubStates(Factory.Grounded());
+            
         }
-        private void HandleStamina() {
-            Ctx.Stormlight -= Ctx.StormlightDepletionRate;
-            if (Ctx.Stormlight < 0) Ctx.Stormlight = 0;
-                     
-            Ctx.UIManager.StormlightBar.Set(Ctx.Stormlight, Ctx.BreathedStormlight);
-        }
-
-
- 
 
     }
 }

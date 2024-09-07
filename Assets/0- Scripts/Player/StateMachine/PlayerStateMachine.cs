@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Player.StateMachine{
     public class PlayerStateMachine : MonoBehaviour
@@ -230,8 +231,8 @@ namespace Player.StateMachine{
         private int stateCount = 0;
         #endregion
     
-        private void Awake()
-        {   
+        private void Awake() {
+            Time.timeScale = 1;
             //Setup state
             _states = new PlayerStateFactory(this);
             _currentState = _states.Alive();
@@ -352,6 +353,11 @@ namespace Player.StateMachine{
                 if (Health < 0)
                     Health = 0;
             }
+        }
+
+        public void ResetLevel() {
+            Time.timeScale = 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

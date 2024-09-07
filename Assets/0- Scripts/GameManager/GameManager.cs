@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using TMPro.Examples;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour{
     [SerializeField] private Collider _startGate;
     [SerializeField] private GameObject _endGate;
     [SerializeField] private bool _active = false;
     [SerializeField] private float _timer;
+    [SerializeField] private GameObject _endPanel;
 
     [SerializeField] private TextMeshProUGUI _timerUI;
     void Start() {
@@ -29,5 +31,10 @@ public class GameManager : MonoBehaviour{
 
     public void EndTimer() {
         _active = false;
+        _endPanel.SetActive(true);
+    }
+
+    public void NextLevel() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

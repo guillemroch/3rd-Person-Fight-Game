@@ -8,10 +8,7 @@ public class SphereDistributor : MonoBehaviour
     public GameObject spherePrefab;  // Reference to the sphere prefab
     public float sphereDiameter = 0.9f; // Scale of spheres relative to grid space
     public bool regenerateSpheres = false;
-    void Start()
-    {
-        //SpawnSpheresInCube();
-    }
+
 
     private void Update() {
        if (regenerateSpheres)
@@ -42,28 +39,22 @@ public class SphereDistributor : MonoBehaviour
             (size.z - gridSizeZ * sphereDiameter) / 2f
         );
 
-        // Loop through each grid position in 3D space and spawn the spheres
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
                 for (int z = 0; z < gridSizeZ; z++)
                 {
-                    // Calculate the position for each sphere relative to the bounds
                     float posX = bounds.min.x + offset.x + x * sphereDiameter + sphereDiameter / 2f;
                     float posY = bounds.min.y + offset.y + y * sphereDiameter + sphereDiameter / 2f;
                     float posZ = bounds.min.z + offset.z + z * sphereDiameter + sphereDiameter / 2f;
 
                     Vector3 position = new Vector3(posX, posY, posZ);
 
-                    // Instantiate the sphere at the calculated position
                     GameObject sphere = Instantiate(spherePrefab, position, Quaternion.identity);
 
-                    // Set the scale of the sphere to match the fixed diameter
-                    sphere.transform.localScale = Vector3.one * sphereDiameter;
-
-                    // Parent the sphere under this GameObject for better hierarchy organization
                     sphere.transform.parent = this.transform;
+                    sphere.transform.localScale = Vector3.one * sphereDiameter;
                 }
             }
         }

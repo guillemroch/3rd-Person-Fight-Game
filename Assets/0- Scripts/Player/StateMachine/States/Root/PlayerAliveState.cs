@@ -27,6 +27,9 @@ namespace Player.StateMachine.States.Alive{
             /*if (Ctx.InputManager.StormlightInput ) {
                 //SwitchStates(Factory.Stormlight());
             }*/
+            if (Ctx.Health <= 0) {
+                SwitchStates(Factory.Death());
+            }
             if (Ctx.InputManager.StormlightInput) {
                 Ctx.InputManager.ResetStormlightInput();
                 

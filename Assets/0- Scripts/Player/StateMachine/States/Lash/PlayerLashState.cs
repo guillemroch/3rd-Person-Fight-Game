@@ -148,12 +148,20 @@ namespace Player.StateMachine.States.Lash{
             float angleDiff = Quaternion.Angle(targetedIncidentAngle, actualForwardRotation);
             //Debug.Log("Angle Diff: " + rotationDir*angleDiff);
 
-            if (Ctx.AngleOfIncidence == 0) angleDiff = 0;
-            Quaternion targetAngle = Quaternion.AngleAxis(rotationDir * angleDiff , Ctx.PlayerTransform.right);
-            targetAngle = Quaternion.AngleAxis(-90 + Ctx.AngleOfIncidence, Ctx.PlayerTransform.right);
+            if (Ctx.AngleOfIncidence == 0) 
+                angleDiff = 0;
+
+            Transform tempTransform = Ctx.PlayerTransform;
+            tempTransform.rotation = targetForward;
+            
+            //Quaternion targetAngle = Quaternion.AngleAxis(rotationDir * angleDiff , Ctx.PlayerTransform.right);
+            Quaternion targetAngle = Quaternion.AngleAxis(Ctx.AngleOfIncidence - 90 , tempTransform.right);
+            //targetAngle = Quaternion.identity;
             //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.transform.rotation, Ctx.transform.rotation * targetAngle   , Ctx.LerpSpeed);
             //Ctx.PlayerTransform.rotation *= Quaternion.AngleAxis(1f, Ctx.PlayerTransform.right);
-            Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward * targetAngle, Ctx.LerpSpeed * 0.1f);
+
+            Ctx.PlayerTransform.rotation = targetForward * targetAngle;
+            //Ctx.PlayerTransform.rotation = Quaternion.Slerp(Ctx.PlayerTransform.rotation, targetForward * targetAngle, Ctx.LerpSpeed * 0.1f);
 
         }
 
@@ -221,7 +229,8 @@ namespace Player.StateMachine.States.Lash{
                 Ctx.AnimatorManager.PlayTargetAnimation("AddLash");
                 float angleDifference =
                     Vector3.SignedAngle(previousDirection, Ctx.GravityDirection, Ctx.PlayerTransform.right);
-                Ctx.AngleOfIncidence -= angleDifference;
+                
+                //Ctx.AngleOfIncidence -= angleDifference;
             }
             else {
                 Ctx.LashingIntensity += lashAmount;

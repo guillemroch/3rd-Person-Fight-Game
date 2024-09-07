@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/5- Scenes/Level Design.unity
     guid: 49a076a67d439e448b62d3a5144b7f5a
+  - enabled: 1
+    path: Assets/5- Scenes/Level 2 - Flat world.unity
+    guid: 093cd2b8d6fd7fa47aec9635703822d5
   m_configObjects: {}

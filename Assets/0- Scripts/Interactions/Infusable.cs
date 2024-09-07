@@ -81,7 +81,7 @@ public class Infusable : MonoBehaviour , Interactable{
 
     private void HandleInverseLash() {
         Debug.Log("Inverse Lash");
-        _active = false;
+        //_active = false;
         
         if (_forceField.activeSelf == false)
             _forceField.SetActive(true);
@@ -156,8 +156,8 @@ public class Infusable : MonoBehaviour , Interactable{
 
     public void AddLash() {
         if (_infusingMode == InfusingMode.Inverse) {
-            _chargedStormlight += (int)_stormlightLashCost;
             HandleInverseLash();
+            return;
         }
        
         _chargedStormlight += 200;
@@ -171,6 +171,8 @@ public class Infusable : MonoBehaviour , Interactable{
     }
 
     public void UnLash() {
+        if (_lashForce <= 0)
+            return;
         _chargedStormlight -= _chargedStormlight > 100 ? 100 : 0;
         _lashForce -= _lashForce > 0 ? 1 : 0;
         _stormlightCost = -_stormlightLashCost;
