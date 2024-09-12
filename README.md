@@ -2,7 +2,6 @@
 
 This project tries to create a game using the mechanics that exists in the universe of the "Cosmere"
 
----
 # Introduction
 ## 1. What is the Cosmere?
 
@@ -21,7 +20,6 @@ Roshar and Scadrial where the adventures of The Stormlight Archive and The Mistb
 The goal is to try and build an environment where a player can get immersed in the epic adventures of some of the characters of the Cosmere such as Kaladin. 
 
 
----
 # Documentation
 
 ## 1. Engine
