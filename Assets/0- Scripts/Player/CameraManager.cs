@@ -209,13 +209,6 @@ public class CameraManager : MonoBehaviour
         //2 - Apply yaw rotation to transform + Up Vector Correction
         rotation.y = yawAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
-        //targetRotation = Quaternion.AngleAxis(yawAngle, transform.up);
-        //Quaternion upAlignRotation = Quaternion.identity;
-        //Quaternion upAlignRotation = Quaternion.FromToRotation(transform.up, _target.up);
-        //Quaternion upAlignRotation = Quaternion.RotateTowards(transform.rotation, _target.rotation, 30f);
-        //Quaternion upAlignRotation = Quaternion.LookRotation(transform.forward, _target.up);
-        //TODO: Make sure the rotation is correct cause it is not
-        //transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * upAlignRotation * targetRotation, _cameraRotationLerp*Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation,transform.rotation * targetRotation , _cameraRotationLerp*Time.deltaTime);
         //3 - Rotate the pivot point for the pitch
         rotation = Vector3.zero;

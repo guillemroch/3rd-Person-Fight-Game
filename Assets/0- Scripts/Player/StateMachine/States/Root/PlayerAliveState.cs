@@ -112,7 +112,7 @@ namespace Player.StateMachine.States.Alive{
 
             //Healing
             if (Ctx.BreathedStormlight > 0 && Ctx.Health < Ctx.MaxHealth) {
-                Ctx.BreathedStormlight--;
+                Ctx.BreathedStormlight-= 0.1f;
                 Ctx.Health++;
             }
         }
