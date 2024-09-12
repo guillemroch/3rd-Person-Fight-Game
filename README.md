@@ -10,7 +10,7 @@ I you are interested in this project you surely know what the Cosmere is.
 But if you do not know it's okay, I will explain briefly. 
 
 The Cosmere is a universe ideated by Brandon Sanderson. 
-This websites compiles a lot of detailed information about it and is a great source of inspiration to help integrate the diferent mechanics. 
+This websites compiles a lot of detailed information about it and is a great source of inspiration to help with the integration of the diferent mechanics. 
 
 - [Coppermind - The Cosmere](https://coppermind.net/wiki/Cosmere)
 
@@ -29,7 +29,10 @@ This project is being build using Unity 2022.3 with the Universal Render Pipelin
 
 It also uses the Unity Input Actions system to help with the development. 
 
-## 2. Player Behaviour and Interactions
+## 2. Folder Structure
+- 1- 
+
+## 3. Player Behaviour and Interactions
 
 For now the main mechanic being implemented is all from Kaladin's powers. This includes, Basic Lash, Full Lash and Inverse Lash with the use of Stormlight and a bit of fighting with a spear. 
 
