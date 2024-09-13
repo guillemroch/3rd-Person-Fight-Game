@@ -230,7 +230,7 @@ namespace Player.StateMachine.States.Lash{
                 float angleDifference =
                     Vector3.SignedAngle(previousDirection, Ctx.GravityDirection, Ctx.PlayerTransform.right);
                 
-                //Ctx.AngleOfIncidence -= angleDifference;
+                Ctx.AngleOfIncidence -= angleDifference;
             }
             else {
                 Ctx.LashingIntensity += lashAmount;

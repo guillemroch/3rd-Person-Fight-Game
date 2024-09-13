@@ -73,7 +73,7 @@ namespace Player.StateMachine.States.Alive{
                     infusable.ActivateOverlay();
                 }
             }
-
+            
             //Handling infuse mode changes
             if (Ctx.InputManager.ScrollInput != 0) {
                 //Debug.Log("Switched infuse mode: " + Ctx.InputManager.ScrollInput);

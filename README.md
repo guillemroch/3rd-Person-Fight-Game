@@ -28,7 +28,19 @@ This project is being build using Unity 2022.3 with the Universal Render Pipelin
 It also uses the Unity Input Actions system to help with the development. 
 
 ## 2. Folder Structure
-- 1- 
+Inside the Assets folder the structure is as follows:
+0. Scripts
+1. Animations
+2. Prefabs
+3. Materials
+4. Meshes
+5. Scenes
+6. Shaders
+7. Textures
+8. Icons
+9. Packages
+
+Each name is self explanatory.
 
 ## 3. Player Behaviour and Interactions
 
@@ -43,3 +55,10 @@ This image shows a basic representation of all the existing states.
 
 
 ### Interactions
+
+The interactions work with the Interactable Interface. 
+
+There are these types of Interactables objects:
+- **Pickable**: Basically spheres containing stormlight that are automatically picked when approached.
+- **Infusable**: Can be infused with Stormlight for different effects.
+
